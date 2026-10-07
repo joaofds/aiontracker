@@ -211,6 +211,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .badge-phase { background: linear-gradient(135deg, #7c5cff, #a07bff); }
 .badge-daily { background: linear-gradient(135deg, #27d8c7, #1fa8c4); }
 .badge-weekly { background: linear-gradient(135deg, #f4c667, #e59b4a); color: #2a1e05; }
+.badge-guide { background: linear-gradient(135deg, #5a7bff, #27d8c7); }
 
 .section-title { flex: 1 1 auto; min-width: 0; }
 .section-title h2 { font-family: "Cinzel", serif; font-size: 1.1rem; margin: 0; }
@@ -263,6 +264,37 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2));
   padding: 0.12rem 0.45rem; border-radius: 999px; vertical-align: middle;
 }
+
+/* ---------- Guia: link no item ---------- */
+.guide-link {
+  flex: none; align-self: center; margin-left: auto;
+  font: inherit; font-size: 0.72rem; font-weight: 600;
+  color: var(--accent-2); background: rgba(39, 216, 199, 0.12);
+  border: 1px solid rgba(39, 216, 199, 0.3); border-radius: 999px;
+  padding: 0.18rem 0.6rem; cursor: pointer; white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.guide-link:hover { background: rgba(39, 216, 199, 0.22); transform: translateY(-1px); }
+
+/* ---------- Guia: conteúdo (prose) ---------- */
+.guide-body { padding: 0.4rem 1.1rem 1rem; font-size: 0.95rem; color: var(--text); }
+.guide-body p { margin: 0 0 0.9rem; color: var(--muted); }
+.guide-body p b, .guide-body li b { color: var(--text); }
+.guide-body ul, .guide-body ol { margin: 0 0 1rem; padding-left: 1.3rem; color: var(--muted); }
+.guide-body li { margin-bottom: 0.45rem; }
+.guide-body li::marker { color: var(--accent-2); }
+.guide-body > :last-child { margin-bottom: 0; }
+
+.tip {
+  background: rgba(124, 92, 255, 0.1);
+  border: 1px solid rgba(124, 92, 255, 0.25);
+  border-left: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.88rem; color: var(--muted);
+  margin-top: 0.5rem;
+}
+.tip b { color: var(--text); }
 
 /* ---------- Toolbar & footer ---------- */
 .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin: 2.5rem 0 1rem; }

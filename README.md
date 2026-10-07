@@ -19,7 +19,10 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - o reset diário (5h),
   - o reset semanal (quarta-feira 5h),
   - o próximo **Gartua** (evento recorrente a cada 12h).
-- **Navegação por abas** — Progressão · Diárias · Semanais.
+- **Navegação por abas** — Progressão · Diárias · Semanais · **Guias**.
+- **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
+  rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
+  leva direto ao guia relacionado.
 - **Barras de progresso** por seção + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
@@ -84,6 +87,24 @@ O conteúdo da checklist está no array `DATA` do `script.js`. Cada seção tem:
 
 > **Importante:** o `id` de cada item é a chave usada no `localStorage`.
 > Se você renomear um `id`, o progresso salvo daquele item é perdido.
+
+### Editar os guias
+O conteúdo da aba **Guias** está no array `GUIDES` do `script.js`. Cada guia tem um
+`id`, `icon`, `title`, `summary` e `html` (conteúdo em HTML — parágrafos, listas e
+caixas de dica `<div class="tip">`):
+
+```js
+{ id: "g-gearscore", icon: "⚔️", title: "Gear Score & encantamento",
+  summary: "Resumo curto que aparece no card.",
+  html: `<p>Conteúdo...</p><div class="tip"><b>Dica:</b> ...</div>` }
+```
+
+Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com o
+`id` do guia (gera o botão **📖 guia**):
+
+```js
+{ id: "gear-enchant", text: "Equipamento encantado...", guide: "g-gearscore" }
+```
 
 ### Adicionar um evento recorrente
 No array `EVENTS`:
