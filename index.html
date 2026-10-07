@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aion 2 Tracker — Checklist de Progressão</title>
+  <meta name="description" content="Acompanhe sua progressão em Aion 2: checklist de endgame, tarefas diárias e semanais, com contadores de reset. Uso pessoal e da galera do Discord." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-aura" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <span class="brand-mark">A2</span>
+        <div class="brand-text">
+          <h1>Aion 2 <span>Tracker</span></h1>
+          <p>Checklist de progressão · endgame</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <button id="theme-toggle" class="icon-btn" type="button" title="Alternar tema" aria-label="Alternar tema"></button>
+        <div class="overall">
+          <div class="overall-ring">
+            <svg viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="ring-bg" cx="60" cy="60" r="52" />
+              <circle class="ring-fg" id="overall-ring-fg" cx="60" cy="60" r="52" />
+            </svg>
+            <div class="overall-ring-label">
+              <strong id="overall-percent">0%</strong>
+              <small>fases</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Painel de contadores ao vivo -->
+    <section class="timers" id="timers" aria-label="Contadores de reset e eventos"></section>
+
+    <p class="intro">
+      Siga a ordem da progressão: cada etapa prepara a próxima. Seu progresso é salvo
+      automaticamente no navegador — nada de login. Os horários seguem o seu
+      <b>fuso local</b> (ajustável no topo do <code>script.js</code>).
+    </p>
+
+    <!-- Abas -->
+    <nav class="tabs" id="tabs" role="tablist">
+      <button class="tab active" data-tab="progressao" role="tab">Progressão</button>
+      <button class="tab" data-tab="daily" role="tab">Diárias</button>
+      <button class="tab" data-tab="weekly" role="tab">Semanais</button>
+    </nav>
+
+    <div id="board"></div>
+
+    <div class="toolbar">
+      <button id="export-btn" class="btn" type="button">Exportar</button>
+      <button id="import-btn" class="btn" type="button">Importar</button>
+      <button id="reset-all" class="btn btn-danger" type="button">Resetar tudo</button>
+    </div>
+  </main>
+
+  <footer class="site-footer wrap">
+    <p>Feito para uso pessoal e amigos do Discord · não afiliado à NCSOFT.</p>
+    <p class="muted">Dados salvos localmente no seu navegador.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
