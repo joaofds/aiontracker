@@ -114,15 +114,27 @@ Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com 
 ```
 
 ### Editar as classes
-A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `symbol` (emoji),
+A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `id`,
 `color` (cor da função, usada no símbolo e no selo), `name`, `role`, `weapon`, `focus`,
-`stats` (lista de atributos → chips), `manastones`, `synergy` e `tip`:
+`stats` (lista de atributos → chips), `pve` e `pvp` (prioridade de stats por modo),
+`manastones`, `synergy` e `tip`. O símbolo vem de `assets/images/<id>.avif`:
 
 ```js
-{ id: "templar", symbol: "🛡️", name: "Templar", color: "#4d82ff",
+{ id: "templar", color: "#4d82ff",
   role: "Tanque", weapon: "Espada longa & Escudo",
-  focus: "...", stats: ["Defesa", "HP", "Block"],
+  focus: "...", stats: ["Defense", "HP", "Block"],
+  pve: "...", pvp: "...",
   manastones: "...", synergy: "...", tip: "..." }
+```
+
+As **skills mais fortes** (PvE e PvP) ficam no mapa `SKILLS`, indexado pelo `id` da
+classe. Cada skill é `{ n: "Nome", d: "descrição curta" }` (nomes em inglês):
+
+```js
+SKILLS.templar = {
+  pve: [ { n: "Judgment", d: "proc que remove cooldowns..." }, /* ... */ ],
+  pvp: [ { n: "Poach", d: "puxão à distância com stun" }, /* ... */ ],
+};
 ```
 
 ### Adicionar um evento recorrente

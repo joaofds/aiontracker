@@ -278,6 +278,137 @@ const CLASSES = [
 // Ressalva exibida nos blocos de PvP (meta global ainda em formação).
 const PVP_NOTE = "Meta de PvP ainda em formação — ajuste conforme o patch atual.";
 
+/* ------------------------------------------------------------
+   Skills mais fortes por classe (PvE / PvP).
+   Nomes de skill em inglês. Dados da comunidade — revise por patch.
+   ------------------------------------------------------------ */
+const SKILLS = {
+  templar: {
+    pve: [
+      { n: "Judgment", d: "proc que remove cooldowns e gira a rotação" },
+      { n: "Pummel", d: "spam principal, encadeia redução de cooldown" },
+      { n: "Shield Smite", d: "ataque de escudo que ativa Judgment" },
+      { n: "Punishment", d: "burst carregado" },
+      { n: "Warden Strike", d: "buff de defesa" },
+    ],
+    pvp: [
+      { n: "Poach", d: "puxão à distância com stun" },
+      { n: "Shield Rush", d: "gap closer" },
+      { n: "Debilitating Smash", d: "reduz a cura do alvo" },
+      { n: "Punishment", d: "burst carregado" },
+      { n: "Defiance", d: "quebra de CC" },
+    ],
+  },
+  gladiator: {
+    pve: [
+      { n: "Overhead Slam", d: "nuke principal (parcela enorme do dano)" },
+      { n: "Rending Blow", d: "spam que atinge vários alvos" },
+      { n: "Runic Blow", d: "buff de dano ao grupo" },
+      { n: "Sword Aura Rampage", d: "reduz cooldowns" },
+    ],
+    pvp: [
+      { n: "Rush Strike", d: "gap closer com CC" },
+      { n: "Leaping Slam", d: "gap closer com CC" },
+      { n: "Overhead Slam", d: "knockdown em área" },
+      { n: "Punishment Charge", d: "burst" },
+      { n: "Debilitating Smash", d: "reduz a cura do alvo" },
+    ],
+  },
+  assassin: {
+    pve: [
+      { n: "Hardcore", d: "reseta cooldown ao critar (prioridade)" },
+      { n: "Quick Slice", d: "garante crit" },
+      { n: "Insignia Explosion", d: "spam com redução de cooldown" },
+      { n: "Savage Roar", d: "gera stacks de insignia" },
+    ],
+    pvp: [
+      { n: "Ambush", d: "abertura em stealth pelas costas" },
+      { n: "Flesh Silence", d: "silencia casters" },
+      { n: "Whirlwind Slice", d: "contra-ataque com evasão" },
+      { n: "Trunil Stagger", d: "stun + reduz cooldown" },
+      { n: "Shadow Walk", d: "volta ao stealth no meio da luta" },
+    ],
+  },
+  ranger: {
+    pve: [
+      { n: "Dead Shot", d: "burst carregado na janela de Precision" },
+      { n: "Drill Dart", d: "bleed/DoT com redução de cooldown" },
+      { n: "Burst Arrow", d: "forte em alvos lentos ou presos" },
+      { n: "Gale Arrow", d: "buff de duração estendida" },
+    ],
+    pvp: [
+      { n: "Snare Shot", d: "root para travar o alvo" },
+      { n: "Burst Arrow", d: "follow-up no alvo preso" },
+      { n: "Explosion Trap", d: "negação de área" },
+      { n: "Dead Shot", d: "burst" },
+      { n: "Gale Arrow", d: "combat speed em teamfight" },
+    ],
+  },
+  sorcerer: {
+    pve: [
+      { n: "Hellfire", d: "nuke assinatura (20%+ do dano)" },
+      { n: "Firestorm", d: "reduz o cooldown de Hellfire" },
+      { n: "Wish of Concentration", d: "-10s em todas as skills" },
+      { n: "Blaze", d: "reduz o cooldown de Wish of Concentration" },
+      { n: "Bitter Cold Wind", d: "AoE multi-hit" },
+    ],
+    pvp: [
+      { n: "Frost Burst", d: "stun" },
+      { n: "Winter Shackles", d: "dano + controle" },
+      { n: "Firestorm", d: "acelera o cast" },
+      { n: "Bitter Cold Wind", d: "burst multi-hit" },
+      { n: "Hibernation", d: "invulnerabilidade para escapar" },
+    ],
+  },
+  spiritmaster: {
+    pve: [
+      { n: "Elemental Fusion", d: "payoff de burst" },
+      { n: "Cold Shock", d: "spam principal (restaura MP)" },
+      { n: "Combustion", d: "dano single-target" },
+      { n: "Summon Fire/Water/Earth Spirit", d: "cicla espíritos por stacks e utilidade" },
+    ],
+    pvp: [
+      { n: "Cry of Terror", d: "fear em grupo" },
+      { n: "Curse of Magish", d: "remove buffs + dano" },
+      { n: "Assault Terror", d: "engage com alcance estendido" },
+      { n: "Elemental Fusion", d: "burst" },
+      { n: "Dimensional Control", d: "slow" },
+    ],
+  },
+  cleric: {
+    pve: [
+      { n: "Condemnation", d: "maior dano, reseta crit" },
+      { n: "Chain of Torment", d: "libera Condemnation" },
+      { n: "Earth Punishment", d: "garante o crit do Condemnation" },
+      { n: "Radiant Recovery", d: "cura em área + cleanse" },
+      { n: "Bolt", d: "ataque carregado secundário" },
+    ],
+    pvp: [
+      { n: "Judgment Thunder", d: "dano com slow" },
+      { n: "Debilitating Mark", d: "DoT que reduz defesa" },
+      { n: "Divine Aura", d: "buff de attack speed" },
+      { n: "Healing Light", d: "cura emergencial" },
+      { n: "Salvation", d: "reset de emergência" },
+    ],
+  },
+  chanter: {
+    pve: [
+      { n: "Dark Crush", d: "maior dano single, remove cooldown" },
+      { n: "Spinning Strike", d: "AoE spammável (-5s de cooldown)" },
+      { n: "Maroton's Wrath", d: "ativa Dark Crush" },
+      { n: "Rushing Smash", d: "reseta ao matar" },
+      { n: "Undefeated Mantra", d: "buff de attack ao grupo" },
+    ],
+    pvp: [
+      { n: "Wearing Blow", d: "chance de stun" },
+      { n: "Tremor Crush", d: "cria distância (gap)" },
+      { n: "Fractural Blow", d: "stun que abre janela de burst" },
+      { n: "Dark Crush", d: "dano com cooldown reduzido" },
+      { n: "Recuperation", d: "cura em cast duplo" },
+    ],
+  },
+};
+
 const STORAGE_KEY = "aion2-tracker-v1";
 const THEME_KEY = "aion2-tracker-theme";
 
@@ -388,6 +519,12 @@ function render() {
   updateOverall();
 }
 
+function skillList(arr, heading) {
+  if (!arr || !arr.length) return "";
+  const items = arr.map((s) => `<li><b>${s.n}</b><span>${s.d}</span></li>`).join("");
+  return `<h5 class="skill-head">${heading}</h5><ul class="skill-list">${items}</ul>`;
+}
+
 function renderClass(cls) {
   const el = document.createElement("section");
   el.className = "section collapsed class-card";
@@ -407,6 +544,7 @@ function renderClass(cls) {
   head.addEventListener("click", () => el.classList.toggle("collapsed"));
 
   const chips = cls.stats.map((s) => `<span class="chip">${s}</span>`).join("");
+  const sk = SKILLS[cls.id] || {};
   const body = document.createElement("div");
   body.className = "section-body";
   body.innerHTML = `
@@ -414,8 +552,15 @@ function renderClass(cls) {
       <p class="class-focus">${cls.focus}</p>
       <div class="class-block"><h4>Atributos recomendados</h4><div class="chips">${chips}</div></div>
       <div class="prio">
-        <div class="class-block prio-pve"><h4>Prioridade PvE</h4><p>${cls.pve}</p></div>
-        <div class="class-block prio-pvp"><h4>Prioridade PvP</h4><p>${cls.pvp}</p><p class="prio-note">${PVP_NOTE}</p></div>
+        <div class="class-block prio-pve">
+          <h4>Prioridade PvE</h4><p>${cls.pve}</p>
+          ${skillList(sk.pve, "Skills mais fortes")}
+        </div>
+        <div class="class-block prio-pvp">
+          <h4>Prioridade PvP</h4><p>${cls.pvp}</p>
+          ${skillList(sk.pvp, "Skills mais fortes")}
+          <p class="prio-note">${PVP_NOTE}</p>
+        </div>
       </div>
       <div class="class-block"><h4>Manastones</h4><p>${cls.manastones}</p></div>
       <div class="class-block"><h4>Sinergias</h4><p>${cls.synergy}</p></div>
