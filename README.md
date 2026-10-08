@@ -24,7 +24,9 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
 - **Guia de classes** — uma seção por classe (as 8 do lançamento), com símbolo, função, arma,
-  foco, atributos recomendados, manastones, sinergias e dica de build.
+  foco, atributos recomendados, manastones, sinergias e dica de build. As **prioridades PvE e
+  PvP** listam as melhores skills separadas por tipo (**Ativas · Passivas · Stigmas**), com a
+  especialização recomendada de cada uma.
 - **Barras de progresso** por seção + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
@@ -127,15 +129,25 @@ A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `id`,
   manastones: "...", synergy: "...", tip: "..." }
 ```
 
-As **skills mais fortes** (PvE e PvP) ficam no mapa `SKILLS`, indexado pelo `id` da
-classe. Cada skill é `{ n: "Nome", d: "descrição curta" }` (nomes em inglês):
+As **skills mais fortes** ficam no mapa `SKILLS`, indexado pelo `id` da classe. Cada
+modo (`pve`/`pvp`) é dividido por tipo — `active`, `passive`, `stigma` — e cada skill é
+`{ n: "Nome", d: "descrição curta", spec: "especialização recomendada" }` (`spec` é
+opcional; nomes em inglês):
 
 ```js
 SKILLS.templar = {
-  pve: [ { n: "Judgment", d: "proc que remove cooldowns..." }, /* ... */ ],
-  pvp: [ { n: "Poach", d: "puxão à distância com stun" }, /* ... */ ],
+  pve: {
+    active:  [ { n: "Judgment", d: "principal dano...", spec: "Remove cooldown (Rank 16)" } ],
+    passive: [ { n: "Fury", d: "buff de dano ao grupo" } ],
+    stigma:  [ { n: "Doom Shield", d: "dispara Judgment (core)", spec: "reseta Annihilate (Rank 5)" } ],
+  },
+  pvp: { active: [ /* ... */ ], passive: [ /* ... */ ], stigma: [ /* ... */ ] },
 };
 ```
+
+Fontes dos dados: [wikily.gg](https://wikily.gg/aion-2/skills) (tipos de skill por classe)
+e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridades e
+especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
 
 ### Adicionar um evento recorrente
 No array `EVENTS`:
