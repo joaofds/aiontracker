@@ -18,7 +18,8 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 - **Contadores ao vivo** (HH:MM:SS) até:
   - o reset diário (5h),
   - o reset semanal (quarta-feira 5h),
-  - o próximo **Gartua** (evento recorrente a cada 12h).
+  - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
+    **Dimensional Invasion** (horários globais em UTC, exibidos no seu fuso) e **Gartua**.
 - **Navegação por abas** — Progressão · Diárias · Semanais · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
@@ -150,15 +151,25 @@ e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridade
 especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
 
 ### Adicionar um evento recorrente
-No array `EVENTS`:
+No array `EVENTS`. Cada evento vira um card de contador no topo:
 
 ```js
 const EVENTS = [
+  // Eventos globais (instante fixo em UTC, exibidos no seu fuso local):
+  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", intervalHours: 3, anchorHour: 0, utc: true },
+  { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
+  // Evento ancorado no fuso configurado do site (sem `utc`):
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
-  // intervalHours: de quanto em quanto tempo o evento ocorre
-  // anchorHour: hora "base" (no fuso configurado) para ancorar o ciclo
 ];
 ```
+
+- `intervalHours` — de quanto em quanto tempo o evento ocorre.
+- `anchorHour` / `anchorMinute` — horário base do ciclo (`anchorMinute` é opcional, padrão `0`).
+- `utc: true` — `anchorHour`/`anchorMinute` são em **UTC** (instante fixo global; o card
+  mostra o próximo horário já convertido para o seu fuso). Sem `utc`, a âncora usa o fuso
+  configurado do site (`SERVER_UTC_OFFSET_HOURS`).
+
+> Horários dos eventos globais conferidos em [corpus.gg/games/aion-2/timers](https://corpus.gg/games/aion-2/timers) (em UTC).
 
 ---
 

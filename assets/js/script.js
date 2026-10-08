@@ -99,8 +99,17 @@ const DATA = [
   },
 ];
 
-// Eventos recorrentes (contadores). intervalHours + anchorHour (hora base no fuso configurado).
+// Eventos recorrentes (contadores).
+//  - intervalHours: de quanto em quanto tempo o evento ocorre.
+//  - anchorHour / anchorMinute: horário base do ciclo.
+//  - utc: true  → anchorHour/anchorMinute são em UTC (instante fixo global; exibido no fuso local).
+//         (ausente) → base no fuso configurado do site (ver SERVER_UTC_OFFSET_HOURS).
+// Horários dos eventos globais conferidos em https://corpus.gg/games/aion-2/timers (em UTC).
 const EVENTS = [
+  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", intervalHours: 3, anchorHour: 0, utc: true },
+  { id: "watcher-kaira", icon: "👁️", label: "Watcher Kaira", intervalHours: 3, anchorHour: 1, utc: true },
+  { id: "shugo-festival", icon: "🎪", label: "Shugo Festival", intervalHours: 1, anchorHour: 0, anchorMinute: 0, utc: true },
+  { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
 
@@ -619,13 +628,24 @@ function nextWeeklyReset() {
   return fromVirtual(t);
 }
 function nextEvent(ev) {
+  const period = ev.intervalHours * 3600000;
+  const min = ev.anchorMinute || 0;
+  if (ev.utc) {
+    // Âncora em UTC: calcula o instante absoluto do próximo evento (fuso-independente).
+    const now = Date.now();
+    const d = new Date(now);
+    d.setUTCHours(ev.anchorHour, min, 0, 0);
+    let t = d.getTime();
+    t += Math.max(Math.ceil((now - t) / period), 0) * period;
+    while (t <= now) t += period;
+    return t;
+  }
+  // Âncora no fuso configurado do site.
   const vnow = toVirtual(Date.now());
   const d = new Date(vnow);
-  d.setUTCHours(ev.anchorHour, 0, 0, 0);
-  const period = ev.intervalHours * 3600000;
+  d.setUTCHours(ev.anchorHour, min, 0, 0);
   let t = d.getTime();
-  const k = Math.ceil((vnow - t) / period);
-  t += Math.max(k, 0) * period;
+  t += Math.max(Math.ceil((vnow - t) / period), 0) * period;
   while (t <= vnow) t += period;
   return fromVirtual(t);
 }
