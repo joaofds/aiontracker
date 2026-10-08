@@ -168,7 +168,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 
 /* ---------- Tabs ---------- */
 .tabs {
-  display: flex; gap: 0.4rem;
+  display: flex; flex-wrap: wrap; gap: 0.4rem;
   background: var(--card);
   border: 1px solid var(--card-border);
   border-radius: 12px;
@@ -177,10 +177,10 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   backdrop-filter: blur(6px);
 }
 .tab {
-  flex: 1; font: inherit; font-weight: 600; font-size: 0.9rem;
+  flex: 1 1 auto; min-width: 0; font: inherit; font-weight: 600; font-size: 0.9rem;
   border: none; background: transparent; color: var(--muted);
   padding: 0.6rem 0.8rem; border-radius: 9px; cursor: pointer;
-  transition: all 0.18s ease;
+  transition: color 0.18s ease, background 0.18s ease;
 }
 .tab:hover { color: var(--text); }
 .tab.active {
@@ -277,7 +277,8 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .guide-link:hover { background: rgba(39, 216, 199, 0.22); transform: translateY(-1px); }
 
 /* ---------- Guia: conteúdo (prose) ---------- */
-.guide-body { padding: 0.4rem 1.1rem 1rem; font-size: 0.95rem; color: var(--text); }
+.guide-body { padding: 0.4rem 1.1rem 1rem; font-size: 0.95rem; color: var(--text); overflow-wrap: break-word; }
+.guide-body code { overflow-wrap: anywhere; }
 .guide-body p { margin: 0 0 0.9rem; color: var(--muted); }
 .guide-body p b, .guide-body li b { color: var(--text); }
 .guide-body ul, .guide-body ol { margin: 0 0 1rem; padding-left: 1.3rem; color: var(--muted); }
@@ -319,4 +320,6 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   .intro { font-size: 0.9rem; }
   .overall-ring { width: 64px; height: 64px; }
   .timer-value { font-size: 1.5rem; }
+  .tab { flex: 1 1 40%; font-size: 0.82rem; padding: 0.55rem 0.4rem; }
+  .guide-body { padding: 0.4rem 0.9rem 0.9rem; }
 }
