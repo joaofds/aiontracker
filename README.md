@@ -19,10 +19,12 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - o reset diário (5h),
   - o reset semanal (quarta-feira 5h),
   - o próximo **Gartua** (evento recorrente a cada 12h).
-- **Navegação por abas** — Progressão · Diárias · Semanais · **Guias**.
+- **Navegação por abas** — Progressão · Diárias · Semanais · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
+- **Guia de classes** — uma seção por classe (as 8 do lançamento), com símbolo, função, arma,
+  foco, atributos recomendados, manastones, sinergias e dica de build.
 - **Barras de progresso** por seção + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
@@ -47,11 +49,16 @@ Como são apenas arquivos estáticos, é só subir a pasta em qualquer hospedage
 
 ```
 rpgtracker/
-├── index.html    # estrutura da página
-├── styles.css    # estilos (tema claro/escuro, layout, animações)
-├── script.js     # dados, renderização, timers, persistência
+├── index.html            # estrutura da página
+├── assets/
+│   ├── css/styles.css    # estilos (tema claro/escuro, layout, animações)
+│   ├── js/script.js      # dados, renderização, timers, persistência
+│   └── images/           # símbolos das classes (<id>.avif)
 └── README.md
 ```
+
+> As imagens das classes ficam em `assets/images/` nomeadas pelo `id` da classe
+> (ex.: `templar.avif`), carregadas por `assets/images/${id}.avif` no card.
 
 > `main.py` presente na pasta não faz parte do tracker.
 
@@ -104,6 +111,18 @@ Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com 
 
 ```js
 { id: "gear-enchant", text: "Equipamento encantado...", guide: "g-gearscore" }
+```
+
+### Editar as classes
+A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `symbol` (emoji),
+`color` (cor da função, usada no símbolo e no selo), `name`, `role`, `weapon`, `focus`,
+`stats` (lista de atributos → chips), `manastones`, `synergy` e `tip`:
+
+```js
+{ id: "templar", symbol: "🛡️", name: "Templar", color: "#4d82ff",
+  role: "Tanque", weapon: "Espada longa & Escudo",
+  focus: "...", stats: ["Defesa", "HP", "Block"],
+  manastones: "...", synergy: "...", tip: "..." }
 ```
 
 ### Adicionar um evento recorrente
