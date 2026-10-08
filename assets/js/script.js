@@ -956,13 +956,21 @@ function buildTimers() {
     </div>`).join("");
 }
 
+// Rótulos usados no preview do cabeçalho.
+const TIMER_LABELS = { daily: "Reset diário", weekly: "Reset semanal" };
+EVENTS.forEach((ev) => { TIMER_LABELS[ev.id] = ev.label; });
+const timersPreview = document.getElementById("timers-preview");
+
 let lastTargets = {};
 function tickTimers() {
   const now = Date.now();
   const targets = { daily: nextDailyReset(), weekly: nextWeeklyReset() };
   EVENTS.forEach((ev) => { targets[ev.id] = nextEvent(ev); });
 
+  let soonest = null;
   for (const [id, target] of Object.entries(targets)) {
+    if (!soonest || target < soonest.target) soonest = { id, target };
+
     const card = timersEl.querySelector(`[data-timer="${id}"]`);
     if (!card) continue;
     card.querySelector("[data-value]").textContent = fmtCountdown(target - now);
@@ -976,6 +984,11 @@ function tickTimers() {
       setTimeout(() => card.classList.remove("flash"), 1000);
     }
     lastTargets[id] = target;
+  }
+
+  // resumo do próximo evento no cabeçalho
+  if (soonest && timersPreview) {
+    timersPreview.innerHTML = `${TIMER_LABELS[soonest.id]} <b>${fmtCountdown(soonest.target - now)}</b>`;
   }
 
   // reset automático de diárias/semanais
@@ -1031,6 +1044,26 @@ document.getElementById("reset-all").addEventListener("click", () => {
   saveState();
   render();
 });
+
+/* ---------- Recolher/expandir o painel de contadores ---------- */
+const TIMERS_KEY = "aion2-tracker-timers-open";
+const timersPanel = document.getElementById("timers-panel");
+const timersToggle = document.getElementById("timers-toggle");
+
+function setTimersOpen(open) {
+  timersPanel.classList.toggle("collapsed", !open);
+  timersToggle.setAttribute("aria-expanded", String(open));
+  localStorage.setItem(TIMERS_KEY, open ? "1" : "0");
+}
+timersToggle.addEventListener("click", () => {
+  setTimersOpen(timersPanel.classList.contains("collapsed"));
+});
+// Estado inicial: usa o salvo; senão, recolhido no mobile e aberto no desktop.
+(() => {
+  const saved = localStorage.getItem(TIMERS_KEY);
+  const open = saved !== null ? saved === "1" : window.innerWidth > 560;
+  setTimersOpen(open);
+})();
 
 /* ============================================================
    Boot

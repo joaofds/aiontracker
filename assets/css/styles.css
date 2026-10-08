@@ -128,11 +128,45 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .overall-ring-label small { font-size: 0.55rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
 /* ---------- Timers ---------- */
+/* Painel recolhível dos contadores */
+.timers-panel { margin: 1.75rem 0 0.5rem; }
+.timers-toggle {
+  width: 100%;
+  display: flex; align-items: center; gap: 0.75rem;
+  font: inherit; font-weight: 600; color: var(--text);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  transition: border-color 0.18s ease;
+}
+.timers-toggle:hover { border-color: var(--accent-2); }
+.tt-title { display: flex; align-items: center; gap: 0.45rem; flex: none; }
+.tt-icon { font-size: 1.05rem; }
+.tt-preview {
+  flex: 1 1 auto; min-width: 0;
+  text-align: right;
+  font-size: 0.82rem; font-weight: 500; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.tt-preview b { color: var(--accent-2); font-variant-numeric: tabular-nums; }
+.timers-toggle .chevron { flex: none; width: 20px; height: 20px; color: var(--muted); transition: transform 0.3s ease; }
+.timers-panel.collapsed .chevron { transform: rotate(-90deg); }
+
+.timers-body {
+  display: grid; grid-template-rows: 1fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.timers-panel.collapsed .timers-body { grid-template-rows: 0fr; }
+.timers-body > .timers { overflow: hidden; min-height: 0; }
+
 .timers {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
-  margin: 1.75rem 0 0.5rem;
+  padding-top: 0.6rem;
 }
 .timer-card {
   background: var(--card);
@@ -397,7 +431,18 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   .section-count { display: none; }
   .intro { font-size: 0.9rem; }
   .overall-ring { width: 64px; height: 64px; }
-  .timer-value { font-size: 1.5rem; }
+
+  /* Contadores compactos em 2 colunas no mobile */
+  .timers-panel { margin: 1.25rem 0 0.25rem; }
+  .timers { grid-template-columns: repeat(2, 1fr); gap: 0.55rem; }
+  .timer-card { padding: 0.55rem 0.65rem; border-radius: 12px; }
+  .timer-card::before { width: 3px; }
+  .timer-head { gap: 0.35rem; }
+  .timer-icon { font-size: 0.9rem; }
+  .timer-label { font-size: 0.62rem; letter-spacing: 0.3px; line-height: 1.2; }
+  .timer-value { font-size: 1.2rem; margin: 0.12rem 0 0.05rem; letter-spacing: 0.5px; }
+  .timer-sub { font-size: 0.64rem; }
+
   .tab { flex: 1 1 40%; font-size: 0.82rem; padding: 0.55rem 0.4rem; }
   .guide-body { padding: 0.4rem 0.9rem 0.9rem; }
 }
