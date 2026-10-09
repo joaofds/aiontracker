@@ -56,7 +56,25 @@ rpgtracker/
 ├── index.html            # estrutura da página
 ├── assets/
 │   ├── css/styles.css    # estilos (tema claro/escuro, layout, animações)
-│   ├── js/script.js      # dados, renderização, timers, persistência
+│   ├── js/
+│   │   ├── config.js     # fuso, horários de reset, chaves do localStorage
+│   │   ├── data/         # conteúdo editável
+│   │   │   ├── checklist.js  # DATA (fases, diárias, semanais)
+│   │   │   ├── events.js     # EVENTS (eventos recorrentes)
+│   │   │   ├── guides.js     # GUIDES (aba Guias)
+│   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
+│   │   │   └── skills.js     # SKILLS (skills por classe)
+│   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
+│   │   ├── state.js      # persistência + reset automático de diárias/semanais
+│   │   ├── ui/           # renderização e interação
+│   │   │   ├── board.js      # render geral, card recolhível, abas
+│   │   │   ├── checklist.js  # seções/itens da checklist + progresso
+│   │   │   ├── guides.js     # aba Guias
+│   │   │   ├── classes.js    # aba Classes
+│   │   │   ├── timers.js     # painel de contadores
+│   │   │   ├── theme.js      # tema claro/escuro
+│   │   │   └── toolbar.js    # exportar / importar / resetar
+│   │   └── main.js       # boot
 │   └── images/           # símbolos das classes (<id>.avif)
 └── README.md
 ```
@@ -64,13 +82,16 @@ rpgtracker/
 > As imagens das classes ficam em `assets/images/` nomeadas pelo `id` da classe
 > (ex.: `templar.avif`), carregadas por `assets/images/${id}.avif` no card.
 
-> `main.py` presente na pasta não faz parte do tracker.
+> Os scripts são **clássicos** (não ES modules) para continuar funcionando abrindo o
+> `index.html` direto do disco (`file://`). Eles compartilham o escopo global, então a
+> **ordem dos `<script>` no `index.html` importa**: config → data → lógica → ui → `main.js`.
+> Ao criar um arquivo novo, adicione-o no `index.html` na posição certa.
 
 ---
 
 ## ⚙️ Configuração
 
-Todas as opções ficam no topo do `script.js`:
+Todas as opções ficam em `assets/js/config.js`:
 
 | Constante | Padrão | Descrição |
 |---|---|---|
@@ -79,7 +100,7 @@ Todas as opções ficam no topo do `script.js`:
 | `WEEKLY_RESET_DOW` | `3` | Dia do reset semanal. `0`=Domingo … `3`=Quarta. |
 
 ### Editar as tarefas
-O conteúdo da checklist está no array `DATA` do `script.js`. Cada seção tem:
+O conteúdo da checklist está no array `DATA` em `assets/js/data/checklist.js`. Cada seção tem:
 
 ```js
 {
@@ -100,7 +121,7 @@ O conteúdo da checklist está no array `DATA` do `script.js`. Cada seção tem:
 > Se você renomear um `id`, o progresso salvo daquele item é perdido.
 
 ### Editar os guias
-O conteúdo da aba **Guias** está no array `GUIDES` do `script.js`. Cada guia tem um
+O conteúdo da aba **Guias** está no array `GUIDES` em `assets/js/data/guides.js`. Cada guia tem um
 `id`, `icon`, `title`, `summary` e `html` (conteúdo em HTML — parágrafos, listas e
 caixas de dica `<div class="tip">`):
 
@@ -118,7 +139,7 @@ Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com 
 ```
 
 ### Editar as classes
-A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `id`,
+A aba **Classes** vem do array `CLASSES` em `assets/js/data/classes.js`. Cada classe tem `id`,
 `color` (cor da função, usada no símbolo e no selo), `name`, `role`, `weapon`, `focus`,
 `stats` (lista de atributos → chips), `pve` e `pvp` (prioridade de stats por modo),
 `manastones`, `synergy` e `tip`. O símbolo vem de `assets/images/<id>.avif`:
@@ -131,7 +152,7 @@ A aba **Classes** vem do array `CLASSES` no `script.js`. Cada classe tem `id`,
   manastones: "...", synergy: "...", tip: "..." }
 ```
 
-As **skills mais fortes** ficam no mapa `SKILLS`, indexado pelo `id` da classe. Cada
+As **skills mais fortes** ficam no mapa `SKILLS` (`assets/js/data/skills.js`), indexado pelo `id` da classe. Cada
 modo (`pve`/`pvp`) é dividido por tipo — `active`, `passive`, `stigma` — e cada skill é
 `{ n: "Nome", d: "descrição curta", spec: "especialização recomendada" }` (`spec` é
 opcional; nomes em inglês):
@@ -152,7 +173,7 @@ e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridade
 especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
 
 ### Adicionar um evento recorrente
-No array `EVENTS`. Cada evento vira um card de contador no topo:
+No array `EVENTS` em `assets/js/data/events.js`. Cada evento vira um card de contador no topo:
 
 ```js
 const EVENTS = [
@@ -195,7 +216,8 @@ const EVENTS = [
 ## 💾 Dados e privacidade
 
 - Tudo é salvo **localmente** no seu navegador (`localStorage`, chave `aion2-tracker-v1`;
-  tema em `aion2-tracker-theme`).
+  tema em `aion2-tracker-theme`; painel de contadores aberto/fechado em
+  `aion2-tracker-timers-open`). As chaves ficam definidas em `assets/js/config.js`.
 - Nada é enviado para servidores. Limpar os dados do navegador apaga o progresso.
 - Use **Exportar** para fazer backup/compartilhar e **Importar** para restaurar.
 

@@ -1,0 +1,98 @@
+/* ============================================================
+   Dados: classes (conteúdo da aba "Classes").
+   São 8 classes no lançamento global, sem ramificação, disponíveis
+   para ambas as facções. Dados da comunidade — revise conforme o patch.
+   ============================================================ */
+const CLASSES = [
+  {
+    id: "templar", symbol: "🛡️", name: "Templar", color: "#4d82ff",
+    role: "Tanque", weapon: "Espada longa & Escudo",
+    focus: "Segura o aggro e absorve dano com habilidades de escudo, mantendo os chefes travados em si com Provoke. Extremamente perdoável para iniciantes.",
+    stats: ["Defense", "HP", "Block", "Front Attack", "Double Chance", "Weapon/Critical Damage"],
+    pve: "Feche Defense / HP / Block primeiro; com o excedente: Front Attack > Double Chance > Weapon/Critical Damage.",
+    pvp: "Sobrevivência primeiro: Evasion, Block, Status Effect Resist e HP; adicione PvP Damage Boost e PvP Accuracy com o que sobrar.",
+    manastones: "Front Attack > Weapon > Critical Damage.",
+    synergy: "Concede buff de dano ao grupo (Fury). Combina com DPS corpo a corpo que precisam de um alvo estável para atacar de frente.",
+    tip: "Defense antes de tudo: só invista em dano quando o Block/HP já estiverem confortáveis.",
+  },
+  {
+    id: "gladiator", symbol: "⚔️", name: "Gladiator", color: "#ff6b4d",
+    role: "DPS corpo a corpo / Off-tank", weapon: "Montante (Greatsword)",
+    focus: "Acerta vários inimigos com combos; muitas skills batem mais forte em alvos derrubados ou atordoados. Tem auto-cura em certos ataques.",
+    stats: ["Strength", "Front Attack", "Double Chance", "Weapon/Critical Damage", "Lifesteal"],
+    pve: "Front Attack > Double Chance > Weapon/Critical Damage.",
+    pvp: "Mantenha o núcleo ofensivo (Front Attack, Weapon/Critical Damage) e some PvP Damage Boost + PvP Accuracy; Status Effect Resist para não ser travado em CC.",
+    manastones: "Front Attack > Weapon > Critical Damage > Damage Boost.",
+    synergy: "Recupera HP em certos golpes e dá buff de dano ao grupo após bloquear — bom como off-tank secundário.",
+    tip: "Garanta Accuracy suficiente e busque um breakpoint útil de Combat Speed.",
+  },
+  {
+    id: "assassin", symbol: "🗡️", name: "Assassin", color: "#9b6bff",
+    role: "DPS burst corpo a corpo", weapon: "Adagas duplas",
+    focus: "Alta mobilidade, stealth e burst. Ataca escondido e reposiciona rápido antes do contra-ataque. Brilha em duelos de PvP.",
+    stats: ["Agility", "Back Attack", "Critical Hit", "Double Chance", "Attack Speed", "Weapon/Critical Damage"],
+    pve: "Back Attack > Double Chance > Critical Hit > Weapon/Critical Damage.",
+    pvp: "Back Attack + PvP Damage Boost para o burst; PvP Accuracy contra Evasion e Status Effect Resist para sobreviver ao controle.",
+    manastones: "Back Attack > Weapon > Critical Damage > Damage Boost.",
+    synergy: "Depende de atacar pelas costas — rende mais com um tanque que segure o aggro de frente.",
+    tip: "Crit é parte do motor do Heart Gore; não negligencie Critical Hit.",
+  },
+  {
+    id: "ranger", symbol: "🏹", name: "Ranger", color: "#3ddc84",
+    role: "DPS físico à distância", weapon: "Arco",
+    focus: "Combate à distância direto, com armadilhas e posicionamento. Armadilhas mantêm o inimigo longe e a mobilidade evita o corpo a corpo. Amigável para iniciantes.",
+    stats: ["Dexterity", "Front Attack", "Weapon Damage", "Accuracy", "Critical/Damage Boost"],
+    pve: "Front Attack > Weapon Damage > Critical/Damage Boost.",
+    pvp: "PvP Damage Boost + PvP Accuracy (alvos empilham Evasion/Block); Status Effect Resist para preservar a mobilidade.",
+    manastones: "Front Attack > Weapon > Critical/Damage Boost.",
+    synergy: "Controla a distância do grupo com armadilhas; seguro e consistente em qualquer composição.",
+    tip: "Considere buffs como o Marking Shot antes de empilhar mais Critical Hit.",
+  },
+  {
+    id: "sorcerer", symbol: "🔮", name: "Sorcerer", color: "#ff5cb0",
+    role: "DPS mágico à distância (burst)", weapon: "Grimório",
+    focus: "Magia de dois elementos: fogo para dano e gelo para controle de grupo. Limpa grupos inteiros mantendo os alvos perigosos à distância.",
+    stats: ["Intelligence", "Weapon Damage", "Front/Critical Damage", "Casting Speed", "Cooldown Reduction"],
+    pve: "Weapon Damage > Front/Critical Damage > Cooldown Reduction.",
+    pvp: "PvP Damage Boost para o burst; defensivos e Status Effect Resist (defesa baixa), além de PvP Accuracy contra Evasion.",
+    manastones: "Weapon > Front/Critical Damage Boost.",
+    synergy: "Tem barreira protetora, mas defesa baixa — rende mais atrás de um tanque que controle a frente.",
+    tip: "A Cooldown Reduction vem principalmente de outros sistemas, não só das manastones.",
+  },
+  {
+    id: "spiritmaster", symbol: "🌪️", name: "Spiritmaster", color: "#27d8c7",
+    role: "DPS mágico / Invocador", weapon: "Orbe",
+    focus: "Invoca espíritos elementais (fogo, água, vento, terra), lança maldições e controla o campo. Os espíritos tankam e causam dano — ótima sustentação solo.",
+    stats: ["Intelligence", "Summon Power", "Double Chance", "Damage Boost", "Weapon Damage", "Critical Damage"],
+    pve: "Double Chance > multiplicadores de dano (Damage/Weapon/Critical Damage) > Critical Hit, com Accuracy suficiente.",
+    pvp: "PvP Damage Boost e PvP Accuracy; Status Effect Resist é essencial para manter o uptime de espíritos e maldições.",
+    manastones: "Damage / Weapon / Critical Damage / Front Attack — ordem flexível.",
+    synergy: "Autossuficiente; os espíritos cobrem funções, encaixando em grupos e no solo com facilidade.",
+    tip: "Vários multiplicadores fortes dão bastante flexibilidade de gearing.",
+  },
+  {
+    id: "cleric", symbol: "✨", name: "Cleric", color: "#f4c667",
+    role: "Healer (com dano)", weapon: "Maça",
+    focus: "Cura individual e em grupo, protege com barreiras e ainda causa dano entre as curas. Única classe com ressurreição.",
+    stats: ["Intelligence", "Spirit", "Attack", "Cooldown Reduction", "Weapon/Critical Damage"],
+    pve: "Attack > Cooldown Reduction > Weapon/Critical Damage (Attack também escala a cura).",
+    pvp: "Uptime e sobrevivência: Status Effect Resist, defensivos e Cooldown Reduction; PvP Damage Boost só com orçamento sobrando.",
+    manastones: "Weapon / Critical > Damage / Front Attack Boost.",
+    synergy: "Muito requisitada em grupo (ressurreição + cura). Sólida também no solo pela durabilidade.",
+    tip: "Attack também melhora a cura (conversão de Healing Enhancement).",
+  },
+  {
+    id: "chanter", symbol: "🎶", name: "Chanter", color: "#36c6e0",
+    role: "Suporte híbrido corpo a corpo", weapon: "Cajado",
+    focus: "Luta no corpo a corpo enquanto fortalece aliados com Mantras (buffs contínuos de Atk, velocidade etc.) e oferece cura suplementar.",
+    stats: ["Intelligence", "Healing Power", "Double Chance", "Front/Back Attack", "Weapon Damage"],
+    pve: "Double Chance > Front/Back Attack > Weapon Damage.",
+    pvp: "Equilibre ofensivo (PvP Damage Boost, PvP Accuracy) com Status Effect Resist e defensivos para manter os Mantras ativos.",
+    manastones: "Front/Back Attack > Weapon Damage.",
+    synergy: "Role flexível que encaixa em qualquer composição — buffs de grupo somam com qualquer DPS.",
+    tip: "Escolha o roll posicional (Front ou Back) conforme seu posicionamento real no grupo, não um padrão universal.",
+  },
+];
+
+// Ressalva exibida nos blocos de PvP (meta global ainda em formação).
+const PVP_NOTE = "Meta de PvP ainda em formação — ajuste conforme o patch atual.";
