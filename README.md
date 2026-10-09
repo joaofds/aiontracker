@@ -16,10 +16,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 - **Checklist por fases** — roadmap da Level 45 até o endgame (1.600–2.100 de Gear Score).
 - **Tarefas diárias e semanais** com reset automático.
 - **Contadores ao vivo** (HH:MM:SS) até:
-  - o reset diário (5h),
-  - o reset semanal (quarta-feira 5h),
+  - o reset diário (4h),
+  - o reset semanal (quarta-feira 4h),
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
-    **Dimensional Invasion** (horários globais em UTC, exibidos no seu fuso) e **Gartua**.
+    **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
+    (horários globais em UTC, exibidos no seu fuso).
 - **Navegação por abas** — Progressão · Diárias · Semanais · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
@@ -74,7 +75,7 @@ Todas as opções ficam no topo do `script.js`:
 | Constante | Padrão | Descrição |
 |---|---|---|
 | `SERVER_UTC_OFFSET_HOURS` | `null` | Fuso usado nos contadores. `null` = fuso **local** do navegador. Para fixar no horário do servidor do jogo, informe o offset em horas (ex.: `2` para GMT+2, `-3` para GMT-3). |
-| `RESET_HOUR` | `5` | Hora do reset diário (e do reset semanal). |
+| `RESET_HOUR` | `4` | Hora do reset diário (e do reset semanal). |
 | `WEEKLY_RESET_DOW` | `3` | Dia do reset semanal. `0`=Domingo … `3`=Quarta. |
 
 ### Editar as tarefas
@@ -158,24 +159,31 @@ const EVENTS = [
   // Eventos globais (instante fixo em UTC, exibidos no seu fuso local):
   { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", intervalHours: 3, anchorHour: 0, utc: true },
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
+  // Evento em dias fixos da semana (UTC): Siege às Seg/Qui/Sáb 21:00 UTC:
+  { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, utc: true },
   // Evento ancorado no fuso configurado do site (sem `utc`):
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
 ```
 
-- `intervalHours` — de quanto em quanto tempo o evento ocorre.
+- `intervalHours` — de quanto em quanto tempo o evento ocorre (eventos de intervalo).
+- `days` — lista de dias da semana (`0`=Dom … `6`=Sáb) para eventos semanais em dias fixos,
+  no horário `anchorHour`/`anchorMinute`. Quando presente, substitui `intervalHours`.
 - `anchorHour` / `anchorMinute` — horário base do ciclo (`anchorMinute` é opcional, padrão `0`).
 - `utc: true` — `anchorHour`/`anchorMinute` são em **UTC** (instante fixo global; o card
   mostra o próximo horário já convertido para o seu fuso). Sem `utc`, a âncora usa o fuso
   configurado do site (`SERVER_UTC_OFFSET_HOURS`).
 
-> Horários dos eventos globais conferidos em [corpus.gg/games/aion-2/timers](https://corpus.gg/games/aion-2/timers) (em UTC).
+> Horários (em UTC) conferidos cruzando [corpus.gg](https://corpus.gg/games/aion-2/timers) e
+> [aion2rifttimer.app](https://aion2rifttimer.app/blog/aion-2-event-schedule-explained), que
+> concordam na grade. Siege: Seg/Qui/Sáb 21:00 UTC. São horários observados pela comunidade
+> (não publicados oficialmente); confirme no contador do próprio jogo (Journal › Duty).
 
 ---
 
 ## 🔁 Como funcionam os resets
 
-- As tarefas **diárias** resetam todo dia às `RESET_HOUR` (5h).
+- As tarefas **diárias** resetam todo dia às `RESET_HOUR` (4h).
 - As tarefas **semanais** resetam no dia `WEEKLY_RESET_DOW` (quarta) às `RESET_HOUR`.
 - O reset é calculado por **chave de período**: a cada novo ciclo os checkboxes
   correspondentes são limpos automaticamente — funciona mesmo que você não abra o

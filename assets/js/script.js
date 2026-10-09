@@ -12,8 +12,8 @@
    o offset em horas (ex.: 2 = GMT+2, -3 = GMT-3).
    ------------------------------------------------------------ */
 const SERVER_UTC_OFFSET_HOURS = null;
-const RESET_HOUR = 5;          // reset diário às 5h
-const WEEKLY_RESET_DOW = 3;    // 0=Dom ... 3=Qua (reset semanal na quarta às 5h)
+const RESET_HOUR = 4;          // reset diário às 4h
+const WEEKLY_RESET_DOW = 3;    // 0=Dom ... 3=Qua (reset semanal na quarta às 4h)
 
 /* ============================================================
    Dados
@@ -73,7 +73,7 @@ const DATA = [
   {
     id: "diarias", type: "daily", tab: "daily",
     badge: "Diárias", title: "Tarefas Diárias",
-    subtitle: "Resetam todo dia às 5h.",
+    subtitle: "Resetam todo dia às 4h.",
     items: [
       { id: "d-quests", text: "Quests diárias" },
       { id: "d-shugo", text: "Os 2 eventos Shugo diários jogados" },
@@ -84,7 +84,7 @@ const DATA = [
   {
     id: "semanais", type: "weekly", tab: "weekly",
     badge: "Semanais", title: "Tarefas Semanais",
-    subtitle: "Resetam na quarta-feira às 5h.",
+    subtitle: "Resetam na quarta-feira às 4h.",
     items: [
       { id: "w-abyss", text: "Quests do Abyss" },
       { id: "w-altgard", text: "Quests de Altgard" },
@@ -110,6 +110,8 @@ const EVENTS = [
   { id: "watcher-kaira", icon: "👁️", label: "Watcher Kaira", intervalHours: 3, anchorHour: 1, utc: true },
   { id: "shugo-festival", icon: "🎪", label: "Shugo Festival", intervalHours: 1, anchorHour: 0, anchorMinute: 0, utc: true },
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
+  // Siege em dias fixos (UTC): Seg, Qui e Sáb às 21:00 UTC (bosses 21:30 UTC logo após).
+  { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, utc: true },
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
 
@@ -155,7 +157,7 @@ const GUIDES = [
     id: "g-rotina", icon: "🔁", title: "Rotina diária/semanal eficiente",
     summary: "A ordem certa das tarefas, gestão de Odyle e como nunca perder um reset.",
     html: `
-      <p>Resets: <b>diárias às 5h</b> e <b>semanais na quarta às 5h</b>. Use os contadores no topo
+      <p>Resets: <b>diárias às 4h</b> e <b>semanais na quarta às 4h</b>. Use os contadores no topo
       para não deixar nada escapar — principalmente na terça à noite, véspera do reset semanal.</p>
       <p><b>Diárias:</b></p>
       <ul>
@@ -630,6 +632,21 @@ function nextWeeklyReset() {
 function nextEvent(ev) {
   const period = ev.intervalHours * 3600000;
   const min = ev.anchorMinute || 0;
+
+  // Recorrência em dias específicos da semana (ex.: Siege às Seg/Qui/Sáb).
+  if (ev.days && ev.days.length) {
+    const now = Date.now();
+    const ref = ev.utc ? now : toVirtual(now);
+    for (let i = 0; i < 8; i++) {
+      const d = new Date(ref + i * 86400000);
+      d.setUTCHours(ev.anchorHour, min, 0, 0);
+      if (ev.days.includes(d.getUTCDay()) && d.getTime() > ref) {
+        return ev.utc ? d.getTime() : fromVirtual(d.getTime());
+      }
+    }
+    return 0;
+  }
+
   if (ev.utc) {
     // Âncora em UTC: calcula o instante absoluto do próximo evento (fuso-independente).
     const now = Date.now();
@@ -959,6 +976,8 @@ function buildTimers() {
 // Rótulos usados no preview do cabeçalho.
 const TIMER_LABELS = { daily: "Reset diário", weekly: "Reset semanal" };
 EVENTS.forEach((ev) => { TIMER_LABELS[ev.id] = ev.label; });
+// IDs de contadores que ocorrem em dias específicos (mostram o dia da semana no sub-texto).
+const DAY_BASED_IDS = new Set(["weekly", ...EVENTS.filter((e) => e.days).map((e) => e.id)]);
 const timersPreview = document.getElementById("timers-preview");
 
 let lastTargets = {};
@@ -975,7 +994,7 @@ function tickTimers() {
     if (!card) continue;
     card.querySelector("[data-value]").textContent = fmtCountdown(target - now);
     const c = fmtClock(target);
-    const sub = id === "weekly" ? `${c.dow}. ${c.hm}` : `às ${c.hm}`;
+    const sub = DAY_BASED_IDS.has(id) ? `${c.dow}. ${c.hm}` : `às ${c.hm}`;
     card.querySelector("[data-sub]").textContent = `próximo ${sub}`;
 
     // ao virar um alvo, piscar o card
