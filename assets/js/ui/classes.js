@@ -9,10 +9,12 @@ function skillGroups(modeData) {
   const html = groups.map(([key, label]) => {
     const arr = modeData[key];
     if (!arr || !arr.length) return "";
-    const items = arr.map((s) =>
-      `<li><b>${s.n}</b>${s.d ? `<span> — ${s.d}</span>` : ""}` +
-      `${s.spec ? `<em class="spec">${s.spec}</em>` : ""}</li>`
-    ).join("");
+    const items = arr.map((s) => {
+      // número(s) da especialização no jogo, quando mapeado (`pick`), ex.: "★ Esp. 3 + 5 · "
+      const num = s.pick?.length ? `<span class="spec-num">★ Esp. ${s.pick.join(" + ")}</span> · ` : "";
+      return `<li><b>${s.n}</b>${s.d ? `<span> — ${s.d}</span>` : ""}` +
+        `${s.spec ? `<em class="spec">${num}${s.spec}</em>` : ""}</li>`;
+    }).join("");
     return `<div class="skill-group skill-${key}"><h6>${label}</h6><ul class="skill-list">${items}</ul></div>`;
   }).join("");
   return html;

@@ -192,13 +192,20 @@ opcional; nomes em inglês):
 ```js
 SKILLS.templar = {
   pve: {
-    active:  [ { n: "Judgment", d: "principal dano...", spec: "Remove cooldown (Rank 16)" } ],
+    active:  [ { n: "Judgment", d: "principal dano...", spec: "Remove cooldown (lvl 16)", pick: [5] } ],
     passive: [ { n: "Fury", d: "buff de dano ao grupo" } ],
-    stigma:  [ { n: "Doom Shield", d: "dispara Judgment (core)", spec: "reseta Annihilate (Rank 5)" } ],
+    stigma:  [ { n: "Doom Shield", d: "dispara Judgment (core)", spec: "reseta Annihilate (lvl 5)", pick: [1] } ],
   },
   pvp: { active: [ /* ... */ ], passive: [ /* ... */ ], stigma: [ /* ... */ ] },
 };
 ```
+
+`pick` (opcional) liga a recomendação às especializações reais do banco de skills: são os
+**números** das especializações recomendadas, na ordem do jogo (a mesma da lista em
+`SKILL_DB[...].specs`, 1 = primeira). Com ele, a visão geral mostra "★ Esp. 5 · …" e a sub-aba
+**Skills** destaca a especialização com ★ e o modo (PvE/PvP). Sem `pick`, o `spec` aparece só
+como texto. Ao atualizar os dados com o importador, confira se a ordem das especializações não
+mudou no patch.
 
 Fontes dos dados: [wikily.gg](https://wikily.gg/aion-2/skills) (tipos de skill por classe)
 e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridades e
@@ -208,7 +215,8 @@ especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda e
 Cada card de classe tem duas sub-abas: **Visão geral** (o conteúdo acima) e **Skills**, com a
 lista completa da classe (ativas, passivas e stigmas), filtro por tipo, nível, custo, cooldown,
 alcance e o efeito no nível 1. Clique na skill para ver o efeito inteiro e as **especializações**
-(o selo "N esp." indica quantas ela tem), com o nível mínimo de cada uma. Skills que aparecem em
+(o selo "N esp." indica quantas ela tem), com o nível mínimo de cada uma; as recomendadas
+(`pick` em `SKILLS`) aparecem com ★. Skills que aparecem em
 `SKILLS` ganham os selos **PvE**/**PvP** de recomendada.
 
 Os dados ficam em `assets/js/data/skill-db/` — um arquivo por classe, que preenche

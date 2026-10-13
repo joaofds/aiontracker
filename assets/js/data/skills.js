@@ -1,12 +1,14 @@
 /* ============================================================
    Dados: skills mais fortes por classe (PvE / PvP), indexadas pelo id da classe.
    Nomes de skill em inglês. Dados da comunidade — revise por patch.
+   Cada skill: { n: nome, d: descrição curta, spec?: especialização recomendada (texto),
+   pick?: [números das especializações recomendadas, na ordem do jogo — ver SKILL_DB] }.
    ============================================================ */
 const SKILLS = {
   templar: {
     pve: {
       active: [
-        { n: "Judgment", d: "principal dano, disparado pelos ataques de escudo", spec: "Remove cooldown (lvl 16)" },
+        { n: "Judgment", d: "principal dano, disparado pelos ataques de escudo", spec: "Remove cooldown (lvl 16)", pick: [5] },
         { n: "Pummel", d: "base de dano multi-alvo", spec: "subir o máximo de rank" },
         { n: "Punishment", d: "abertura", spec: "buff Executor (+200 Accuracy, +20% PvE Damage)" },
         { n: "Shield Smite", d: "ativa Judgment" },
@@ -18,15 +20,15 @@ const SKILLS = {
         { n: "Ironclad Defense", d: "defesa" },
       ],
       stigma: [
-        { n: "Doom Shield", d: "dispara Judgment (core)", spec: "reseta Annihilate (lvl 5)" },
-        { n: "Battlefield Banner", d: "Attack escala com Defense (core)", spec: "+Multi-Hit e Weapon Damage (lvl 5+)" },
+        { n: "Doom Shield", d: "dispara Judgment (core)", spec: "reseta Annihilate (lvl 5)", pick: [1] },
+        { n: "Battlefield Banner", d: "Attack escala com Defense (core)", spec: "+Multi-Hit e Weapon Damage (lvl 5+)", pick: [1, 2] },
         { n: "Nezekan's Shield", d: "escudo de grupo (raid)" },
         { n: "Shield of Protection", d: "garante Block (tank buster)" },
       ],
     },
     pvp: {
       active: [
-        { n: "Debilitating Smash", d: "anti-cura", spec: "-60% Incoming Heal (PvP)" },
+        { n: "Debilitating Smash", d: "anti-cura", spec: "-60% Incoming Heal (PvP)", pick: [3] },
         { n: "Poach", d: "puxão à distância com stun" },
         { n: "Shield Rush", d: "gap closer" },
         { n: "Defiance", d: "quebra de CC" },
@@ -44,20 +46,20 @@ const SKILLS = {
   gladiator: {
     pve: {
       active: [
-        { n: "Overhead Slam", d: "núcleo do build (sem cooldown)", spec: "Remove cooldown (lvl 16)" },
-        { n: "Rending Blow", d: "spam multi-alvo", spec: "Mobile; +50 MP no Critical Hit" },
-        { n: "Keen Strike", d: "gerador de MP", spec: "+20% MP restaurado" },
-        { n: "Ruinous Blow", d: "dano", spec: "+20% Skill Speed" },
+        { n: "Overhead Slam", d: "núcleo do build (sem cooldown)", spec: "Remove cooldown (lvl 16)", pick: [5] },
+        { n: "Rending Blow", d: "spam multi-alvo", spec: "Mobile; +50 MP no Critical Hit", pick: [3, 5] },
+        { n: "Keen Strike", d: "gerador de MP", spec: "+20% MP restaurado", pick: [1] },
+        { n: "Ruinous Blow", d: "dano", spec: "+20% Skill Speed", pick: [1] },
       ],
       passive: [
         { n: "Blood Absorption", d: "sustain (lifesteal)" },
         { n: "Murderous Burst", d: "dano" },
       ],
       stigma: [
-        { n: "Lunge Stance", d: "core", spec: "lvl 20: CDR no Critical Hit" },
+        { n: "Lunge Stance", d: "core", spec: "lvl 20: CDR no Critical Hit", pick: [4] },
         { n: "Zikel's Blessing", d: "attack boost + stagger" },
-        { n: "Rage Burst", d: "janela de burst", spec: "lvl 5: CDR" },
-        { n: "Focused Block", d: "defensivo", spec: "lvl 5: 2º uso consecutivo" },
+        { n: "Rage Burst", d: "janela de burst", spec: "lvl 5: CDR", pick: [1] },
+        { n: "Focused Block", d: "defensivo", spec: "lvl 5: 2º uso consecutivo", pick: [1] },
       ],
     },
     pvp: {
@@ -80,11 +82,11 @@ const SKILLS = {
   assassin: {
     pve: {
       active: [
-        { n: "Heart Gore", d: "principal", spec: "reset no Critical Hit; +20% Crit chance (lvl 16)" },
-        { n: "Quick Slice", d: "garante crit", spec: "sempre crita; reduz CD de Insignia Explosion" },
-        { n: "Insignia Explosion", d: "spam", spec: "Multi-Hit, -3s de cooldown" },
-        { n: "Savage Roar", d: "gera stacks de insignia", spec: "-20% MP, +20% Skill Speed" },
-        { n: "Storm Rampage", d: "usar sem outros cooldowns", spec: "reduz CD de todas as skills no hit" },
+        { n: "Heart Gore", d: "principal", spec: "reset no Critical Hit; +20% Crit chance (lvl 16)", pick: [3, 5] },
+        { n: "Quick Slice", d: "garante crit", spec: "sempre crita; reduz CD de Insignia Explosion", pick: [4, 5] },
+        { n: "Insignia Explosion", d: "spam", spec: "Multi-Hit, -3s de cooldown", pick: [2, 5] },
+        { n: "Savage Roar", d: "gera stacks de insignia", spec: "-20% MP, +20% Skill Speed", pick: [1, 2] },
+        { n: "Storm Rampage", d: "usar sem outros cooldowns", spec: "reduz CD de todas as skills no hit", pick: [5] },
       ],
       passive: [
         { n: "Apply Poison", d: "DoT de veneno" },
@@ -92,9 +94,9 @@ const SKILLS = {
       ],
       stigma: [
         { n: "Illusive Clone", d: "core", spec: "lvl 20: remove o cooldown de Heart Gore" },
-        { n: "Triniel's Dagger", d: "core", spec: "lvl 10: -10% CD de todas as skills" },
+        { n: "Triniel's Dagger", d: "core", spec: "lvl 10: -10% CD de todas as skills", pick: [2] },
         { n: "Swift Contract", d: "+20% Combat Speed" },
-        { n: "Savage Fang", d: "grava 5 Insignias", spec: "lvl 15: +10% PvE Damage" },
+        { n: "Savage Fang", d: "grava 5 Insignias", spec: "lvl 15: +10% PvE Damage", pick: [3] },
       ],
     },
     pvp: {
@@ -115,20 +117,20 @@ const SKILLS = {
   ranger: {
     pve: {
       active: [
-        { n: "Deadshot", d: "burst (lvl 20)", spec: "+30% Skill Speed, mobile, +dano no hit" },
-        { n: "Gale Arrow", d: "buff (lvl 20)", spec: "mobile, -10s CD, +5s de duração" },
-        { n: "Snipe", d: "gerador", spec: "CD de Deadshot, Tempest Arrow, +50% Multi-Hit (lvl 20)" },
-        { n: "Drill Dart", d: "DoT (lvl 16)", spec: "Multi-Hit, ativação extra, Absorb HP se precisar" },
-        { n: "Tempest Shot", d: "dano (lvl 16)", spec: "fewer-targets, +20% Skill Speed" },
-        { n: "Marking Shot", d: "buff de precisão", spec: "+5% Perfect Chance, +5s de duração" },
+        { n: "Deadshot", d: "burst (lvl 20)", spec: "+30% Skill Speed, mobile, +dano no hit", pick: [2, 3, 5] },
+        { n: "Gale Arrow", d: "buff (lvl 20)", spec: "mobile, -10s CD, +5s de duração", pick: [1, 3, 5] },
+        { n: "Snipe", d: "gerador", spec: "CD de Deadshot, Tempest Arrow, +50% Multi-Hit (lvl 20)", pick: [3, 4, 5] },
+        { n: "Drill Dart", d: "DoT (lvl 16)", spec: "Multi-Hit, ativação extra, Absorb HP se precisar", pick: [4, 5] },
+        { n: "Tempest Shot", d: "dano (lvl 16)", spec: "fewer-targets, +20% Skill Speed", pick: [3, 5] },
+        { n: "Marking Shot", d: "buff de precisão", spec: "+5% Perfect Chance, +5s de duração", pick: [1, 3] },
       ],
       passive: [
         { n: "Concentrated Fire", d: "dano" },
         { n: "Focused Eye", d: "dano" },
       ],
       stigma: [
-        { n: "Vaizel's Authority", d: "core", spec: "lvl 20: +20% Attack, CDR no Critical Hit" },
-        { n: "Bow of Blessing", d: "core", spec: "+200 Crit, +100 Accuracy, +50% Multi-Hit" },
+        { n: "Vaizel's Authority", d: "core", spec: "lvl 20: +20% Attack, CDR no Critical Hit", pick: [4] },
+        { n: "Bow of Blessing", d: "core", spec: "+200 Crit, +100 Accuracy, +50% Multi-Hit", pick: [1] },
         { n: "Griffon Arrow", d: "DoT (Crimson Flames)" },
         { n: "Supporting Fire", d: "orbe com tiros extras (ou troque por Explosive Arrow)" },
       ],
@@ -153,10 +155,10 @@ const SKILLS = {
   sorcerer: {
     pve: {
       active: [
-        { n: "Hellfire", d: "nuke assinatura (20%+ do dano)", spec: "+30% Skill Speed (dungeon) / Fire DoT (boss); -15s CD em ranks altos" },
-        { n: "Firestorm", d: "gestão de MP + CDR", spec: "-50% MP (cedo); cada bola -2s no CD de Hellfire (lvl 12+)" },
-        { n: "Ice Chain", d: "dano/controle", spec: "+20% Skill Speed → -20% MP com gear de cast" },
-        { n: "Flame Arrow", d: "sustain", spec: "+20% MP restaurado" },
+        { n: "Hellfire", d: "nuke assinatura (20%+ do dano)", spec: "+30% Skill Speed (dungeon) / Fire DoT (boss); -15s CD em ranks altos", pick: [1, 2, 5] },
+        { n: "Firestorm", d: "gestão de MP + CDR", spec: "-50% MP (cedo); cada bola -2s no CD de Hellfire (lvl 12+)", pick: [1, 4] },
+        { n: "Ice Chain", d: "dano/controle", spec: "+20% Skill Speed → -20% MP com gear de cast", pick: [1, 2] },
+        { n: "Flame Arrow", d: "sustain", spec: "+20% MP restaurado", pick: [1] },
         { n: "Wish of Concentration", d: "-10s em todas as skills" },
         { n: "Bittercold Wind", d: "AoE multi-hit" },
       ],
@@ -173,7 +175,7 @@ const SKILLS = {
     },
     pvp: {
       active: [
-        { n: "Hellfire", d: "nuke confiável", spec: "Ignores Block and Evasion (PvP)" },
+        { n: "Hellfire", d: "nuke confiável", spec: "Ignores Block and Evasion (PvP)", pick: [4] },
         { n: "Frost Burst", d: "stun" },
         { n: "Winter's Shackles", d: "dano + controle" },
       ],
@@ -190,21 +192,21 @@ const SKILLS = {
   spiritmaster: {
     pve: {
       active: [
-        { n: "Elemental Fusion", d: "payoff de burst (lvl 20)", spec: "+dano no hit, +10 Element Boost, 25% de recuperar Four Elements" },
-        { n: "Combustion", d: "single-target; acesso ao Ashy Call", spec: "-20% MP (cedo) / +20% Skill Speed (tarde)" },
-        { n: "Cold Shock", d: "spam principal", spec: "+2% Attack + MP (cedo) / +50% Multi-Hit (tarde)" },
-        { n: "Dimensional Control", d: "slow", spec: "+dano no hit, +50% Multi-Hit" },
-        { n: "Jointstrike: Curse", d: "maldição", spec: "-2s CD, +2s de duração" },
-        { n: "Summon: Fire Spirit", d: "espírito", spec: "+20% Critical Hit damage" },
-        { n: "Summon: Water Spirit", d: "espírito", spec: "+10% Attack" },
+        { n: "Elemental Fusion", d: "payoff de burst (lvl 20)", spec: "+dano no hit, +10 Element Boost, 25% de recuperar Four Elements", pick: [2, 3, 5] },
+        { n: "Combustion", d: "single-target; acesso ao Ashy Call", spec: "-20% MP (cedo) / +20% Skill Speed (tarde)", pick: [1, 4] },
+        { n: "Cold Shock", d: "spam principal", spec: "+2% Attack + MP (cedo) / +50% Multi-Hit (tarde)", pick: [1, 3, 4] },
+        { n: "Dimensional Control", d: "slow", spec: "+dano no hit, +50% Multi-Hit", pick: [2, 3] },
+        { n: "Jointstrike: Curse", d: "maldição", spec: "-2s CD, +2s de duração", pick: [1, 4] },
+        { n: "Summon: Fire Spirit", d: "espírito", spec: "+20% Critical Hit damage", pick: [2] },
+        { n: "Summon: Water Spirit", d: "espírito", spec: "+10% Attack", pick: [2] },
       ],
       passive: [
         { n: "Spirit Strike", d: "dano do espírito" },
         { n: "Element Unification", d: "dano" },
       ],
       stigma: [
-        { n: "Summon: Ancient Spirit", d: "core", spec: "lvl 15: skill a cada 5 ataques (em vez de 7)" },
-        { n: "Jointstrike: Corrode", d: "amplificador", spec: "+10% dano recebido do seu espírito" },
+        { n: "Summon: Ancient Spirit", d: "core", spec: "lvl 15: skill a cada 5 ataques (em vez de 7)", pick: [3] },
+        { n: "Jointstrike: Corrode", d: "amplificador", spec: "+15% dano recebido do seu espírito", pick: [1] },
         { n: "Flame Blessing", d: "dano", spec: "50% de chance de dano extra no hit" },
         { n: "Cursed Cloud", d: "mid-late game" },
       ],
@@ -266,19 +268,19 @@ const SKILLS = {
   chanter: {
     pve: {
       active: [
-        { n: "Dark Crush", d: "maior dano single", spec: "lvl 16: crita e remove cooldown" },
-        { n: "Spinning Strike", d: "AoE spammável", spec: "-5s de cooldown, fewer-targets" },
-        { n: "Onslaught", d: "gerador", spec: "+20% MP, reduz CD de Spinning Strike" },
-        { n: "Rushing Smash", d: "reset ao matar", spec: "Charge Skill com reset de CD" },
-        { n: "Recuperation", d: "cura", spec: "+1 uso consecutivo, +5% HP restaurado" },
-        { n: "Incandescent Blow", d: "dano", spec: "-20% MP consumido" },
+        { n: "Dark Crush", d: "maior dano single", spec: "lvl 16: crita e remove cooldown", pick: [3, 5] },
+        { n: "Spinning Strike", d: "AoE spammável", spec: "-5s de cooldown, fewer-targets", pick: [1, 3] },
+        { n: "Onslaught", d: "gerador", spec: "+20% MP, reduz CD de Spinning Strike", pick: [1, 4] },
+        { n: "Rushing Smash", d: "reset ao matar", spec: "Charge Skill com reset de CD", pick: [2, 4] },
+        { n: "Recuperation", d: "cura", spec: "+1 uso consecutivo, +5% HP restaurado", pick: [1, 4] },
+        { n: "Incandescent Blow", d: "dano", spec: "-20% MP consumido", pick: [1] },
       ],
       passive: [
         { n: "Raging Spell", d: "dano" },
         { n: "Attack Preparation", d: "dano" },
       ],
       stigma: [
-        { n: "Undefeated Mantra", d: "buff de grupo (core)", spec: "max primeiro: Critical Hit + Accuracy" },
+        { n: "Undefeated Mantra", d: "buff de grupo (core)", spec: "max primeiro: Critical Hit + Accuracy", pick: [1, 2] },
         { n: "Marchutan's Wrath", d: "core", spec: "lvl 5: habilita Dark Crush" },
         { n: "Sprint Mantra", d: "combat speed de grupo (lvl 5)" },
         { n: "Ensnaring Mark", d: "habilita Dark Crush" },

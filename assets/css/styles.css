@@ -480,6 +480,16 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   padding: 0 0.3rem; border-radius: 4px; background: rgba(130, 140, 180, 0.14);
 }
 .tag-specs { color: var(--muted); background: rgba(130, 140, 180, 0.14); }
+
+/* Especialização recomendada (pick em SKILLS) */
+.sdb-specs li.picked { color: var(--text); font-weight: 600; }
+.sdb-specs li.picked::marker { color: var(--gold); }
+.spec-pick {
+  display: inline-block; margin-left: 0.4rem;
+  font-size: 0.64rem; font-weight: 700; color: var(--gold);
+  padding: 0 0.35rem; border-radius: 4px; background: rgba(244, 198, 103, 0.14);
+}
+.spec-num { font-weight: 700; color: var(--gold); }
 .sdb-source { color: var(--muted-2); text-decoration: none; }
 .sdb-source:hover { color: var(--accent-2); text-decoration: underline; }
 

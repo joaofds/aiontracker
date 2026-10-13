@@ -23,10 +23,11 @@ function sortSkills(list) {
     || a.name.localeCompare(b.name));
 }
 
-// Nomes das skills recomendadas em SKILLS para um modo ("pve" | "pvp") da classe.
-function recommendedNames(classId, mode) {
+// Skills recomendadas em SKILLS para um modo ("pve" | "pvp") da classe:
+// Map nome → números das especializações recomendadas (`pick`, pode ser vazio).
+function recommendedSkills(classId, mode) {
   const data = SKILLS[classId]?.[mode] || {};
-  return new Set(SKILL_TYPES.flatMap(([key]) => (data[key] || []).map((s) => s.n)));
+  return new Map(SKILL_TYPES.flatMap(([key]) => (data[key] || []).map((s) => [s.n, s.pick || []])));
 }
 
 // Ícone da skill: imagem se `icon` existir, senão as iniciais do nome.
@@ -45,11 +46,15 @@ function skillSourceLink(skill) {
 }
 
 // Lista numerada das especializações (visível só com a linha expandida).
-function skillSpecs(skill) {
+// As recomendadas (`pick` em SKILLS) ganham ★ com o modo (PvE/PvP).
+function skillSpecs(skill, pvePicks, pvpPicks) {
   if (!skill.specs?.length) return "";
-  const items = skill.specs.map((sp) =>
-    `<li>${sp.level != null ? `<span class="spec-level">Nv. ${esc(sp.level)}</span>` : ""}${esc(sp.text)}</li>`
-  ).join("");
+  const items = skill.specs.map((sp, i) => {
+    const n = i + 1;
+    const modes = [pvePicks.includes(n) ? "PvE" : "", pvpPicks.includes(n) ? "PvP" : ""].filter(Boolean);
+    const star = modes.length ? `<span class="spec-pick" title="Especialização recomendada">★ ${modes.join(" · ")}</span>` : "";
+    return `<li${modes.length ? ' class="picked"' : ""}>${sp.level != null ? `<span class="spec-level">Nv. ${esc(sp.level)}</span>` : ""}${esc(sp.text)}${star}</li>`;
+  }).join("");
   return `<div class="sdb-specs"><h6>Especializações</h6><ol>${items}</ol></div>`;
 }
 
@@ -57,10 +62,15 @@ function skillSpecs(skill) {
 // O efeito fica limitado a 2 linhas; clicar na linha expande o efeito e mostra as especializações.
 function skillRow(classId, skill, recPve, recPvp) {
   const typeLabel = SKILL_TYPES.find(([key]) => key === skill.type)?.[1].replace(/s$/, "") ?? skill.type;
+  const pvePicks = recPve.get(skill.name) || [];
+  const pvpPicks = recPvp.get(skill.name) || [];
+  const hasPick = pvePicks.length || pvpPicks.length;
   const tags = [
     recPve.has(skill.name) ? '<span class="skill-tag tag-pve">PvE</span>' : "",
     recPvp.has(skill.name) ? '<span class="skill-tag tag-pvp">PvP</span>' : "",
-    skill.specs?.length ? `<span class="skill-tag tag-specs" title="Clique para ver as especializações">${skill.specs.length} esp.</span>` : "",
+    skill.specs?.length
+      ? `<span class="skill-tag tag-specs" title="Clique para ver as especializações">${skill.specs.length} esp.${hasPick ? " ★" : ""}</span>`
+      : "",
   ].join("");
   const filled = (field) => skill[field] != null && skill[field] !== "";
   const cells = SKILL_COLUMNS.map(([field, label]) =>
@@ -76,7 +86,7 @@ function skillRow(classId, skill, recPve, recPvp) {
           <b>${esc(skill.name)}</b>${tags}
           <small>${esc(typeLabel)}${skill.source ? ` · ${skillSourceLink(skill)}` : ""}</small>
           ${skill.desc ? `<p class="sdb-desc">${esc(skill.desc)}</p>` : ""}
-          ${skillSpecs(skill)}
+          ${skillSpecs(skill, pvePicks, pvpPicks)}
         </div>
       </div>
       ${cells}
@@ -94,8 +104,8 @@ function renderSkillDb(cls) {
     return panel;
   }
 
-  const recPve = recommendedNames(cls.id, "pve");
-  const recPvp = recommendedNames(cls.id, "pvp");
+  const recPve = recommendedSkills(cls.id, "pve");
+  const recPvp = recommendedSkills(cls.id, "pvp");
   const filters = [["all", "Todas", skills.length], ...SKILL_TYPES.map(([key, label]) => [key, label, skills.filter((s) => s.type === key).length])];
 
   panel.innerHTML = `
@@ -110,7 +120,7 @@ function renderSkillDb(cls) {
       ${skills.map((s) => skillRow(cls.id, s, recPve, recPvp)).join("")}
     </div>
     <p class="sdb-foot">
-      <span class="skill-tag tag-pve">PvE</span><span class="skill-tag tag-pvp">PvP</span> = recomendada na visão geral.
+      <span class="skill-tag tag-pve">PvE</span><span class="skill-tag tag-pvp">PvP</span> = recomendada na visão geral; ★ = especialização recomendada.
       Clique numa skill para ver o efeito completo (nível 1) e as especializações.
       Dados: <a href="${SKILL_DB_SOURCE(cls.id)}" target="_blank" rel="noopener">MetaBot.GG — ${esc(cls.name)} ↗</a>
     </p>`;
