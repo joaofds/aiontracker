@@ -243,8 +243,6 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   padding: 0.3rem 0.6rem; border-radius: 999px; color: #fff;
 }
 .badge-phase { background: linear-gradient(135deg, #7c5cff, #a07bff); }
-.badge-daily { background: linear-gradient(135deg, #27d8c7, #1fa8c4); }
-.badge-weekly { background: linear-gradient(135deg, #f4c667, #e59b4a); color: #2a1e05; }
 .badge-guide { background: linear-gradient(135deg, #5a7bff, #27d8c7); }
 
 .section-title { flex: 1 1 auto; min-width: 0; }
@@ -264,8 +262,6 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
   transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.section[data-type="weekly"] .section-bar span { background: linear-gradient(90deg, #e59b4a, var(--gold)); }
-.section[data-type="daily"] .section-bar span { background: linear-gradient(90deg, #1fa8c4, var(--accent-2)); }
 
 .section-body { padding: 0.5rem 0.6rem 0.8rem; display: grid; grid-template-rows: 1fr; transition: grid-template-rows 0.3s ease; }
 .section.collapsed .section-body { grid-template-rows: 0fr; padding-top: 0; padding-bottom: 0; }
@@ -409,6 +405,97 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 }
 .spec::before { content: "⟡ "; opacity: 0.8; }
 
+/* ---------- Rotina (personagens) ---------- */
+.routine { display: grid; gap: 1rem; }
+.routine[hidden] { display: none; }
+
+.routine-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 0.75rem; }
+.routine-title h2 { font-family: "Cinzel", serif; font-size: 1.1rem; margin: 0; }
+.routine-title p { margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--muted); }
+.routine-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; align-items: start; }
+
+.char-card {
+  display: flex; flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(6px);
+  padding: 1rem 0.6rem 0.8rem;
+}
+.char-main { border-color: rgba(244, 198, 103, 0.35); }
+
+.char-head { display: flex; align-items: center; gap: 0.6rem; padding: 0 0.5rem; }
+.char-badge {
+  flex: none; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 0.2rem 0.5rem; border-radius: 6px;
+  color: var(--accent-2); background: rgba(39, 216, 199, 0.14);
+}
+.char-main .char-badge { color: var(--gold); background: rgba(244, 198, 103, 0.16); }
+.char-name {
+  flex: 1 1 auto; min-width: 0; text-align: left;
+  font: inherit; font-family: "Cinzel", serif; font-size: 1.05rem; font-weight: 700;
+  color: var(--text); background: none; border: none; padding: 0; cursor: pointer;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.char-name:hover { color: var(--accent-2); }
+.char-remove {
+  flex: none; font: inherit; font-size: 0.8rem; line-height: 1;
+  color: var(--muted); background: none; border: none; border-radius: 6px;
+  padding: 0.3rem 0.4rem; cursor: pointer;
+}
+.char-remove:hover { color: var(--danger); background: rgba(255, 92, 122, 0.12); }
+
+.char-progress { padding: 0.7rem 0.5rem 0.2rem; }
+.char-progress .section-bar { border-radius: 999px; overflow: hidden; }
+.char-progress-text { display: flex; justify-content: space-between; margin-top: 0.35rem; font-size: 0.76rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.char-progress-text b { color: var(--accent-2); }
+
+.char-cat {
+  margin: 0.9rem 0.8rem 0.2rem; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted-2);
+}
+.char-card .item { padding: 0.5rem 0.8rem; }
+.char-card .item-text { font-size: 0.88rem; }
+
+.char-foot { display: flex; justify-content: flex-end; margin-top: auto; padding: 0.6rem 0.5rem 0; }
+
+/* Editor das listas de tarefas */
+.routine-editor {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(6px);
+}
+.routine-editor summary { padding: 0.9rem 1.2rem; font-weight: 600; cursor: pointer; }
+.editor-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 0 1.2rem; }
+.editor-col h4 {
+  margin: 0 0 0.5rem; font-size: 0.74rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted-2);
+}
+.editor-list { list-style: none; margin: 0 0 0.75rem; padding: 0; display: grid; gap: 0.15rem; }
+.editor-list li {
+  display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+  font-size: 0.85rem; padding: 0.3rem 0.5rem; border-radius: 8px;
+}
+.editor-list li:hover { background: rgba(130, 140, 180, 0.08); }
+.editor-add { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.editor-add input, .editor-add select {
+  font: inherit; font-size: 0.82rem; color: var(--text);
+  background: var(--card-solid); border: 1px solid var(--card-border); border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+}
+.editor-add input { flex: 1 1 140px; min-width: 0; }
+.editor-add input:focus, .editor-add select:focus { outline: 2px solid var(--accent-2); outline-offset: 1px; }
+.editor-foot { display: flex; justify-content: flex-end; padding: 1rem 1.2rem 1.1rem; }
+
+@media (max-width: 560px) {
+  .char-grid { grid-template-columns: 1fr; }
+  .editor-cols { grid-template-columns: 1fr; }
+}
+
 /* ---------- Toolbar & footer ---------- */
 .toolbar { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin: 2.5rem 0 1rem; }
 
@@ -418,6 +505,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   color: var(--text); background: var(--card);
 }
 .btn:hover { border-color: var(--accent-2); transform: translateY(-1px); }
+.btn-sm { font-size: 0.8rem; padding: 0.4rem 0.85rem; border-radius: 999px; }
 .btn-danger { border-color: rgba(255, 92, 122, 0.4); color: var(--danger); }
 .btn-danger:hover { background: rgba(255, 92, 122, 0.12); border-color: var(--danger); }
 

@@ -1,10 +1,10 @@
 /* ============================================================
-   Dados: checklist com as fases de progressão + diárias + semanais.
+   Dados: checklist de progressão (fases). Diárias/semanais ficam em data/routine.js.
    O `id` de cada item é a chave salva no localStorage.
    ============================================================ */
 const DATA = [
   {
-    id: "fase1", type: "phase", tab: "progressao",
+    id: "fase1",
     badge: "Fase 1", title: "Da Level 45 ao Gear Score",
     subtitle: "Base da progressão — prepare tudo antes de focar no gear score.",
     items: [
@@ -25,7 +25,7 @@ const DATA = [
     ],
   },
   {
-    id: "fase2", type: "phase", tab: "progressao",
+    id: "fase2",
     badge: "Meta 1", title: "Alcançar 1.400 de Gear Score",
     subtitle: "Encantamentos e manastones no ponto certo — sem exageros.",
     items: [
@@ -34,7 +34,7 @@ const DATA = [
     ],
   },
   {
-    id: "fase3", type: "phase", tab: "progressao",
+    id: "fase3",
     badge: "Fase 2", title: "Após 1.400 de GS: Vakron e Gartua",
     subtitle: "Conteúdo pós-1.400 para manter a evolução.",
     items: [
@@ -44,7 +44,7 @@ const DATA = [
     ],
   },
   {
-    id: "fase4", type: "phase", tab: "progressao",
+    id: "fase4",
     badge: "Fase 3", title: "Progressão 1.600 – 2.100",
     subtitle: "Reta de endgame.",
     items: [
@@ -52,33 +52,6 @@ const DATA = [
       { id: "acc-farm", text: "Farm de acessórios", note: "opcional" },
       { id: "odyle-craft-extra", text: "Odyle produzido (craft) de apoio" },
       { id: "odyle-buy-extra", text: "Odyle comprado de apoio" },
-    ],
-  },
-  {
-    id: "diarias", type: "daily", tab: "daily",
-    badge: "Diárias", title: "Tarefas Diárias",
-    subtitle: "Resetam todo dia às 4h.",
-    items: [
-      { id: "d-quests", text: "Quests diárias" },
-      { id: "d-shugo", text: "Os 2 eventos Shugo diários jogados" },
-      { id: "d-nightmare", text: "Os 2 chefes Nightmare diários" },
-      { id: "d-dungeons", text: "Dungeons até gastar todo o seu Odyle" },
-    ],
-  },
-  {
-    id: "semanais", type: "weekly", tab: "weekly",
-    badge: "Semanais", title: "Tarefas Semanais",
-    subtitle: "Resetam na quarta-feira às 4h.",
-    items: [
-      { id: "w-abyss", text: "Quests do Abyss" },
-      { id: "w-altgard", text: "Quests de Altgard" },
-      { id: "w-odyle-craft", text: "20 recargas de Odyle produzidas (craft)" },
-      { id: "w-odyle-buy", text: "20 recargas de Odyle compradas do Wind Breeze Merchant" },
-      { id: "w-dungeons", text: "Dungeons Diárias: as 14 entradas base" },
-      { id: "w-tickets", text: "7 Tickets de Clear Instantâneo comprados (Daily Dungeon)" },
-      { id: "w-season", text: "Missões semanais da temporada concluídas" },
-      { id: "w-trophies", text: "Marco de 11.000 troféus alcançado" },
-      { id: "w-ascension", text: "Ascension Trial no nível mais alto possível" },
     ],
   },
 ];

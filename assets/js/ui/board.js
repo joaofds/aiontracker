@@ -6,10 +6,11 @@ let activeTab = "progressao";
 
 const CHEVRON_SVG = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
 
-// (Re)desenha o board inteiro: checklist, guias e classes; depois aplica a aba e o progresso.
+// (Re)desenha o board inteiro: fases, rotina, guias e classes; depois aplica a aba e o progresso.
 function render() {
   board.innerHTML = "";
   DATA.forEach((section) => board.appendChild(renderSection(section)));
+  board.appendChild(renderRoutine());
   GUIDES.forEach((guide) => board.appendChild(renderGuide(guide)));
   CLASSES.forEach((cls) => board.appendChild(renderClass(cls)));
   applyTab();
@@ -32,9 +33,9 @@ function createCollapsibleSection(className, headHtml) {
 
 /* ---------- Abas ---------- */
 
-// Mostra só as seções da aba ativa e marca o botão da aba correspondente.
+// Mostra só os blocos do board da aba ativa e marca o botão da aba correspondente.
 function applyTab() {
-  document.querySelectorAll(".section").forEach((el) => {
+  board.querySelectorAll(":scope > [data-tab]").forEach((el) => {
     el.hidden = el.dataset.tab !== activeTab;
   });
   document.querySelectorAll(".tab").forEach((t) => {

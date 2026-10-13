@@ -2,9 +2,10 @@
    Export / Import / Reset
    ============================================================ */
 
-// Gera um código base64 com os checks e copia para a área de transferência.
+// Gera um código base64 com as fases e a rotina e copia para a área de transferência.
 async function exportProgress() {
-  const code = btoa(unescape(encodeURIComponent(JSON.stringify(state.checks))));
+  const data = { checks: state.checks, routine: state.routine };
+  const code = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
   try {
     await navigator.clipboard.writeText(code);
     alert("Código do progresso copiado para a área de transferência!\n\nCole no Discord ou guarde para restaurar depois.");
@@ -13,14 +14,20 @@ async function exportProgress() {
   }
 }
 
-// Lê um código gerado pelo exportProgress e substitui os checks atuais.
+// Lê um código gerado pelo exportProgress e substitui o progresso atual.
+// Aceita também o formato antigo (só o objeto de checks das fases), mantendo a rotina atual.
 function importProgress() {
   const code = prompt("Cole aqui o código do progresso para importar:");
   if (!code) return;
   try {
-    const checks = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
-    if (typeof checks !== "object" || checks === null) throw new Error("formato");
-    state.checks = checks;
+    const data = JSON.parse(decodeURIComponent(escape(atob(code.trim()))));
+    if (typeof data !== "object" || data === null) throw new Error("formato");
+    if (typeof data.checks === "object" && data.checks !== null) {
+      state.checks = data.checks;
+      if (isValidRoutine(data.routine)) state.routine = data.routine;
+    } else {
+      state.checks = data;
+    }
     saveState();
     render();
     alert("Progresso importado com sucesso!");
@@ -31,9 +38,9 @@ function importProgress() {
 
 // Apaga todo o progresso (após confirmação).
 function resetAll() {
-  if (!confirm("Resetar TODO o progresso (fases, diárias e semanais)?")) return;
+  if (!confirm("Resetar TODO o progresso (fases e rotina de todos os personagens)?")) return;
   state.checks = {};
-  saveState();
+  clearRoutine();
   render();
 }
 

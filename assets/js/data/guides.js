@@ -42,21 +42,24 @@ const GUIDES = [
     html: `
       <p>Resets: <b>diárias às 4h</b> e <b>semanais na quarta às 4h</b>. Use os contadores no topo
       para não deixar nada escapar — principalmente na terça à noite, véspera do reset semanal.</p>
-      <p><b>Diárias:</b></p>
+      <p>A aba <b>Rotina</b> tem um card por personagem (Main + alts), cada um com a sua lista.</p>
+      <p><b>Diárias (Main):</b></p>
       <ul>
-        <li>Quests diárias.</li>
-        <li>Os 2 eventos Shugo e os 2 chefes Nightmare.</li>
-        <li>Dungeons até <b>gastar todo o seu Odyle</b> do dia.</li>
+        <li><b>Duty Quests</b> (5x) e as 2 <b>Nightmare Dungeons</b>.</li>
+        <li><b>7h de farm no Abyss</b> e <b>Shugo Festival</b> (2x).</li>
       </ul>
-      <p><b>Semanais:</b></p>
+      <p><b>Semanais (Main):</b></p>
       <ul>
-        <li>Quests de Abyss e Altgard.</li>
-        <li><b>20 recargas de Odyle produzidas</b> (craft) + <b>20 compradas</b> do Wind Breeze Merchant.</li>
-        <li>As <b>14 entradas base</b> das Daily Dungeons + <b>7 Tickets de Clear Instantâneo</b>.</li>
-        <li>Missões da temporada, marco de <b>11.000 troféus</b> e Ascension Trial no maior nível possível.</li>
+        <li>Energia: compra na <b>VIP / Subscriber Shop</b> + <b>crafting (Substance Morph — 20x)</b>, e gastar a
+          <b>Dungeon Energy</b> antes de estourar o limite.</li>
+        <li><b>Daily Dungeons</b> (14x), <b>Ascension Trial</b> (3x), <b>Battlefield/Arena</b> (3x)
+          e <b>Sanctuary</b>.</li>
+        <li>Lojas: <b>Abyss Shop</b>, <b>Nightmare Shop</b>, <b>Command Quests</b> e <b>Weekly Supply Requests</b>.</li>
       </ul>
-      <div class="tip"><b>Gestão de Odyle:</b> não deixe o Odyle estourar o limite — gastar antes de
-      acumular o máximo evita desperdício. Craftar e comprar as recargas semanais mantém o estoque girando.</div>`,
+      <p><b>Alts:</b> Nightmare, farm no Abyss, energia (VIP Shop, crafting 4x e Odyle Energy da Breeze
+      Association), Expedition Dungeons, Ascension Trial, Sanctuary e Abyss Shop.</p>
+      <div class="tip"><b>Gestão de energia:</b> a Dungeon Energy acumula (+120/dia, até 840) — gaste antes de
+      chegar no máximo para não desperdiçar. Comprar e craftar a energia semanal mantém o estoque girando.</div>`,
   },
   {
     id: "g-vakron", icon: "🌀", title: "Vakron & Gartua",

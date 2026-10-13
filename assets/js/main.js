@@ -1,6 +1,6 @@
 /* ============================================================
    Aion 2 Tracker — boot
-   - checklist de progressão (fases) + diárias + semanais
+   - checklist de progressão (fases) + rotina por personagem
    - contadores ao vivo de reset e eventos recorrentes
    - abas, tema claro/escuro, export/import, destaque do próximo
    ============================================================ */
@@ -9,6 +9,7 @@ initTabs();
 initToolbar();
 initTimersPanel();
 
+ensureRoutine();
 applyResets();
 buildTimers();
 render();

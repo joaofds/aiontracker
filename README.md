@@ -1,7 +1,7 @@
 # Aion 2 Tracker
 
 Checklist de progressão de **Aion 2** para uso pessoal e dos amigos do Discord.
-Acompanha a progressão de endgame (fases), tarefas **diárias** e **semanais**, com
+Acompanha a progressão de endgame (fases), a rotina **diária** e **semanal** de cada personagem, com
 contadores regressivos ao vivo até os resets e eventos recorrentes do jogo.
 
 Inspirado em [guidemmo.com/checklist-aion-2](https://guidemmo.com/checklist-aion-2-en/)
@@ -14,14 +14,18 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 ## ✨ Funcionalidades
 
 - **Checklist por fases** — roadmap da Level 45 até o endgame (1.600–2.100 de Gear Score).
-- **Tarefas diárias e semanais** com reset automático.
+- **Rotina por personagem** (aba Rotina) — um card para o **Main** e um para cada **alt**, com as
+  tarefas agrupadas em *Diárias / Frequentes*, *Semanais*, *Lojas e Encomendas* e *Eventos do
+  Abyss & Mundo*. Diárias resetam todo dia às 4h; o resto, no reset semanal. Dá para adicionar,
+  renomear e remover alts e **editar as listas de tarefas** (Main e alts) direto pelo site.
+  Lista padrão baseada na [checklist semanal do hartmannlab](https://aion2.hartmannlab.xyz/#/checklist).
 - **Contadores ao vivo** (HH:MM:SS) até:
   - o reset diário (4h),
   - o reset semanal (quarta-feira 4h),
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
     **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
     (horários globais em UTC, exibidos no seu fuso).
-- **Navegação por abas** — Progressão · Diárias · Semanais · **Guias** · **Classes**.
+- **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
@@ -29,10 +33,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   foco, atributos recomendados, manastones, sinergias e dica de build. As **prioridades PvE e
   PvP** listam as melhores skills separadas por tipo (**Ativas · Passivas · Stigmas**), com a
   especialização recomendada de cada uma.
-- **Barras de progresso** por seção + **anel de progresso geral** (considera só as fases).
+- **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
-- **Exportar / Importar** progresso via código (ótimo para comparar/compartilhar no Discord).
+- **Exportar / Importar** progresso via código — fases, personagens e listas de tarefas
+  (ótimo para backup ou para levar para outro navegador). Códigos do formato antigo continuam sendo aceitos.
 - **Persistência local** (`localStorage`) — sem login, sem servidor.
 
 ---
@@ -59,16 +64,19 @@ rpgtracker/
 │   ├── js/
 │   │   ├── config.js     # fuso, horários de reset, chaves do localStorage
 │   │   ├── data/         # conteúdo editável
-│   │   │   ├── checklist.js  # DATA (fases, diárias, semanais)
+│   │   │   ├── checklist.js  # DATA (fases da progressão)
+│   │   │   ├── routine.js    # ROUTINE_* (categorias e tarefas padrão da Rotina)
 │   │   │   ├── events.js     # EVENTS (eventos recorrentes)
 │   │   │   ├── guides.js     # GUIDES (aba Guias)
 │   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
 │   │   │   └── skills.js     # SKILLS (skills por classe)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
+│   │   ├── routine.js    # personagens, listas de tarefas e marcações da Rotina
 │   │   ├── ui/           # renderização e interação
 │   │   │   ├── board.js      # render geral, card recolhível, abas
-│   │   │   ├── checklist.js  # seções/itens da checklist + progresso
+│   │   │   ├── checklist.js  # fases + item de checkbox reutilizável + progresso
+│   │   │   ├── routine.js    # aba Rotina (cards dos personagens + editor de tarefas)
 │   │   │   ├── guides.js     # aba Guias
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
@@ -99,14 +107,12 @@ Todas as opções ficam em `assets/js/config.js`:
 | `RESET_HOUR` | `4` | Hora do reset diário (e do reset semanal). |
 | `WEEKLY_RESET_DOW` | `3` | Dia do reset semanal. `0`=Domingo … `3`=Quarta. |
 
-### Editar as tarefas
-O conteúdo da checklist está no array `DATA` em `assets/js/data/checklist.js`. Cada seção tem:
+### Editar as fases
+As fases da aba **Progressão** estão no array `DATA` em `assets/js/data/checklist.js`. Cada fase tem:
 
 ```js
 {
-  id: "fase1",            // identificador único da seção
-  type: "phase",          // "phase" | "daily" | "weekly"
-  tab: "progressao",      // aba: "progressao" | "daily" | "weekly"
+  id: "fase1",            // identificador único da fase
   badge: "Fase 1",
   title: "Da Level 45 ao Gear Score",
   subtitle: "...",
@@ -119,6 +125,27 @@ O conteúdo da checklist está no array `DATA` em `assets/js/data/checklist.js`.
 
 > **Importante:** o `id` de cada item é a chave usada no `localStorage`.
 > Se você renomear um `id`, o progresso salvo daquele item é perdido.
+
+### Editar a rotina padrão
+A lista padrão da aba **Rotina** fica em `assets/js/data/routine.js`:
+
+- `ROUTINE_CATEGORIES` — categorias exibidas nos cards, na ordem, e quando resetam
+  (`reset: "daily"` às `RESET_HOUR`; `reset: "weekly"` no reset semanal).
+- `ROUTINE_TASKS` — todas as tarefas padrão: `{ cat, text, note? }`, indexadas pelo `id`.
+- `ROUTINE_DEFAULTS` — a lista (ordem) de `id`s do **Main** e das **alts**. Uma tarefa pode
+  aparecer nas duas listas.
+
+```js
+const ROUTINE_TASKS = {
+  "abyss-shop": { cat: "shops", text: "Abyss Shop", note: "PvP Manastone/Soulstone, ..." },
+};
+const ROUTINE_DEFAULTS = { main: ["duty-quests", "abyss-shop", /* ... */], alt: [/* ... */] };
+```
+
+Mudanças no texto de uma tarefa padrão aparecem para todo mundo. Já a **lista** de cada
+usuário fica salva no navegador dele (ele pode ter removido/adicionado tarefas): tarefas novas
+em `ROUTINE_DEFAULTS` só aparecem para quem usar **Editar tarefas › Restaurar tarefas padrão**
+(ou para novos usuários).
 
 ### Editar os guias
 O conteúdo da aba **Guias** está no array `GUIDES` em `assets/js/data/guides.js`. Cada guia tem um
@@ -204,8 +231,9 @@ const EVENTS = [
 
 ## 🔁 Como funcionam os resets
 
-- As tarefas **diárias** resetam todo dia às `RESET_HOUR` (4h).
-- As tarefas **semanais** resetam no dia `WEEKLY_RESET_DOW` (quarta) às `RESET_HOUR`.
+- As tarefas da categoria **Diárias / Frequentes** resetam todo dia às `RESET_HOUR` (4h).
+- As demais categorias da rotina (**Semanais**, **Lojas**, **Eventos**) resetam no dia
+  `WEEKLY_RESET_DOW` (quarta) às `RESET_HOUR`.
 - O reset é calculado por **chave de período**: a cada novo ciclo os checkboxes
   correspondentes são limpos automaticamente — funciona mesmo que você não abra o
   site na hora exata. Com a aba aberta, a verificação roda a cada segundo.
