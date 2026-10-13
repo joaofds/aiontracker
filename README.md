@@ -32,7 +32,8 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 - **Guia de classes** — uma seção por classe (as 8 do lançamento), com símbolo, função, arma,
   foco, atributos recomendados, manastones, sinergias e dica de build. As **prioridades PvE e
   PvP** listam as melhores skills separadas por tipo (**Ativas · Passivas · Stigmas**), com a
-  especialização recomendada de cada uma.
+  especialização recomendada de cada uma. Na sub-aba **Skills**, a lista completa da classe com
+  filtro por tipo, ícone e atributos.
 - **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
@@ -69,7 +70,8 @@ rpgtracker/
 │   │   │   ├── events.js     # EVENTS (eventos recorrentes)
 │   │   │   ├── guides.js     # GUIDES (aba Guias)
 │   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
-│   │   │   └── skills.js     # SKILLS (skills por classe)
+│   │   │   ├── skills.js     # SKILLS (skills recomendadas por classe)
+│   │   │   └── skill-db/     # SKILL_DB: index.js (formato) + um arquivo por classe (gerado)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
 │   │   ├── routine.js    # personagens, listas de tarefas e marcações da Rotina
@@ -78,12 +80,15 @@ rpgtracker/
 │   │   │   ├── checklist.js  # fases + item de checkbox reutilizável + progresso
 │   │   │   ├── routine.js    # aba Rotina (cards dos personagens + editor de tarefas)
 │   │   │   ├── guides.js     # aba Guias
+│   │   │   ├── skill-db.js   # sub-aba Skills da classe (lista, filtros, ícones)
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
 │   │   │   ├── theme.js      # tema claro/escuro
 │   │   │   └── toolbar.js    # exportar / importar / resetar
 │   │   └── main.js       # boot
-│   └── images/           # símbolos das classes (<id>.avif)
+│   └── images/           # símbolos das classes (<id>.avif) + skills/<classe>/ (ícones)
+├── tools/
+│   └── import-metabot.py # gera data/skill-db/*.js a partir do MetaBot.GG
 └── README.md
 ```
 
@@ -198,6 +203,65 @@ SKILLS.templar = {
 Fontes dos dados: [wikily.gg](https://wikily.gg/aion-2/skills) (tipos de skill por classe)
 e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridades e
 especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
+
+### Banco de skills (sub-aba "Skills" da classe)
+Cada card de classe tem duas sub-abas: **Visão geral** (o conteúdo acima) e **Skills**, com a
+lista completa da classe (ativas, passivas e stigmas), filtro por tipo, nível, custo, cooldown,
+alcance e o efeito no nível 1. Clique na skill para ver o efeito inteiro e as **especializações**
+(o selo "N esp." indica quantas ela tem), com o nível mínimo de cada uma. Skills que aparecem em
+`SKILLS` ganham os selos **PvE**/**PvP** de recomendada.
+
+Os dados ficam em `assets/js/data/skill-db/` — um arquivo por classe, que preenche
+`SKILL_DB.<id-da-classe>` (o `index.js` declara o `SKILL_DB` e documenta o formato):
+
+```js
+SKILL_DB.templar = [
+  { id: "judgment", name: "Judgment", type: "active",          // obrigatórios
+    level: 16, cost: "120 MP", cooldown: "20s", range: "4m",
+    desc: "Efeito no nível 1.", source: "https://metabot.gg/...", icon: "judgment.webp",
+    specs: [ { level: 8, text: "Critical Hit on hit" } ] },   // especializações, na ordem do jogo
+];
+```
+
+- São arquivos `.js` (e não `.json`) porque `fetch` de `.json` é bloqueado ao abrir o site
+  direto do disco (`file://`). O conteúdo é JSON com `SKILL_DB.<classe> =` na frente.
+- Campos não preenchidos aparecem como "—"; sem `icon`, o card mostra as iniciais da skill
+  na cor da classe. Ícones ficam em `assets/images/skills/<id-da-classe>/<icon>`.
+- Ao criar o arquivo de uma classe nova, adicione o `<script>` dele no `index.html`
+  (depois de `data/skill-db/index.js`).
+
+#### Atualizar os dados (MetaBot.GG)
+Os arquivos são gerados a partir do [MetaBot.GG](https://metabot.gg/en/aion-2/classes):
+
+```bash
+python3 tools/import-metabot.py                     # dados de todas as classes
+python3 tools/import-metabot.py gladiator           # só uma
+python3 tools/import-metabot.py --icons chanter     # dados + ícones que faltam
+```
+
+O script usa só a biblioteca padrão do Python e faz uma requisição a cada 2 s: a página da classe
+e a página de cada skill (efeito completo + especializações) — ~1,5 min por classe, ~10 min
+para todas.
+
+**Licença dos dados** ([termos do MetaBot.GG](https://metabot.gg/en/legal/terms-of-service),
+seção *Data Usage & Attribution*): o reuso é permitido desde que cada dado credite o MetaBot.GG
+com um link **sem** `rel="nofollow"`/`"sponsored"`/`"ugc"` para a página de onde veio, sem
+apresentar os dados como nossos e acessando o site numa taxa razoável. Por isso cada skill guarda
+o `source` e a lista mostra o link "MetaBot.GG ↗" — **não remova esses links**.
+
+**Ícones** (só com `--icons`): vão para `assets/images/skills/<classe>/<id>.webp`, reduzidos para
+72 px se o [Pillow](https://pypi.org/project/pillow/) estiver instalado (senão, o original de
+256 px). Ícones já baixados são reaproveitados — rodar sem `--icons` não os apaga e mantém o
+`icon` no `.js`. Skills que o MetaBot.GG não tem ícone ficam com as iniciais.
+
+> **Atenção com os ícones:** são assets da NCSOFT — a licença do MetaBot.GG cobre os dados, não
+> os ícones. Estão aqui para uso pessoal e não comercial. A diretriz de fã do AION 2 só licencia
+> materiais liberados expressamente (fan kit) e proíbe redistribuí-los como coleção; se o site for
+> publicado, mantenha os créditos e remova os ícones se a NCSOFT pedir (autorização formal:
+> <https://help.plaync.com/>).
+>
+> **Não copie dados de shugo.gg nem de wikily.gg**: os termos de uso dos dois proíbem scraping
+> e redistribuição.
 
 ### Adicionar um evento recorrente
 No array `EVENTS` em `assets/js/data/events.js`. Cada evento vira um card de contador no topo:

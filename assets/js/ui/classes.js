@@ -18,7 +18,8 @@ function skillGroups(modeData) {
   return html;
 }
 
-// Cria o card recolhível de uma classe: atributos, prioridades PvE/PvP com skills, manastones e dicas.
+// Cria o card recolhível de uma classe com as sub-abas "Visão geral" (atributos, prioridades
+// PvE/PvP, manastones e dicas) e "Skills" (lista completa do SKILL_DB, ver ui/skill-db.js).
 function renderClass(cls) {
   const el = createCollapsibleSection("section collapsed class-card", `
     <img class="class-symbol" src="assets/images/${cls.id}.avif" alt="Símbolo de ${cls.name}" loading="lazy" />
@@ -37,24 +38,44 @@ function renderClass(cls) {
   body.className = "section-body";
   body.innerHTML = `
     <div class="section-body-inner class-body">
-      <p class="class-focus">${cls.focus}</p>
-      <div class="class-block"><h4>Atributos recomendados</h4><div class="chips">${chips}</div></div>
-      <div class="prio">
-        <div class="class-block prio-pve">
-          <h4>Prioridade PvE</h4><p>${cls.pve}</p>
-          <div class="skills-wrap">${skillGroups(sk.pve)}</div>
-        </div>
-        <div class="class-block prio-pvp">
-          <h4>Prioridade PvP</h4><p>${cls.pvp}</p>
-          <div class="skills-wrap">${skillGroups(sk.pvp)}</div>
-          <p class="prio-note">${PVP_NOTE}</p>
-        </div>
+      <div class="class-subtabs" role="tablist">
+        <button type="button" class="class-subtab active" data-panel="overview">Visão geral</button>
+        <button type="button" class="class-subtab" data-panel="skills">Skills <span>${(SKILL_DB[cls.id] || []).length}</span></button>
       </div>
-      <div class="class-block"><h4>Manastones</h4><p>${cls.manastones}</p></div>
-      <div class="class-block"><h4>Sinergias</h4><p>${cls.synergy}</p></div>
-      <div class="tip"><b>Dica:</b> ${cls.tip}</div>
+      <div class="class-panel" data-panel="overview">
+        <p class="class-focus">${cls.focus}</p>
+        <div class="class-block"><h4>Atributos recomendados</h4><div class="chips">${chips}</div></div>
+        <div class="prio">
+          <div class="class-block prio-pve">
+            <h4>Prioridade PvE</h4><p>${cls.pve}</p>
+            <div class="skills-wrap">${skillGroups(sk.pve)}</div>
+          </div>
+          <div class="class-block prio-pvp">
+            <h4>Prioridade PvP</h4><p>${cls.pvp}</p>
+            <div class="skills-wrap">${skillGroups(sk.pvp)}</div>
+            <p class="prio-note">${PVP_NOTE}</p>
+          </div>
+        </div>
+        <div class="class-block"><h4>Manastones</h4><p>${cls.manastones}</p></div>
+        <div class="class-block"><h4>Sinergias</h4><p>${cls.synergy}</p></div>
+        <div class="tip"><b>Dica:</b> ${cls.tip}</div>
+      </div>
+      <div class="class-panel" data-panel="skills" hidden></div>
     </div>`;
+
+  body.querySelector('.class-panel[data-panel="skills"]').append(renderSkillDb(cls));
+  initClassSubtabs(body);
 
   el.append(body);
   return el;
+}
+
+// Liga os botões de sub-aba de um card de classe (mostra o painel correspondente).
+function initClassSubtabs(body) {
+  body.querySelector(".class-subtabs").addEventListener("click", (e) => {
+    const btn = e.target.closest(".class-subtab");
+    if (!btn) return;
+    body.querySelectorAll(".class-subtab").forEach((b) => b.classList.toggle("active", b === btn));
+    body.querySelectorAll(".class-panel").forEach((p) => { p.hidden = p.dataset.panel !== btn.dataset.panel; });
+  });
 }

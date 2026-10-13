@@ -287,13 +287,13 @@ const SKILLS = {
     pvp: {
       active: [
         { n: "Tremor Crush", d: "cria distância (gap)" },
-        { n: "Fracturing Blow", d: "stun que abre janela de burst" },
         { n: "Dark Crush", d: "burst" },
       ],
       passive: [
         { n: "Impact Hit", d: "passiva de PvP (Stun/Knockdown)" },
       ],
       stigma: [
+        { n: "Fracturing Blow", d: "stun que abre janela de burst" },
         { n: "Power of the Storm", d: "buff de grupo (+20% Combat Speed, +10% CDR)" },
         { n: "Obliterate", d: "situacional" },
         { n: "Focused Defense", d: "defensivo" },
