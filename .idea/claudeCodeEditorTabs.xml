@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="32d8d0d8-21e7-4d46-8465-c3ab3e41f479" />
+    <option name="activeSessionId" value="3563faf2-ee2f-4349-8839-2166f5cfe06c" />
     <option name="openSessionIds">
       <list>
         <option value="32d8d0d8-21e7-4d46-8465-c3ab3e41f479" />
+        <option value="3563faf2-ee2f-4349-8839-2166f5cfe06c" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
         <entry key="32d8d0d8-21e7-4d46-8465-c3ab3e41f479" value="/sessions/4b0fb67d-de31-426f-a469-65196d9931fc" />
+        <entry key="3563faf2-ee2f-4349-8839-2166f5cfe06c" value="/sessions/efa9f47b-9ad8-4e44-8b5d-9dfaf913670a" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
-        <entry key="32d8d0d8-21e7-4d46-8465-c3ab3e41f479" value="o arquivo js está muito grande, vamos refatorar e" />
+        <entry key="32d8d0d8-21e7-4d46-8465-c3ab3e41f479" value="localhost:54791/sessions/4b0fb67d-de31-426f-a469-65196d9931fc?workingDir=D%3A%2Fprojetos%2Fpessoal%2Faiontracker&amp;panelId=32d8d0d8-21e7-4d46-8465-c3ab3e41f479&amp;theme=dark" />
+        <entry key="3563faf2-ee2f-4349-8839-2166f5cfe06c" value="Vamos alterar o evento abaixo. { id: &quot;spacetime-ri" />
       </map>
     </option>
   </component>

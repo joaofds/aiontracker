@@ -55,6 +55,8 @@ function tickTimers() {
     lastTargets[id] = target;
   }
 
+  checkEventAlerts(targets, now);
+
   // resumo do próximo evento no cabeçalho
   if (soonest && timersPreview) {
     timersPreview.innerHTML = `${TIMER_LABELS[soonest.id]} <b>${fmtCountdown(soonest.target - now)}</b>`;
@@ -81,4 +83,67 @@ function initTimersPanel() {
   // Estado inicial: usa o salvo; senão, recolhido no mobile e aberto no desktop.
   const saved = localStorage.getItem(TIMERS_KEY);
   setTimersOpen(saved !== null ? saved === "1" : window.innerWidth > 560);
+}
+
+/* ---------- Alerta sonoro antes dos eventos ---------- */
+
+const alertsToggle = document.getElementById("alerts-toggle");
+let alertsOn = false;
+let audioCtx = null;
+// Alvo já alertado de cada evento (evita tocar de novo a cada segundo).
+const alertedTargets = {};
+
+// Cria/retoma o AudioContext (o navegador só libera áudio após uma interação do usuário).
+function unlockAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === "suspended") audioCtx.resume();
+}
+
+// Toca três bipes curtos sintetizados.
+function playAlert() {
+  if (!audioCtx || audioCtx.state !== "running") return;
+  const t0 = audioCtx.currentTime;
+  [0, 0.25, 0.5].forEach((dt) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = 880;
+    gain.gain.setValueAtTime(0.0001, t0 + dt);
+    gain.gain.exponentialRampToValueAtTime(0.3, t0 + dt + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dt + 0.18);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t0 + dt);
+    osc.stop(t0 + dt + 0.2);
+  });
+}
+
+// Toca o alerta quando algum evento entra na janela de ALERT_LEAD_MINUTES (uma vez por ocorrência).
+function checkEventAlerts(targets, now) {
+  if (!alertsOn) return;
+  const lead = ALERT_LEAD_MINUTES * 30000;
+  let fire = false;
+  EVENTS.forEach((ev) => {
+    const target = targets[ev.id];
+    const left = target - now;
+    if (left > 0 && left <= lead && alertedTargets[ev.id] !== target) {
+      alertedTargets[ev.id] = target;
+      fire = true;
+    }
+  });
+  if (fire) playAlert();
+}
+
+// Liga o toggle de alerta e restaura a preferência salva.
+function initEventAlerts() {
+  document.getElementById("alerts-label").textContent =
+    `🔔 Alerta sonoro ${ALERT_LEAD_MINUTES} min antes dos eventos`;
+  alertsOn = localStorage.getItem(ALERTS_KEY) === "1";
+  alertsToggle.checked = alertsOn;
+  alertsToggle.addEventListener("change", () => {
+    alertsOn = alertsToggle.checked;
+    localStorage.setItem(ALERTS_KEY, alertsOn ? "1" : "0");
+    if (alertsOn) { unlockAudio(); playAlert(); }
+  });
+  // Preferência já ligada ao abrir a página: libera o áudio na primeira interação.
+  if (alertsOn) document.addEventListener("pointerdown", unlockAudio, { once: true });
 }

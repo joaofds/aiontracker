@@ -8,6 +8,7 @@ initTheme();
 initTabs();
 initToolbar();
 initTimersPanel();
+initEventAlerts();
 
 ensureRoutine();
 applyResets();

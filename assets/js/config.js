@@ -16,3 +16,5 @@ const WEEKLY_RESET_DOW = 3;    // 0=Dom ... 3=Qua (reset semanal na quarta às 4
 const STORAGE_KEY = "aion2-tracker-v1";
 const THEME_KEY = "aion2-tracker-theme";
 const TIMERS_KEY = "aion2-tracker-timers-open";
+const ALERTS_KEY = "aion2-tracker-event-alerts";
+const ALERT_LEAD_MINUTES = 5;  // alerta sonoro X minutos antes de cada evento

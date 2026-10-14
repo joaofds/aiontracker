@@ -50,7 +50,16 @@
         <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </button>
       <div class="timers-body">
-        <div class="timers" id="timers"></div>
+        <div class="timers-inner">
+          <div class="timers-opts">
+            <label class="switch">
+              <input type="checkbox" id="alerts-toggle">
+              <span class="switch-track"></span>
+              <span class="switch-label" id="alerts-label">🔔 Alerta sonoro antes dos eventos</span>
+            </label>
+          </div>
+          <div class="timers" id="timers"></div>
+        </div>
       </div>
     </section>
 

@@ -53,6 +53,22 @@ function nextEvent(ev) {
     return 0;
   }
 
+  // Horários fixos diários (ex.: Spacetime Rift só dentro de uma janela do dia).
+  if (ev.hours && ev.hours.length) {
+    const now = Date.now();
+    const ref = ev.utc ? now : toVirtual(now);
+    let best = Infinity;
+    for (let i = 0; i < 2; i++) {
+      for (const h of ev.hours) {
+        const d = new Date(ref + i * 86400000);
+        d.setUTCHours(h, min, 0, 0);
+        const t = d.getTime();
+        if (t > ref && t < best) best = t;
+      }
+    }
+    return ev.utc ? best : fromVirtual(best);
+  }
+
   if (ev.utc) {
     // Âncora em UTC: calcula o instante absoluto do próximo evento (fuso-independente).
     const now = Date.now();

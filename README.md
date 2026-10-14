@@ -25,6 +25,7 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
     **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
     (horários globais em UTC, exibidos no seu fuso).
+  - toggle **🔔 Alerta sonoro** no painel: toca um bipe quando faltam 5 min para qualquer evento.
 - **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
@@ -111,6 +112,7 @@ Todas as opções ficam em `assets/js/config.js`:
 | `SERVER_UTC_OFFSET_HOURS` | `null` | Fuso usado nos contadores. `null` = fuso **local** do navegador. Para fixar no horário do servidor do jogo, informe o offset em horas (ex.: `2` para GMT+2, `-3` para GMT-3). |
 | `RESET_HOUR` | `4` | Hora do reset diário (e do reset semanal). |
 | `WEEKLY_RESET_DOW` | `3` | Dia do reset semanal. `0`=Domingo … `3`=Quarta. |
+| `ALERT_LEAD_MINUTES` | `5` | Com o alerta sonoro ligado, quantos minutos antes de cada evento o bipe toca. |
 
 ### Editar as fases
 As fases da aba **Progressão** estão no array `DATA` em `assets/js/data/checklist.js`. Cada fase tem:
@@ -276,8 +278,9 @@ No array `EVENTS` em `assets/js/data/events.js`. Cada evento vira um card de con
 
 ```js
 const EVENTS = [
+  // Horários fixos diários (UTC): Spacetime Rift no servidor SA, 11:00–02:00 BRT a cada 3h:
+  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", hours: [14, 17, 20, 23, 2, 5], utc: true },
   // Eventos globais (instante fixo em UTC, exibidos no seu fuso local):
-  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", intervalHours: 3, anchorHour: 0, utc: true },
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   // Evento em dias fixos da semana (UTC): Siege às Seg/Qui/Sáb 21:00 UTC:
   { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, utc: true },
@@ -289,8 +292,10 @@ const EVENTS = [
 - `intervalHours` — de quanto em quanto tempo o evento ocorre (eventos de intervalo).
 - `days` — lista de dias da semana (`0`=Dom … `6`=Sáb) para eventos semanais em dias fixos,
   no horário `anchorHour`/`anchorMinute`. Quando presente, substitui `intervalHours`.
+- `hours` — lista de horários fixos diários (no minuto `anchorMinute`), para eventos que só
+  ocorrem em certas horas do dia. Quando presente, substitui `intervalHours`/`anchorHour`.
 - `anchorHour` / `anchorMinute` — horário base do ciclo (`anchorMinute` é opcional, padrão `0`).
-- `utc: true` — `anchorHour`/`anchorMinute` são em **UTC** (instante fixo global; o card
+- `utc: true` — `anchorHour`/`anchorMinute`/`hours` são em **UTC** (instante fixo global; o card
   mostra o próximo horário já convertido para o seu fuso). Sem `utc`, a âncora usa o fuso
   configurado do site (`SERVER_UTC_OFFSET_HOURS`).
 
@@ -317,7 +322,7 @@ const EVENTS = [
 
 - Tudo é salvo **localmente** no seu navegador (`localStorage`, chave `aion2-tracker-v1`;
   tema em `aion2-tracker-theme`; painel de contadores aberto/fechado em
-  `aion2-tracker-timers-open`). As chaves ficam definidas em `assets/js/config.js`.
+  `aion2-tracker-timers-open`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts`). As chaves ficam definidas em `assets/js/config.js`.
 - Nada é enviado para servidores. Limpar os dados do navegador apaga o progresso.
 - Use **Exportar** para fazer backup/compartilhar e **Importar** para restaurar.
 
