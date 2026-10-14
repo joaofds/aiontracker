@@ -139,7 +139,7 @@ function notifyEvent(ev, target) {
 // Agenda o alerta de cada evento cujo momento de aviso (início − ALERT_LEAD_MINUTES) está próximo.
 function checkEventAlerts(targets, now) {
   if (!alertsOn) return;
-  const lead = ALERT_LEAD_MINUTES * 30000;
+  const lead = ALERT_LEAD_MINUTES * 20000;
   EVENTS.forEach((ev) => {
     const target = targets[ev.id];
     if (alertedTargets[ev.id] === target) return;
