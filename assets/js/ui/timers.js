@@ -85,13 +85,19 @@ function initTimersPanel() {
   setTimersOpen(saved !== null ? saved === "1" : window.innerWidth > 560);
 }
 
-/* ---------- Alerta sonoro antes dos eventos ---------- */
+/* ---------- Alerta sonoro antes dos eventos ----------
+   Em aba de fundo o navegador desacelera o setInterval (até 1x/min no Chrome), então:
+    - o bipe é agendado com antecedência no relógio do AudioContext, que não é desacelerado;
+    - uma notificação do sistema acompanha o bipe (aparece mesmo com o navegador minimizado).
+   ------------------------------------------------------------ */
 
 const alertsToggle = document.getElementById("alerts-toggle");
 let alertsOn = false;
 let audioCtx = null;
-// Alvo já alertado de cada evento (evita tocar de novo a cada segundo).
+// Ocorrência (epoch do evento) já agendada/alertada por evento, para não repetir.
 const alertedTargets = {};
+// Quanto tempo antes do momento do alerta o bipe já é agendado (cobre o atraso dos timers em 2º plano).
+const ALERT_SCHEDULE_AHEAD_MS = 90000;
 
 // Cria/retoma o AudioContext (o navegador só libera áudio após uma interação do usuário).
 function unlockAudio() {
@@ -99,11 +105,11 @@ function unlockAudio() {
   if (audioCtx.state === "suspended") audioCtx.resume();
 }
 
-// Toca três bipes curtos sintetizados.
-function playAlert() {
-  if (!audioCtx || audioCtx.state !== "running") return;
-  const t0 = audioCtx.currentTime;
-  [0, 0.25, 0.5].forEach((dt) => {
+// Toca três bipes curtos sintetizados, `delaySec` segundos a partir de agora; `onStart` roda quando soam.
+function playAlert(delaySec = 0, onStart) {
+  if (!audioCtx || audioCtx.state !== "running") return false;
+  const t0 = audioCtx.currentTime + delaySec;
+  [0, 0.25, 0.5].forEach((dt, i) => {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
     osc.type = "sine";
@@ -112,25 +118,41 @@ function playAlert() {
     gain.gain.exponentialRampToValueAtTime(0.3, t0 + dt + 0.02);
     gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dt + 0.18);
     osc.connect(gain).connect(audioCtx.destination);
+    // o evento "ended" vem do relógio de áudio, então dispara na hora mesmo em aba de fundo
+    if (i === 0 && onStart) osc.onended = onStart;
     osc.start(t0 + dt);
     osc.stop(t0 + dt + 0.2);
   });
+  return true;
 }
 
-// Toca o alerta quando algum evento entra na janela de ALERT_LEAD_MINUTES (uma vez por ocorrência).
+// Mostra uma notificação do sistema (se o usuário permitiu).
+function notifyEvent(ev, target) {
+  if (!("Notification" in window) || Notification.permission !== "granted") return;
+  const mins = Math.max(1, Math.round((target - Date.now()) / 60000));
+  new Notification(`${ev.icon} ${ev.label}`, {
+    body: `Começa em ${mins} min (às ${fmtClock(target).hm}).`,
+    tag: `event-${ev.id}`,
+  });
+}
+
+// Agenda o alerta de cada evento cujo momento de aviso (início − ALERT_LEAD_MINUTES) está próximo.
 function checkEventAlerts(targets, now) {
   if (!alertsOn) return;
   const lead = ALERT_LEAD_MINUTES * 30000;
-  let fire = false;
   EVENTS.forEach((ev) => {
     const target = targets[ev.id];
-    const left = target - now;
-    if (left > 0 && left <= lead && alertedTargets[ev.id] !== target) {
+    if (alertedTargets[ev.id] === target) return;
+    const untilAlert = target - lead - now;
+    if (target <= now || untilAlert > ALERT_SCHEDULE_AHEAD_MS) return;
+    if (playAlert(Math.max(0, untilAlert) / 1000, () => notifyEvent(ev, target))) {
       alertedTargets[ev.id] = target;
-      fire = true;
+    } else if (untilAlert <= 0) {
+      // áudio ainda não liberado (sem interação na página): ao menos a notificação
+      alertedTargets[ev.id] = target;
+      notifyEvent(ev, target);
     }
   });
-  if (fire) playAlert();
 }
 
 // Liga o toggle de alerta e restaura a preferência salva.
@@ -142,8 +164,20 @@ function initEventAlerts() {
   alertsToggle.addEventListener("change", () => {
     alertsOn = alertsToggle.checked;
     localStorage.setItem(ALERTS_KEY, alertsOn ? "1" : "0");
-    if (alertsOn) { unlockAudio(); playAlert(); }
+    if (alertsOn) {
+      unlockAudio();
+      playAlert();
+      if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+    } else if (audioCtx) {
+      // descarta bipes já agendados
+      audioCtx.close();
+      audioCtx = null;
+      for (const id in alertedTargets) delete alertedTargets[id];
+    }
   });
   // Preferência já ligada ao abrir a página: libera o áudio na primeira interação.
-  if (alertsOn) document.addEventListener("pointerdown", unlockAudio, { once: true });
+  if (alertsOn) {
+    document.addEventListener("pointerdown", unlockAudio, { once: true });
+    document.addEventListener("keydown", unlockAudio, { once: true });
+  }
 }

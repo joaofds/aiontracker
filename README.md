@@ -25,7 +25,9 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
     **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
     (horários globais em UTC, exibidos no seu fuso).
-  - toggle **🔔 Alerta sonoro** no painel: toca um bipe quando faltam 5 min para qualquer evento.
+  - toggle **🔔 Alerta sonoro** no painel: toca um bipe e mostra uma notificação do sistema quando
+    faltam 5 min para qualquer evento — também com a aba em segundo plano ou o navegador minimizado
+    (a aba precisa estar aberta; o áudio é liberado após o primeiro clique na página).
 - **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
