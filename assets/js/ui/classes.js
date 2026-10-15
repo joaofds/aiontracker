@@ -21,7 +21,8 @@ function skillGroups(modeData) {
 }
 
 // Cria o card recolhível de uma classe com as sub-abas "Visão geral" (atributos, prioridades
-// PvE/PvP, manastones e dicas) e "Skills" (lista completa do SKILL_DB, ver ui/skill-db.js).
+// PvE/PvP, manastones e dicas), "Skills" (lista completa do SKILL_DB, ver ui/skill-db.js) e,
+// se a classe tiver guia em CLASS_GUIDES, "Guia" (ver ui/class-guide.js).
 function renderClass(cls) {
   const el = createCollapsibleSection("section collapsed class-card", `
     <img class="class-symbol" src="assets/images/${cls.id}.avif" alt="Símbolo de ${cls.name}" loading="lazy" />
@@ -36,6 +37,7 @@ function renderClass(cls) {
 
   const chips = cls.stats.map((s) => `<span class="chip">${s}</span>`).join("");
   const sk = SKILLS[cls.id] || {};
+  const hasGuide = Boolean(CLASS_GUIDES[cls.id]);
   const body = document.createElement("div");
   body.className = "section-body";
   body.innerHTML = `
@@ -43,6 +45,7 @@ function renderClass(cls) {
       <div class="class-subtabs" role="tablist">
         <button type="button" class="class-subtab active" data-panel="overview">Visão geral</button>
         <button type="button" class="class-subtab" data-panel="skills">Skills <span>${(SKILL_DB[cls.id] || []).length}</span></button>
+        ${hasGuide ? '<button type="button" class="class-subtab" data-panel="guide">Guia</button>' : ""}
       </div>
       <div class="class-panel" data-panel="overview">
         <p class="class-focus">${cls.focus}</p>
@@ -63,9 +66,11 @@ function renderClass(cls) {
         <div class="tip"><b>Dica:</b> ${cls.tip}</div>
       </div>
       <div class="class-panel" data-panel="skills" hidden></div>
+      ${hasGuide ? '<div class="class-panel" data-panel="guide" hidden></div>' : ""}
     </div>`;
 
   body.querySelector('.class-panel[data-panel="skills"]').append(renderSkillDb(cls));
+  if (hasGuide) body.querySelector('.class-panel[data-panel="guide"]').append(renderClassGuide(cls));
   initClassSubtabs(body);
 
   el.append(body);

@@ -545,6 +545,123 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   }
 }
 
+/* Guia de build da classe (CLASS_GUIDES) */
+.cg-legend { margin: -0.4rem 0 0.75rem; font-size: 0.76rem; color: var(--muted-2); }
+.cg-toc { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-bottom: 0.9rem; }
+.cg-toc-item {
+  font: inherit; font-size: 0.78rem; font-weight: 600; color: var(--muted); cursor: pointer;
+  background: rgba(130, 140, 180, 0.08); border: 1px solid var(--card-border);
+  border-radius: 999px; padding: 0.25rem 0.7rem;
+}
+.cg-toc-item:hover { color: var(--text); border-color: var(--role, var(--accent)); }
+
+.cg-sec {
+  margin-bottom: 0.6rem; border-radius: 10px;
+  background: rgba(130, 140, 180, 0.05); border: 1px solid var(--card-border);
+  scroll-margin-top: 1rem;
+}
+.cg-sec summary {
+  display: flex; align-items: center; gap: 0.5rem; cursor: pointer; list-style: none;
+  padding: 0.65rem 0.85rem; font-weight: 700; font-size: 0.95rem; color: var(--text);
+}
+.cg-sec summary::-webkit-details-marker { display: none; }
+.cg-sec summary .chevron { margin-left: auto; width: 18px; height: 18px; color: var(--muted-2); transition: transform 0.2s; }
+.cg-sec:not([open]) summary .chevron { transform: rotate(-90deg); }
+.cg-sec-icon { width: 1.4rem; text-align: center; }
+.cg-sec-body { padding: 0 0.85rem 0.85rem; display: grid; gap: 1rem; }
+.cg-note { margin: 0; font-size: 0.82rem; color: var(--muted); font-style: italic; }
+.cg-block-title {
+  margin: 0 0 0.45rem; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.7px; color: var(--role, var(--accent));
+}
+.cg-muted { display: block; color: var(--muted-2); font-size: 0.76rem; }
+
+/* Pills, cadeias de prioridade e selos */
+.cg-pills, .cg-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; }
+.cg-pill {
+  font-size: 0.78rem; color: var(--text); white-space: nowrap;
+  background: rgba(130, 140, 180, 0.12); border: 1px solid var(--card-border);
+  padding: 0.12rem 0.5rem; border-radius: 7px;
+}
+.cg-chain .cg-pill:first-child { border-color: color-mix(in srgb, var(--role, var(--accent)) 55%, transparent); background: color-mix(in srgb, var(--role, var(--accent)) 14%, transparent); }
+.cg-arrow { color: var(--muted-2); font-size: 0.75rem; }
+.cg-tag {
+  display: inline-block; margin-left: 0.3rem; vertical-align: 1px;
+  font-size: 0.58rem; font-weight: 700; letter-spacing: 0.3px;
+  padding: 0 0.3rem; border-radius: 4px;
+}
+.cg-legend .cg-tag { margin-left: 0; }
+.cg-tag-kr { color: var(--danger); background: rgba(255, 92, 122, 0.14); }
+.cg-tag-s2 { color: var(--gold); background: rgba(244, 198, 103, 0.14); }
+
+/* Skills ativas: ícone · nome + especializações · nível alvo */
+.cg-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+.cg-skill {
+  display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0.6rem;
+  border-radius: 8px; border: 1px solid var(--card-border); background: rgba(130, 140, 180, 0.05);
+}
+.cg-skill-main { flex: 1; min-width: 0; font-size: 0.85rem; }
+.cg-skill-main b { color: var(--text); font-weight: 600; }
+.cg-lv {
+  flex: none; font-size: 0.7rem; font-weight: 700; color: var(--gold);
+  padding: 0.05rem 0.4rem; border-radius: 5px; background: rgba(244, 198, 103, 0.12);
+}
+.cg-specs { list-style: none; margin: 0.25rem 0 0; padding: 0; display: grid; gap: 0.15rem; }
+.cg-specs li { font-size: 0.76rem; line-height: 1.35; color: var(--muted); }
+.cg-spec-n {
+  display: inline-grid; place-items: center; width: 1.05rem; height: 1.05rem; margin-right: 0.35rem;
+  font-size: 0.62rem; font-weight: 700; color: var(--gold);
+  border-radius: 4px; background: rgba(244, 198, 103, 0.14);
+}
+
+/* Listas ranqueadas (passivas, stigmas) */
+.cg-ranked { margin: 0; padding-left: 1.4rem; display: grid; gap: 0.2rem; font-size: 0.88rem; color: var(--text); }
+.cg-ranked li::marker { color: var(--role, var(--accent)); font-weight: 700; }
+.cg-ranked li .skill-icon { width: 22px; height: 22px; border-radius: 5px; margin-right: 0.45rem; vertical-align: middle; }
+.cg-ranked li span { vertical-align: middle; }
+.cg-builds { margin-bottom: 0.9rem; }
+.cg-extra { margin: 0.5rem 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: var(--muted-2); }
+
+/* Definições (rótulo → prioridade) */
+.cg-defs { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: 0.45rem 0.9rem; align-items: baseline; }
+.cg-defs dt { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.cg-defs dd { margin: 0; }
+.cg-para { font-size: 0.85rem; color: var(--muted); }
+
+/* Tabela */
+.cg-table-wrap { overflow-x: auto; }
+.cg-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.cg-table th {
+  text-align: left; font-size: 0.64rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px;
+  color: var(--muted-2); padding: 0.3rem 0.5rem; border-bottom: 1px solid var(--card-border);
+}
+.cg-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid var(--card-border); vertical-align: top; color: var(--muted); }
+.cg-table td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
+
+/* Imagens e links */
+.cg-figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; }
+.cg-figs figure { margin: 0; }
+.cg-figs figure:only-child { grid-column: 1 / -1; max-width: 720px; }
+.cg-figs .cg-fig-wide { grid-column: 1 / -1; }
+.cg-figs img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--card-border); }
+.cg-figs figcaption { margin-top: 0.25rem; font-size: 0.74rem; color: var(--muted-2); text-align: center; }
+.cg-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
+.cg-link {
+  display: grid; gap: 0.1rem; padding: 0.55rem 0.7rem; text-decoration: none;
+  border-radius: 8px; border: 1px solid var(--card-border); background: rgba(130, 140, 180, 0.06);
+}
+.cg-link:hover { border-color: var(--role, var(--accent)); }
+.cg-link b { font-size: 0.85rem; color: var(--text); }
+.cg-link span { font-size: 0.75rem; color: var(--muted-2); }
+
+@media (max-width: 560px) {
+  .cg-defs { grid-template-columns: 1fr; gap: 0.15rem; }
+  .cg-defs dd { margin-bottom: 0.4rem; }
+  .cg-table thead { display: none; }
+  .cg-table tr { display: grid; padding: 0.4rem 0; border-bottom: 1px solid var(--card-border); }
+  .cg-table td { border: none; padding: 0.15rem 0.2rem; }
+}
+
 /* ---------- Rotina (personagens) ---------- */
 .routine { display: grid; gap: 1rem; }
 .routine[hidden] { display: none; }

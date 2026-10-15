@@ -36,7 +36,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   foco, atributos recomendados, manastones, sinergias e dica de build. As **prioridades PvE e
   PvP** listam as melhores skills separadas por tipo (**Ativas · Passivas · Stigmas**), com a
   especialização recomendada de cada uma. Na sub-aba **Skills**, a lista completa da classe com
-  filtro por tipo, ícone e atributos.
+  filtro por tipo, ícone e atributos. Na sub-aba **Guia**, as builds de cada classe baseadas nos
+  [guias do hartmannlab](https://aion2.hartmannlab.xyz/en/class-guides): skills com nível alvo e
+  especializações, Arcana, Genus Insight, asas/títulos, Soul Binding, Manastones, Pantheon, layout e
+  macro, em seções recolhíveis com índice. Cleric e Spirit Master têm uma build extra completa
+  (rotação, equipamento peça a peça e Daevanion boards), com seletor entre as builds.
 - **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
