@@ -34,14 +34,14 @@ function nextWeeklyReset() {
   if (t <= vnow) t += 7 * 86400000;
   return fromVirtual(t);
 }
-// Epoch da próxima ocorrência de um evento de EVENTS (por intervalo ou dias fixos da semana).
-function nextEvent(ev) {
+// Epoch da próxima ocorrência (estritamente depois de `from`) de um evento de EVENTS.
+function nextEvent(ev, from = Date.now()) {
   const period = ev.intervalHours * 3600000;
   const min = ev.anchorMinute || 0;
 
   // Recorrência em dias específicos da semana (ex.: Siege às Seg/Qui/Sáb).
   if (ev.days && ev.days.length) {
-    const now = Date.now();
+    const now = from;
     const ref = ev.utc ? now : toVirtual(now);
     for (let i = 0; i < 8; i++) {
       const d = new Date(ref + i * 86400000);
@@ -55,7 +55,7 @@ function nextEvent(ev) {
 
   // Horários fixos diários (ex.: Spacetime Rift só dentro de uma janela do dia).
   if (ev.hours && ev.hours.length) {
-    const now = Date.now();
+    const now = from;
     const ref = ev.utc ? now : toVirtual(now);
     let best = Infinity;
     for (let i = 0; i < 2; i++) {
@@ -71,7 +71,7 @@ function nextEvent(ev) {
 
   if (ev.utc) {
     // Âncora em UTC: calcula o instante absoluto do próximo evento (fuso-independente).
-    const now = Date.now();
+    const now = from;
     const d = new Date(now);
     d.setUTCHours(ev.anchorHour, min, 0, 0);
     let t = d.getTime();
@@ -80,13 +80,21 @@ function nextEvent(ev) {
     return t;
   }
   // Âncora no fuso configurado do site.
-  const vnow = toVirtual(Date.now());
+  const vnow = toVirtual(from);
   const d = new Date(vnow);
   d.setUTCHours(ev.anchorHour, min, 0, 0);
   let t = d.getTime();
   t += Math.max(Math.ceil((vnow - t) / period), 0) * period;
   while (t <= vnow) t += period;
   return fromVirtual(t);
+}
+
+// Duração (em ms) em que o evento é mostrado como "agora" depois de começar.
+function eventDuration(ev) { return (ev.durationMinutes || EVENT_LIVE_MINUTES) * 60000; }
+// Epoch de início da ocorrência em andamento do evento, ou null se ele não está acontecendo agora.
+function liveEventStart(ev, now = Date.now()) {
+  const start = nextEvent(ev, now - eventDuration(ev));
+  return start <= now ? start : null;
 }
 
 /* ---------- Formatação ---------- */

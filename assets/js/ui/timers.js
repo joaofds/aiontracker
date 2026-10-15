@@ -21,10 +21,15 @@ function buildTimers() {
   ];
   timersEl.innerHTML = cards.map((c) => `
     <div class="timer-card ${c.kind === "evt" ? "evt" : ""}" data-timer="${c.id}">
-      <div class="timer-head"><span class="timer-icon">${c.icon}</span><span class="timer-label">${c.label}</span></div>
+      <div class="timer-head"><span class="timer-icon">${c.icon}</span><span class="timer-label">${c.label}</span>${
+        c.kind === "evt" ? `<button type="button" class="timer-bell" data-bell="${c.id}"></button>` : ""}</div>
       <div class="timer-value" data-value>--:--:--</div>
       <div class="timer-sub" data-sub></div>
     </div>`).join("");
+  timersEl.querySelectorAll("[data-bell]").forEach((btn) => {
+    btn.addEventListener("click", () => toggleEventMuted(btn.dataset.bell));
+  });
+  updateBells();
 }
 
 // Último alvo de cada contador, para detectar quando ele "vira" e piscar o card.
@@ -36,16 +41,29 @@ function tickTimers() {
   const targets = { daily: nextDailyReset(), weekly: nextWeeklyReset() };
   EVENTS.forEach((ev) => { targets[ev.id] = nextEvent(ev); });
 
+  // eventos acontecendo agora: id → epoch de término da ocorrência em andamento
+  const live = {};
+  EVENTS.forEach((ev) => {
+    const start = liveEventStart(ev, now);
+    if (start !== null) live[ev.id] = start + eventDuration(ev);
+  });
+
   let soonest = null;
   for (const [id, target] of Object.entries(targets)) {
     if (!soonest || target < soonest.target) soonest = { id, target };
 
     const card = timersEl.querySelector(`[data-timer="${id}"]`);
     if (!card) continue;
-    card.querySelector("[data-value]").textContent = fmtCountdown(target - now);
     const c = fmtClock(target);
     const sub = DAY_BASED_IDS.has(id) ? `${c.dow}. ${c.hm}` : `às ${c.hm}`;
-    card.querySelector("[data-sub]").textContent = `próximo ${sub}`;
+    card.classList.toggle("live", id in live);
+    if (id in live) {
+      card.querySelector("[data-value]").textContent = "🟢 Agora";
+      card.querySelector("[data-sub]").textContent = `até ~${fmtClock(live[id]).hm} · próximo ${sub}`;
+    } else {
+      card.querySelector("[data-value]").textContent = fmtCountdown(target - now);
+      card.querySelector("[data-sub]").textContent = `próximo ${sub}`;
+    }
 
     // ao virar um alvo, piscar o card
     if (lastTargets[id] && target !== lastTargets[id]) {
@@ -57,8 +75,11 @@ function tickTimers() {
 
   checkEventAlerts(targets, now);
 
-  // resumo do próximo evento no cabeçalho
-  if (soonest && timersPreview) {
+  // resumo no cabeçalho: evento acontecendo agora (se houver) ou o próximo
+  const liveId = Object.keys(live)[0];
+  if (liveId && timersPreview) {
+    timersPreview.innerHTML = `${TIMER_LABELS[liveId]} <b class="live">agora</b>`;
+  } else if (soonest && timersPreview) {
     timersPreview.innerHTML = `${TIMER_LABELS[soonest.id]} <b>${fmtCountdown(soonest.target - now)}</b>`;
   }
 
@@ -92,7 +113,14 @@ function initTimersPanel() {
    ------------------------------------------------------------ */
 
 const alertsToggle = document.getElementById("alerts-toggle");
+const alertsLeadSelect = document.getElementById("alerts-lead");
 let alertsOn = false;
+// Antecedência do alerta em minutos (escolhida no seletor ao lado do toggle).
+let alertLeadMinutes = ALERT_LEAD_DEFAULT;
+// Eventos com o alerta desligado no 🔔 do card (os demais alertam; eventos novos começam ligados).
+const mutedEvents = new Set(JSON.parse(localStorage.getItem(ALERT_MUTED_KEY) || "[]"));
+// Osciladores do bipe já agendado de cada evento, para poder cancelá-lo ao silenciar o evento.
+const scheduledBeeps = {};
 let audioCtx = null;
 // Ocorrência (epoch do evento) já agendada/alertada por evento, para não repetir.
 const alertedTargets = {};
@@ -106,9 +134,11 @@ function unlockAudio() {
 }
 
 // Toca três bipes curtos sintetizados, `delaySec` segundos a partir de agora; `onStart` roda quando soam.
+// Retorna os osciladores agendados (ou null se o áudio ainda não foi liberado).
 function playAlert(delaySec = 0, onStart) {
-  if (!audioCtx || audioCtx.state !== "running") return false;
+  if (!audioCtx || audioCtx.state !== "running") return null;
   const t0 = audioCtx.currentTime + delaySec;
+  const oscs = [];
   [0, 0.25, 0.5].forEach((dt, i) => {
     const osc = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
@@ -122,8 +152,9 @@ function playAlert(delaySec = 0, onStart) {
     if (i === 0 && onStart) osc.onended = onStart;
     osc.start(t0 + dt);
     osc.stop(t0 + dt + 0.2);
+    oscs.push(osc);
   });
-  return true;
+  return oscs;
 }
 
 // Mostra uma notificação do sistema (se o usuário permitiu).
@@ -136,17 +167,20 @@ function notifyEvent(ev, target) {
   });
 }
 
-// Agenda o alerta de cada evento cujo momento de aviso (início − ALERT_LEAD_MINUTES) está próximo.
+// Agenda o alerta de cada evento cujo momento de aviso (início − alertLeadMinutes) está próximo.
 function checkEventAlerts(targets, now) {
   if (!alertsOn) return;
-  const lead = ALERT_LEAD_MINUTES * 20000;
+  const lead = alertLeadMinutes * 60000;
   EVENTS.forEach((ev) => {
+    if (mutedEvents.has(ev.id)) return;
     const target = targets[ev.id];
     if (alertedTargets[ev.id] === target) return;
     const untilAlert = target - lead - now;
     if (target <= now || untilAlert > ALERT_SCHEDULE_AHEAD_MS) return;
-    if (playAlert(Math.max(0, untilAlert) / 1000, () => notifyEvent(ev, target))) {
+    const oscs = playAlert(Math.max(0, untilAlert) / 1000, () => notifyEvent(ev, target));
+    if (oscs) {
       alertedTargets[ev.id] = target;
+      scheduledBeeps[ev.id] = oscs;
     } else if (untilAlert <= 0) {
       // áudio ainda não liberado (sem interação na página): ao menos a notificação
       alertedTargets[ev.id] = target;
@@ -155,24 +189,66 @@ function checkEventAlerts(targets, now) {
   });
 }
 
-// Liga o toggle de alerta e restaura a preferência salva.
+// Descarta os bipes já agendados no AudioContext e libera os eventos para serem reagendados.
+function cancelScheduledAlerts() {
+  if (audioCtx) { audioCtx.close(); audioCtx = null; }
+  for (const id in alertedTargets) delete alertedTargets[id];
+  for (const id in scheduledBeeps) delete scheduledBeeps[id];
+}
+
+// Liga/desliga o alerta de um evento (🔔/🔕 no card) e cancela o bipe dele que já estiver agendado.
+function toggleEventMuted(id) {
+  if (mutedEvents.has(id)) {
+    mutedEvents.delete(id);
+  } else {
+    mutedEvents.add(id);
+    (scheduledBeeps[id] || []).forEach((osc) => { osc.onended = null; osc.disconnect(); });
+  }
+  delete scheduledBeeps[id];
+  delete alertedTargets[id];
+  localStorage.setItem(ALERT_MUTED_KEY, JSON.stringify([...mutedEvents]));
+  updateBells();
+}
+
+// Atualiza o ícone/título do 🔔 de cada card de evento.
+function updateBells() {
+  timersEl.querySelectorAll("[data-bell]").forEach((btn) => {
+    const muted = mutedEvents.has(btn.dataset.bell);
+    btn.textContent = muted ? "🔕" : "🔔";
+    btn.classList.toggle("muted", muted);
+    btn.title = muted ? "Alerta deste evento desligado — clique para ligar" : "Alerta deste evento ligado — clique para desligar";
+    btn.setAttribute("aria-pressed", String(!muted));
+    btn.setAttribute("aria-label", `Alerta de ${TIMER_LABELS[btn.dataset.bell]}`);
+  });
+}
+
+// Liga o toggle de alerta e o seletor de antecedência, e restaura as preferências salvas.
 function initEventAlerts() {
-  document.getElementById("alerts-label").textContent =
-    `🔔 Alerta sonoro ${ALERT_LEAD_MINUTES} min antes dos eventos`;
+  const savedLead = Number(localStorage.getItem(ALERT_LEAD_KEY));
+  if (ALERT_LEAD_OPTIONS.includes(savedLead)) alertLeadMinutes = savedLead;
+  alertsLeadSelect.innerHTML = ALERT_LEAD_OPTIONS
+    .map((m) => `<option value="${m}">${m} min antes</option>`).join("");
+  alertsLeadSelect.value = String(alertLeadMinutes);
+  alertsLeadSelect.addEventListener("change", () => {
+    alertLeadMinutes = Number(alertsLeadSelect.value);
+    localStorage.setItem(ALERT_LEAD_KEY, String(alertLeadMinutes));
+    // bipes agendados com a antecedência antiga: descarta e reagenda no próximo tick
+    if (alertsOn) { cancelScheduledAlerts(); unlockAudio(); }
+  });
+
   alertsOn = localStorage.getItem(ALERTS_KEY) === "1";
   alertsToggle.checked = alertsOn;
+  timersEl.classList.toggle("alerts-off", !alertsOn);
   alertsToggle.addEventListener("change", () => {
     alertsOn = alertsToggle.checked;
+    timersEl.classList.toggle("alerts-off", !alertsOn);
     localStorage.setItem(ALERTS_KEY, alertsOn ? "1" : "0");
     if (alertsOn) {
       unlockAudio();
       playAlert();
       if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
-    } else if (audioCtx) {
-      // descarta bipes já agendados
-      audioCtx.close();
-      audioCtx = null;
-      for (const id in alertedTargets) delete alertedTargets[id];
+    } else {
+      cancelScheduledAlerts();
     }
   });
   // Preferência já ligada ao abrir a página: libera o áudio na primeira interação.

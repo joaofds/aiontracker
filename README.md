@@ -30,8 +30,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
     **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
     (horários globais em UTC, exibidos no seu fuso).
   - toggle **🔔 Alerta sonoro** no painel: toca um bipe e mostra uma notificação do sistema quando
-    faltam 5 min para qualquer evento — também com a aba em segundo plano ou o navegador minimizado
+    falta o tempo escolhido no seletor ao lado (1 a 15 min, padrão 2) para qualquer evento — também com a aba em segundo plano ou o navegador minimizado
     (a aba precisa estar aberta; o áudio é liberado após o primeiro clique na página).
+    O 🔔 de cada card de evento liga/desliga o alerta só daquele evento (🔕).
+  - durante um evento o card mostra **🟢 Agora** (e até quando, aproximadamente), em vez de pular
+    direto para a próxima ocorrência; o resumo do painel também avisa "agora".
 - **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**, fixas no topo ao rolar.
   Dentro de um card aberto (classe, Combat Power, fase…) aparece uma **barra de contexto** com o
   nome do card, as sub-abas, o seletor de build e um "Ir para…" com as seções, além de
@@ -141,7 +144,9 @@ Todas as opções ficam em `assets/js/config.js`:
 | `SERVER_UTC_OFFSET_HOURS` | `null` | Fuso usado nos contadores. `null` = fuso **local** do navegador. Para fixar no horário do servidor do jogo, informe o offset em horas (ex.: `2` para GMT+2, `-3` para GMT-3). |
 | `RESET_HOUR` | `4` | Hora do reset diário (e do reset semanal). |
 | `WEEKLY_RESET_DOW` | `3` | Dia do reset semanal. `0`=Domingo … `3`=Quarta. |
-| `ALERT_LEAD_MINUTES` | `5` | Com o alerta sonoro ligado, quantos minutos antes de cada evento o bipe toca. |
+| `ALERT_LEAD_OPTIONS` | `[1, 2, 3, 5, 10, 15]` | Opções (em minutos) do seletor de antecedência do alerta sonoro, ao lado do toggle. |
+| `ALERT_LEAD_DEFAULT` | `2` | Antecedência padrão do alerta, até o usuário escolher outra no seletor. |
+| `EVENT_LIVE_MINUTES` | `10` | Por quantos minutos depois do início um evento aparece como "🟢 Agora" (eventos podem sobrescrever com `durationMinutes`). |
 
 ### Editar as fases
 As fases da aba **Progressão** estão no array `DATA` em `assets/js/data/checklist.js`. Cada fase tem:
@@ -385,6 +390,8 @@ const EVENTS = [
 - `hours` — lista de horários fixos diários (no minuto `anchorMinute`), para eventos que só
   ocorrem em certas horas do dia. Quando presente, substitui `intervalHours`/`anchorHour`.
 - `anchorHour` / `anchorMinute` — horário base do ciclo (`anchorMinute` é opcional, padrão `0`).
+- `durationMinutes` — opcional; por quanto tempo o card mostra "🟢 Agora" depois do início
+  (padrão `EVENT_LIVE_MINUTES`). As durações são estimativas: ajuste conforme o jogo.
 - `utc: true` — `anchorHour`/`anchorMinute`/`hours` são em **UTC** (instante fixo global; o card
   mostra o próximo horário já convertido para o seu fuso). Sem `utc`, a âncora usa o fuso
   configurado do site (`SERVER_UTC_OFFSET_HOURS`).
@@ -412,7 +419,7 @@ const EVENTS = [
 
 - Tudo é salvo **localmente** no seu navegador (`localStorage`, chave `aion2-tracker-v1`;
   tema em `aion2-tracker-theme`; painel de contadores aberto/fechado em
-  `aion2-tracker-timers-open`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts`). As chaves ficam definidas em `assets/js/config.js`.
+  `aion2-tracker-timers-open`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts` antecedência em `aion2-tracker-event-alert-lead` e eventos silenciados em `aion2-tracker-event-alerts-muted`). As chaves ficam definidas em `assets/js/config.js`.
 - Nada é enviado para servidores. Limpar os dados do navegador apaga o progresso.
 - Use **Exportar** para fazer backup/compartilhar e **Importar** para restaurar.
 

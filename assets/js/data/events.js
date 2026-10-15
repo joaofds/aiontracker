@@ -4,6 +4,8 @@
     - days: dias fixos da semana (0=Dom … 6=Sáb); substitui intervalHours.
     - hours: lista de horários fixos diários (com anchorMinute opcional); substitui intervalHours/anchorHour.
     - anchorHour / anchorMinute: horário base do ciclo.
+    - durationMinutes: opcional; por quanto tempo o card mostra "Agora" depois do início
+           (padrão EVENT_LIVE_MINUTES, em config.js). São estimativas — ajuste conforme o jogo.
     - utc: true  → anchorHour/anchorMinute são em UTC (instante fixo global; exibido no fuso local).
            (ausente) → base no fuso configurado do site (ver SERVER_UTC_OFFSET_HOURS).
    Horários dos eventos globais conferidos em https://corpus.gg/games/aion-2/timers (em UTC).
@@ -15,6 +17,6 @@ const EVENTS = [
   { id: "shugo-festival", icon: "🎪", label: "Shugo Festival", intervalHours: 1, anchorHour: 0, anchorMinute: 0, utc: true },
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   // Siege em dias fixos (UTC): Seg, Qui e Sáb às 21:00 UTC (bosses 21:30 UTC logo após).
-  { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, utc: true },
+  { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, durationMinutes: 60, utc: true },
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
