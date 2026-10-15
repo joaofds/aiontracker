@@ -13,7 +13,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 
 ## ✨ Funcionalidades
 
-- **Checklist por fases** — roadmap da Level 45 até o endgame (1.600–2.100 de Gear Score).
+- **Checklist por fases** — roadmap do nível 22 à raid de Ludra, baseado no
+  [roadmap do DeanGamingTV](https://aion2.hartmannlab.xyz/en/roadmap): *Primeira semana* e as metas
+  Level 45 → 1.000 → 1.400 → 1.900 → 2.100 → 2.800 GS → *Próximos objetivos*. Itens com selo
+  **Main / Alts / Main + Alts / Opcional**, subgrupos dentro de cada meta e um **resumo das metas** no
+  topo (progresso de cada uma, a meta atual destacada; clicar leva até ela).
 - **Rotina por personagem** (aba Rotina) — um card para o **Main** e um para cada **alt**, com as
   tarefas agrupadas em *Diárias / Frequentes*, *Semanais*, *Lojas e Encomendas* e *Eventos do
   Abyss & Mundo*. Diárias resetam todo dia às 4h; o resto, no reset semanal. Dá para adicionar,
@@ -37,7 +41,8 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   direto no Discord, recarregar sem perder o lugar e usar o **Voltar** do navegador depois de
   trocar de aba ou seguir um atalho.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
-  rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
+  rotina diária/semanal, dungeons ★/Vakron & Gartua e **Recursos e energia** — de onde vem cada
+  recurso, recompensas das Duty Quests e o que fazer sem energia). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
 - **Combat Power** (aba Guias) — lembrete das 10 fontes de poder do jogo (pets, Genus Insight,
   equipamento, Arcana, asas, títulos, skills/stigmas, Daevanion, skins e Pantheon) e do poder
@@ -143,12 +148,17 @@ As fases da aba **Progressão** estão no array `DATA` em `assets/js/data/checkl
 
 ```js
 {
-  id: "fase1",            // identificador único da fase
-  badge: "Fase 1",
-  title: "Da Level 45 ao Gear Score",
+  id: "meta-1000",           // identificador único da fase (também usado no endereço #progressao/meta-1000)
+  badge: "Meta 2",
+  title: "Do 45 aos 1.000 GS e terminar a MSQ",
+  target: "1.000 GS",        // opcional: meta (selo no card e etapa no resumo do topo)
   subtitle: "...",
+  tip: "...",                // opcional: aviso no topo da fase
   items: [
-    { id: "lvl45", text: "Level 45 alcançado...", note: "texto opcional menor" },
+    { heading: "No seu mapa" },  // subtítulo (não conta no progresso)
+    { id: "monolith", text: "Penas do seu mapa", note: "texto opcional menor",
+      tag: "main",              // opcional: "main" | "alt" | "ma" (Main + Alts) | "opt" (Opcional)
+      guide: "g-gearscore" },   // opcional: botão 📖 guia
     // ...
   ],
 }

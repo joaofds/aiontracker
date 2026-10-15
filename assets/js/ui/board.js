@@ -9,6 +9,7 @@ const CHEVRON_SVG = '<svg class="chevron" viewBox="0 0 24 24" fill="none" stroke
 // (Re)desenha o board inteiro: fases, rotina, guias e classes; depois aplica a aba e o progresso.
 function render() {
   board.innerHTML = "";
+  board.appendChild(renderRoadmapSummary());
   DATA.forEach((section) => board.appendChild(renderSection(section)));
   board.appendChild(renderRoutine());
   GUIDES.forEach((guide) => board.appendChild(renderGuide(guide)));

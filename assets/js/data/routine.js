@@ -17,7 +17,10 @@ const ROUTINE_CATEGORIES = [
 const ROUTINE_TASKS = {
   // Main
   "duty-quests": { cat: "daily", text: "Duty Quests (5x por dia)" },
-  "nightmare": { cat: "daily", text: "Nightmare Dungeons (2x por dia)" },
+  "kinah-farm": { cat: "daily", text: "Farmar 1M de Kinah no mundo aberto", note: "fora do Abyss" },
+  "daily-attendance": { cat: "daily", text: "Presença diária (Daily attendance)" },
+  "emergency-supply": { cat: "daily", text: "Emergency Supply Request" },
+  "nightmare": { cat: "daily", text: "Nightmare Dungeons (2x por dia)", note: "as entradas acumulam por até 1 semana" },
   "abyss-farm": { cat: "daily", text: "7h de farm no Abyss" },
   "vip-energy": { cat: "weekly", text: "Comprar energia na VIP Shop / Subscriber Shop" },
   "energy-craft": { cat: "weekly", text: "Crafting de energia (Substance Morph — 20x)" },
@@ -25,7 +28,7 @@ const ROUTINE_TASKS = {
   "battlefield-arena": { cat: "weekly", text: "Recompensas de Battlefield e Arena (3x)" },
   "ascension-trial": { cat: "weekly", text: "Ascension Trial (3x por semana)" },
   "sanctuary": { cat: "weekly", text: "Sanctuary" },
-  "shugo-festival": { cat: "daily", text: "Shugo Festival (2x)" },
+  "shugo-festival": { cat: "daily", text: "Shugo Festival (2x)", note: "acumula por até 1 semana" },
   "dungeon-energy": { cat: "weekly", text: "Gastar Dungeon Energy (+120/dia, até 120/840 acumulados)" },
   "abyss-shop": { cat: "shops", text: "Abyss Shop", note: "PvP Manastone/Soulstone, Potential Amplification Stone, Medals — 100k pontos" },
   "nightmare-shop": { cat: "shops", text: "Nightmare Shop", note: "Soul Codex, Soul Codex: Reset" },
@@ -46,13 +49,13 @@ const ROUTINE_TASKS = {
 // Lista padrão de tarefas de cada tipo de personagem, na ordem de exibição.
 const ROUTINE_DEFAULTS = {
   main: [
-    "duty-quests", "nightmare", "abyss-farm", "shugo-festival",
+    "duty-quests", "kinah-farm", "daily-attendance", "emergency-supply", "nightmare", "abyss-farm", "shugo-festival",
     "vip-energy", "energy-craft", "daily-dungeons", "battlefield-arena", "ascension-trial", "sanctuary", "dungeon-energy",
     "abyss-shop", "nightmare-shop", "command-quests", "supply-requests",
     "abyss-corridors", "artifact-siege", "world-bosses",
   ],
   alt: [
-    "nightmare", "abyss-farm",
+    "kinah-farm", "nightmare", "abyss-farm",
     "vip-energy-alt", "energy-craft-alt", "odyle-breeze", "ascension-trial", "expedition", "sanctuary", "abyss-corridor-alt", "abyss-shop-alt",
   ],
 };

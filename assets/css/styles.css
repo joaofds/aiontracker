@@ -330,6 +330,49 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .section-title p { margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--muted); }
 
 .section-meta { display: flex; align-items: center; gap: 0.75rem; flex: none; }
+.section-target {
+  font-size: 0.74rem; font-weight: 700; color: var(--gold); white-space: nowrap;
+  padding: 0.15rem 0.5rem; border-radius: 999px; background: rgba(244, 198, 103, 0.12);
+}
+
+/* Fases: subtítulos, selos de item (Main/Alts/Opcional) e dica */
+.item-heading {
+  margin: 0.9rem 0.8rem 0.25rem; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.8px; color: var(--accent-2);
+}
+.item-heading:first-child { margin-top: 0.3rem; }
+.item-tag {
+  display: inline-block; margin-right: 0.45rem; vertical-align: 1px;
+  font-size: 0.6rem; font-weight: 700; letter-spacing: 0.3px; text-transform: uppercase;
+  padding: 0.08rem 0.4rem; border-radius: 5px;
+}
+.tag-main { color: #6ea8ff; background: rgba(110, 168, 255, 0.14); }
+.tag-alt { color: #c08cff; background: rgba(192, 140, 255, 0.14); }
+.tag-ma { color: var(--accent-2); background: rgba(39, 216, 199, 0.12); }
+.tag-opt { color: var(--muted); background: rgba(130, 140, 180, 0.14); }
+.phase-tip { margin: 0.2rem 0.8rem 0.5rem; }
+
+/* Resumo das metas (topo da aba Progressão) */
+.roadmap-summary[hidden] { display: none; }
+.rm-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(105px, 1fr)); gap: 0.45rem; }
+.rm-step {
+  font: inherit; text-align: left; cursor: pointer; color: var(--text);
+  display: grid; gap: 0.2rem; padding: 0.55rem 0.65rem; border-radius: 12px;
+  background: var(--card); border: 1px solid var(--card-border); backdrop-filter: blur(6px);
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+.rm-step:hover { border-color: var(--accent-2); transform: translateY(-1px); }
+.rm-step small { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted-2); }
+.rm-step b { font-size: 0.9rem; white-space: nowrap; }
+.rm-bar { height: 4px; border-radius: 99px; background: rgba(130, 140, 180, 0.18); overflow: hidden; }
+.rm-bar span { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.3s ease; }
+.rm-count { font-style: normal; font-size: 0.7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.rm-step.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.rm-step.current small::after { content: " · agora"; color: var(--accent-2); }
+.rm-step.done b::after { content: " ✓"; color: var(--ok); }
+.rm-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: var(--muted); }
+.rm-note span { color: var(--muted-2); }
+.rm-note a { color: var(--accent-2); }
 .section-count { font-size: 0.82rem; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .section-count b { color: var(--accent-2); }
 
@@ -861,6 +904,10 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 @media (max-width: 560px) {
   .brand-text p { display: none; }
   .section-count { display: none; }
+  .section-target { display: none; } /* a meta já aparece no resumo do topo */
+  .rm-steps { grid-template-columns: repeat(4, 1fr); }
+  .rm-step { padding: 0.45rem 0.5rem; }
+  .rm-step b { font-size: 0.78rem; }
   .intro { font-size: 0.9rem; }
   .overall-ring { width: 54px; height: 54px; }
   /* cabeçalho fica sempre visível (junto com as abas): mais baixo no mobile */

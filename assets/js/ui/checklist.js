@@ -3,7 +3,7 @@
    ============================================================ */
 const CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
-// Cria a linha de checkbox genérica ({ id, text, note? }), usada pelas fases e pela rotina.
+// Cria a linha de checkbox genérica ({ id, text, note?, tag? }), usada pelas fases e pela rotina.
 // O texto entra via textContent, pois a rotina aceita tarefas digitadas/importadas.
 function createCheckItem(item, checked, onChange) {
   const label = document.createElement("label");
@@ -21,7 +21,13 @@ function createCheckItem(item, checked, onChange) {
 
   const text = document.createElement("span");
   text.className = "item-text";
-  text.textContent = item.text;
+  if (ITEM_TAGS[item.tag]) {
+    const tag = document.createElement("span");
+    tag.className = `item-tag tag-${item.tag}`;
+    tag.textContent = ITEM_TAGS[item.tag];
+    text.append(tag);
+  }
+  text.append(item.text);
   if (item.note) {
     const note = document.createElement("small");
     note.textContent = item.note;
@@ -32,13 +38,17 @@ function createCheckItem(item, checked, onChange) {
   return label;
 }
 
-// Cria o card de uma fase (cabeçalho com contador, barra de progresso e itens).
+// Itens marcáveis de uma fase (sem os subtítulos `{ heading }`).
+const phaseItems = (section) => section.items.filter((it) => it.id);
+
+// Cria o card de uma fase (cabeçalho com meta e contador, barra de progresso, dica e itens).
 function renderSection(section) {
   const el = createCollapsibleSection("section", `
     <span class="section-badge badge-phase">${section.badge}</span>
     <div class="section-title"><h2>${section.title}</h2><p>${section.subtitle}</p></div>
     <div class="section-meta">
-      <span class="section-count"><b class="count-done">0</b>/${section.items.length}</span>
+      ${section.target ? `<span class="section-target">🎯 ${section.target}</span>` : ""}
+      <span class="section-count"><b class="count-done">0</b>/${phaseItems(section).length}</span>
       ${CHEVRON_SVG}
     </div>`);
   el.dataset.id = section.id;
@@ -52,7 +62,11 @@ function renderSection(section) {
   body.className = "section-body";
   const inner = document.createElement("div");
   inner.className = "section-body-inner";
-  section.items.forEach((item) => inner.appendChild(renderItem(item, section)));
+  if (section.tip) inner.insertAdjacentHTML("beforeend", `<div class="tip phase-tip"><b>Atenção:</b> ${section.tip}</div>`);
+  section.items.forEach((item) => {
+    if (item.heading) inner.insertAdjacentHTML("beforeend", `<h3 class="item-heading">${item.heading}</h3>`);
+    else inner.appendChild(renderItem(item, section));
+  });
   body.appendChild(inner);
 
   el.append(bar, body);
@@ -89,8 +103,9 @@ function renderItem(item, section) {
 
 // Conta os itens marcados de uma seção: { done, total }.
 function sectionProgress(section) {
-  const done = section.items.filter((it) => state.checks[it.id]).length;
-  return { done, total: section.items.length };
+  const items = phaseItems(section);
+  const done = items.filter((it) => state.checks[it.id]).length;
+  return { done, total: items.length };
 }
 
 // Atualiza contador, barra e destaque "próximo" de uma seção no DOM.
@@ -104,20 +119,63 @@ function updateSection(sectionId) {
 
   // destaque do próximo objetivo
   el.querySelectorAll(".item.next").forEach((n) => n.classList.remove("next"));
-  const next = section.items.find((it) => !state.checks[it.id]);
+  const next = phaseItems(section).find((it) => !state.checks[it.id]);
   if (next) el.querySelector(`.item[data-id="${next.id}"]`)?.classList.add("next");
 }
 
 // Circunferência do anel de progresso (r = 52 no SVG do index.html).
 const RING_CIRC = 2 * Math.PI * 52;
 
-// Atualiza todas as seções e o anel de progresso geral (considera só as fases).
+// Atualiza todas as seções, o resumo das metas e o anel de progresso geral (considera só as fases).
 function updateOverall() {
   DATA.forEach((s) => updateSection(s.id));
-  const total = DATA.reduce((n, s) => n + s.items.length, 0);
+  updateRoadmapSummary();
+  const total = DATA.reduce((n, s) => n + phaseItems(s).length, 0);
   const done = DATA.reduce((n, s) => n + sectionProgress(s).done, 0);
   const pct = total ? Math.round((done / total) * 100) : 0;
   document.getElementById("overall-percent").textContent = `${pct}%`;
   const ring = document.getElementById("overall-ring-fg");
   ring.style.strokeDashoffset = RING_CIRC * (1 - pct / 100);
+}
+
+/* ---------- Resumo das metas (topo da aba Progressão) ---------- */
+
+// Faixa com uma etapa por fase (meta + progresso); clicar leva até a fase.
+function renderRoadmapSummary() {
+  const el = document.createElement("div");
+  el.className = "roadmap-summary";
+  el.dataset.tab = "progressao";
+  el.innerHTML = `
+    <div class="rm-steps">
+      ${DATA.map((s) => `
+        <button type="button" class="rm-step" data-phase="${s.id}">
+          <small>${s.badge}</small>
+          <b>${s.target || s.title}</b>
+          <span class="rm-bar"><span></span></span>
+          <em class="rm-count">0/${phaseItems(s).length}</em>
+        </button>`).join("")}
+    </div>
+    <p class="rm-note">💬 ${ROADMAP.noRush}</p>`;
+  el.querySelector(".rm-steps").addEventListener("click", (e) => {
+    const step = e.target.closest(".rm-step");
+    if (step) navigate({ tab: "progressao", card: step.dataset.phase }, { push: true });
+  });
+  return el;
+}
+
+// Atualiza o progresso de cada etapa do resumo e destaca a primeira meta não concluída.
+function updateRoadmapSummary() {
+  const el = board.querySelector(".roadmap-summary");
+  if (!el) return;
+  let current = null;
+  DATA.forEach((s) => {
+    const { done, total } = sectionProgress(s);
+    const step = el.querySelector(`.rm-step[data-phase="${s.id}"]`);
+    step.querySelector(".rm-bar span").style.width = total ? `${(done / total) * 100}%` : "0%";
+    step.querySelector(".rm-count").textContent = `${done}/${total}`;
+    step.classList.toggle("done", total > 0 && done === total);
+    if (!current && done < total) current = step;
+  });
+  el.querySelectorAll(".rm-step.current").forEach((n) => n.classList.remove("current"));
+  current?.classList.add("current");
 }
