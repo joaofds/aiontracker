@@ -28,7 +28,14 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - toggle **🔔 Alerta sonoro** no painel: toca um bipe e mostra uma notificação do sistema quando
     faltam 5 min para qualquer evento — também com a aba em segundo plano ou o navegador minimizado
     (a aba precisa estar aberta; o áudio é liberado após o primeiro clique na página).
-- **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**.
+- **Navegação por abas** — Progressão · **Rotina** · **Guias** · **Classes**, fixas no topo ao rolar.
+  Dentro de um card aberto (classe, Combat Power, fase…) aparece uma **barra de contexto** com o
+  nome do card, as sub-abas, o seletor de build e um "Ir para…" com as seções, além de
+  🔗 copiar link · ↑ topo do card · ✕ fechar. Um botão flutuante **↑** volta ao topo do card (ou da página).
+- **Endereço na URL** — cada aba, card, sub-aba, build e seção tem um endereço
+  (ex.: `#classes/cleric/guia/pve/gear`, `#guias/g-cp/daevanion`): dá para mandar o link
+  direto no Discord, recarregar sem perder o lugar e usar o **Voltar** do navegador depois de
+  trocar de aba ou seguir um atalho.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
@@ -100,7 +107,8 @@ rpgtracker/
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
 │   │   │   ├── theme.js      # tema claro/escuro
-│   │   │   └── toolbar.js    # exportar / importar / resetar
+│   │   │   ├── toolbar.js    # exportar / importar / resetar
+│   │   │   └── nav.js        # endereço na URL, barra de contexto, botão "topo"
 │   │   └── main.js       # boot
 │   └── images/           # símbolos das classes (<id>.avif) + skills/<classe>/ (ícones)
 │                         # + guides/<classe>/ e guides/common/ (prints dos guias de classe)
@@ -190,6 +198,22 @@ Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com 
 
 O `guide` aceita `"guia#ancora"` para rolar até um trecho do guia — o elemento com id
 `guia-ancora` (ex.: `guide: "g-cp#daevanion"` abre o card de Combat Power em `#g-cp-daevanion`).
+
+### Navegação e endereços (URL)
+`assets/js/ui/nav.js` cuida de três coisas:
+
+- **Endereço** (`#aba/card/sub-aba/build/seção`) — o card é o `data-class`, `data-guide` ou
+  `data-id` do card no board; nas classes, a sub-aba é `skills` ou `guia` (Visão geral não
+  aparece), seguida da build (só quando a classe tem mais de uma) e do `id` da seção; nos guias,
+  a âncora (`#guias/g-cp/daevanion` → elemento `#g-cp-daevanion`). Use `navigate({ tab, card, rest },
+  { push: true })` para ir a um lugar gravando no histórico — `openGuide` e `openClassGuide`
+  passam por ele. Trocar de aba e seguir atalhos grava no histórico; rolar e abrir cards só
+  atualizam o endereço (sem encher o Voltar).
+- **Barra de contexto** — aparece quando o cabeçalho de um card aberto sobe atrás das abas;
+  os botões dela só repassam o clique para os controles reais do card.
+- **Recuo de rolagem** — as alturas do cabeçalho e das abas são medidas em `--header-h` e
+  `--nav-h`, e `--scroll-offset` (CSS) define onde os alvos param ao rolar. Elementos novos que
+  sejam destino de rolagem devem entrar na regra de `scroll-margin-top` do `styles.css`.
 
 ### Editar o guia de Combat Power
 O card **Combat Power** da aba Guias vem de `CP_GUIDE` em `assets/js/data/combat-power.js`.

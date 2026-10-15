@@ -69,13 +69,16 @@
       <b>fuso local.</b>.
     </p>
 
-    <!-- Abas -->
-    <nav class="tabs" id="tabs" role="tablist">
-      <button class="tab active" data-tab="progressao" role="tab">Progressão</button>
-      <button class="tab" data-tab="rotina" role="tab">Rotina</button>
-      <button class="tab" data-tab="guias" role="tab">Guias</button>
-      <button class="tab" data-tab="classes" role="tab">Classes</button>
-    </nav>
+    <!-- Abas (fixas ao rolar) + barra de contexto do card em foco (ver ui/nav.js) -->
+    <div class="nav-sticky">
+      <nav class="tabs" id="tabs" role="tablist">
+        <button class="tab active" data-tab="progressao" role="tab">Progressão</button>
+        <button class="tab" data-tab="rotina" role="tab">Rotina</button>
+        <button class="tab" data-tab="guias" role="tab">Guias</button>
+        <button class="tab" data-tab="classes" role="tab">Classes</button>
+      </nav>
+      <div class="context-bar" id="context-bar" hidden></div>
+    </div>
 
     <div id="board"></div>
 
@@ -85,6 +88,8 @@
       <button id="reset-all" class="btn btn-danger" type="button">Resetar tudo</button>
     </div>
   </main>
+
+  <button id="to-top" class="to-top" type="button" title="Voltar ao topo" aria-label="Voltar ao topo" hidden>↑</button>
 
   <footer class="site-footer wrap">
     <p>Feito para uso pessoal e amigos do Discord · não afiliado à NCSOFT.</p>
@@ -139,6 +144,7 @@
   <script src="assets/js/ui/timers.js"></script>
   <script src="assets/js/ui/theme.js"></script>
   <script src="assets/js/ui/toolbar.js"></script>
+  <script src="assets/js/ui/nav.js"></script>
 
   <!-- Boot -->
   <script src="assets/js/main.js"></script>

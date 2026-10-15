@@ -49,10 +49,13 @@ function setActiveTab(tab) {
   activeTab = tab;
   applyTab();
 }
-// Liga o clique nos botões de aba.
+// Liga o clique nos botões de aba: troca a aba, grava no histórico (ver ui/nav.js) e, se a
+// página estiver rolada para baixo, volta para o começo do conteúdo.
 function initTabs() {
   document.getElementById("tabs").addEventListener("click", (e) => {
     const tab = e.target.closest(".tab");
-    if (tab) setActiveTab(tab.dataset.tab);
+    if (!tab) return;
+    navigate({ tab: tab.dataset.tab }, { push: true });
+    if (board.getBoundingClientRect().top < stickyBottom()) board.scrollIntoView({ block: "start" });
   });
 }

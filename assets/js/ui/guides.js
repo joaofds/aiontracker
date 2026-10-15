@@ -22,20 +22,10 @@ function renderGuide(guide) {
   return el;
 }
 
-// Duração da animação de abrir/fechar card (.section-body em styles.css), com folga.
-const EXPAND_MS = 320;
-
-// Abre um guia: troca para a aba Guias, expande o guia e rola até ele.
-// Aceita "guia#ancora" para rolar até um trecho dele (elemento com id "guia-ancora", ex.: "g-cp#daevanion" → #g-cp-daevanion).
+// Abre um guia (troca para a aba Guias, expande e rola até ele) e grava no histórico.
+// Aceita "guia#ancora" para rolar até um trecho dele (elemento com id "guia-ancora",
+// ex.: "g-cp#daevanion" → #g-cp-daevanion). Ver navigate() em ui/nav.js.
 function openGuide(ref) {
   const [guideId, anchor] = ref.split("#");
-  setActiveTab("guias");
-  const el = board.querySelector(`.section[data-guide="${guideId}"]`);
-  if (!el) return;
-  const wasCollapsed = el.classList.contains("collapsed");
-  el.classList.remove("collapsed");
-  const target = anchor && el.querySelector(`#${guideId}-${anchor}`);
-  if (!target) return el.scrollIntoView({ behavior: "smooth", block: "start" });
-  // espera a animação de abrir o card (0,3s) para a posição do trecho estar certa
-  setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), wasCollapsed ? EXPAND_MS : 0);
+  navigate({ tab: "guias", card: guideId, rest: anchor ? [anchor] : [] }, { push: true });
 }
