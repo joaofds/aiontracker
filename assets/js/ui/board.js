@@ -12,9 +12,11 @@ function render() {
   DATA.forEach((section) => board.appendChild(renderSection(section)));
   board.appendChild(renderRoutine());
   GUIDES.forEach((guide) => board.appendChild(renderGuide(guide)));
+  board.appendChild(renderCombatPower());
   CLASSES.forEach((cls) => board.appendChild(renderClass(cls)));
   applyTab();
   updateOverall();
+  updateCombatPower();
 }
 
 // Cria o card recolhível base (section + cabeçalho clicável).

@@ -32,6 +32,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal e Vakron & Gartua). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
+- **Combat Power** (aba Guias) — lembrete das 10 fontes de poder do jogo (pets, Genus Insight,
+  equipamento, Arcana, asas, títulos, skills/stigmas, Daevanion, skins e Pantheon) e do poder
+  "invisível" que não aparece no número. Cada fonte tem itens para marcar o que você já usa
+  (com contador; entram no Exportar/Importar) e atalhos para a seção certa do Guia de cada classe.
+  Baseado no [guia do hartmannlab](https://aion2.hartmannlab.xyz/en/combat-power).
 - **Guia de classes** — uma seção por classe (as 8 do lançamento), com símbolo, função, arma,
   foco, atributos recomendados, manastones, sinergias e dica de build. As **prioridades PvE e
   PvP** listam as melhores skills separadas por tipo (**Ativas · Passivas · Stigmas**), com a
@@ -76,8 +81,10 @@ rpgtracker/
 │   │   │   ├── routine.js    # ROUTINE_* (categorias e tarefas padrão da Rotina)
 │   │   │   ├── events.js     # EVENTS (eventos recorrentes)
 │   │   │   ├── guides.js     # GUIDES (aba Guias)
+│   │   │   ├── combat-power.js # CP_GUIDE (card de Combat Power na aba Guias)
 │   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
 │   │   │   ├── skills.js     # SKILLS (skills recomendadas por classe)
+│   │   │   ├── class-guides.js # CLASS_GUIDES (sub-aba Guia de cada classe)
 │   │   │   └── skill-db/     # SKILL_DB: index.js (formato) + um arquivo por classe (gerado)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
@@ -87,13 +94,16 @@ rpgtracker/
 │   │   │   ├── checklist.js  # fases + item de checkbox reutilizável + progresso
 │   │   │   ├── routine.js    # aba Rotina (cards dos personagens + editor de tarefas)
 │   │   │   ├── guides.js     # aba Guias
+│   │   │   ├── combat-power.js # card de Combat Power (lembretes + atalhos p/ o Guia da classe)
 │   │   │   ├── skill-db.js   # sub-aba Skills da classe (lista, filtros, ícones)
+│   │   │   ├── class-guide.js  # sub-aba Guia da classe (builds, seções, seletor)
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
 │   │   │   ├── theme.js      # tema claro/escuro
 │   │   │   └── toolbar.js    # exportar / importar / resetar
 │   │   └── main.js       # boot
 │   └── images/           # símbolos das classes (<id>.avif) + skills/<classe>/ (ícones)
+│                         # + guides/<classe>/ e guides/common/ (prints dos guias de classe)
 ├── tools/
 │   └── import-metabot.py # gera data/skill-db/*.js a partir do MetaBot.GG
 └── README.md
@@ -178,6 +188,27 @@ Para ligar um item da checklist a um guia, adicione o campo `guide` ao item com 
 { id: "gear-enchant", text: "Equipamento encantado...", guide: "g-gearscore" }
 ```
 
+O `guide` aceita `"guia#ancora"` para rolar até um trecho do guia — o elemento com id
+`guia-ancora` (ex.: `guide: "g-cp#daevanion"` abre o card de Combat Power em `#g-cp-daevanion`).
+
+### Editar o guia de Combat Power
+O card **Combat Power** da aba Guias vem de `CP_GUIDE` em `assets/js/data/combat-power.js`.
+`sources` são as fontes de poder (um card cada) e `invisible`, os grupos do "poder invisível":
+
+```js
+{ id: "genus", icon: "🧬", title: "Genus Insight",
+  how: ["Como funciona..."],             // lista de explicações
+  where: ["Shugo Festival", "Nightmare"], // opcional: onde conseguir (pills)
+  classGuide: "genus",                    // opcional: seção do Guia da classe ("O que escolher")
+  checks: [{ id: "cp-genus-10", text: "Todo o Genus Insight no nível 10", note: "opcional" }] }
+```
+
+Os `checks` são salvos em `state.checks` junto com as fases (por isso entram no Exportar/Importar
+e no Resetar tudo, mas não no anel de progresso). Use ids com o prefixo `cp-` e não os renomeie,
+pela mesma razão das fases. O `classGuide` é o `id` de uma seção de `CLASS_GUIDES`
+(`skills`, `arcana`, `genus`, `wings-titles`, `gear`, `pantheon`, `boards`); se a classe não tiver
+a seção, o atalho abre o Guia dela no topo.
+
 ### Editar as classes
 A aba **Classes** vem do array `CLASSES` em `assets/js/data/classes.js`. Cada classe tem `id`,
 `color` (cor da função, usada no símbolo e no selo), `name`, `role`, `weapon`, `focus`,
@@ -219,8 +250,27 @@ Fontes dos dados: [wikily.gg](https://wikily.gg/aion-2/skills) (tipos de skill p
 e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridades e
 especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
 
+### Guias de build (sub-aba "Guia" da classe)
+As builds ficam em `CLASS_GUIDES` (`assets/js/data/class-guides.js`), indexado pelo `id` da classe.
+Cada classe tem uma **lista** de builds; com mais de uma, a sub-aba mostra um seletor. Classes sem
+entrada não ganham a sub-aba. O formato completo dos blocos (`skills`, `ranked`, `defs`, `table`,
+`images`, `links`, `tip`) e dos selos **TW/KR** / **S2** está documentado no topo do arquivo.
+
+- **`hartmannBuild({...})`** monta uma build no formato das *old builds* do
+  [hartmannlab](https://aion2.hartmannlab.xyz/en/class-guides): as partes iguais para todas as
+  classes (Genus Insight, asas, títulos, armas, Pantheon…) ficam no próprio helper; a classe só
+  informa skills, passivas, stigmas, Arcana, asas do meta, acessórios, Manastones e o layout/macro.
+- **Cleric PvE** e **Spirit Master Global Season 1** são builds completas (rotação, equipamento
+  peça a peça, Daevanion boards), cujas seções foram geradas a partir da base de dados do
+  gerador de builds do site.
+- Nomes de skill devem bater com o `SKILL_DB` da classe (o card puxa ícone e o texto das
+  especializações por eles); sufixos entre parênteses, como `"Taunt (essencial)"`, são ignorados
+  na busca.
+- Prints de layout e macro ficam em `assets/images/guides/<classe>/`; os da configuração da macro,
+  iguais para todos, em `assets/images/guides/common/`.
+
 ### Banco de skills (sub-aba "Skills" da classe)
-Cada card de classe tem duas sub-abas: **Visão geral** (o conteúdo acima) e **Skills**, com a
+Cada card de classe tem as sub-abas **Visão geral** (o conteúdo acima), **Skills** e **Guia** (seção anterior). A **Skills** tem a
 lista completa da classe (ativas, passivas e stigmas), filtro por tipo, nível, custo, cooldown,
 alcance e o efeito no nível 1. Clique na skill para ver o efeito inteiro e as **especializações**
 (o selo "N esp." indica quantas ela tem), com o nível mínimo de cada uma; as recomendadas

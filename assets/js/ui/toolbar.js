@@ -2,7 +2,7 @@
    Export / Import / Reset
    ============================================================ */
 
-// Gera um código base64 com as fases e a rotina e copia para a área de transferência.
+// Gera um código base64 com as fases (e os lembretes de Combat Power) e a rotina e copia para a área de transferência.
 async function exportProgress() {
   const data = { checks: state.checks, routine: state.routine };
   const code = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
@@ -38,7 +38,7 @@ function importProgress() {
 
 // Apaga todo o progresso (após confirmação).
 function resetAll() {
-  if (!confirm("Resetar TODO o progresso (fases e rotina de todos os personagens)?")) return;
+  if (!confirm("Resetar TODO o progresso (fases, lembretes de Combat Power e rotina de todos os personagens)?")) return;
   state.checks = {};
   clearRoutine();
   render();

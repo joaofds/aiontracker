@@ -22,11 +22,20 @@ function renderGuide(guide) {
   return el;
 }
 
+// Duração da animação de abrir/fechar card (.section-body em styles.css), com folga.
+const EXPAND_MS = 320;
+
 // Abre um guia: troca para a aba Guias, expande o guia e rola até ele.
-function openGuide(guideId) {
+// Aceita "guia#ancora" para rolar até um trecho dele (elemento com id "guia-ancora", ex.: "g-cp#daevanion" → #g-cp-daevanion).
+function openGuide(ref) {
+  const [guideId, anchor] = ref.split("#");
   setActiveTab("guias");
   const el = board.querySelector(`.section[data-guide="${guideId}"]`);
   if (!el) return;
+  const wasCollapsed = el.classList.contains("collapsed");
   el.classList.remove("collapsed");
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+  const target = anchor && el.querySelector(`#${guideId}-${anchor}`);
+  if (!target) return el.scrollIntoView({ behavior: "smooth", block: "start" });
+  // espera a animação de abrir o card (0,3s) para a posição do trecho estar certa
+  setTimeout(() => target.scrollIntoView({ behavior: "smooth", block: "start" }), wasCollapsed ? EXPAND_MS : 0);
 }

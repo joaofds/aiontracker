@@ -354,6 +354,39 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 }
 .tip b { color: var(--text); }
 
+/* ---------- Guia de Combat Power (CP_GUIDE) ---------- */
+.cp-body .tip { margin: 0 0 0.9rem; }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.75rem; align-items: start; }
+.cp-card, .cp-invisible {
+  padding: 0.8rem 0.9rem; border-radius: 10px; scroll-margin-top: 1rem;
+  background: rgba(130, 140, 180, 0.06); border: 1px solid var(--card-border);
+}
+.cp-card h3, .cp-invisible h3 { margin: 0 0 0.5rem; font-size: 0.98rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; }
+.cp-num { font-size: 0.68rem; font-weight: 700; color: var(--muted-2); font-variant-numeric: tabular-nums; }
+.guide-body .cp-how { margin: 0 0 0.6rem; padding-left: 1.1rem; }
+.guide-body .cp-how li { font-size: 0.84rem; margin-bottom: 0.25rem; }
+.cp-where { margin: 0 0 0.6rem !important; display: flex; flex-wrap: wrap; align-items: center; gap: 0.35rem; font-size: 0.78rem; }
+.cp-where > span:first-child { color: var(--muted-2); }
+.cp-checks { display: grid; gap: 0.15rem; }
+.cp-checks .item { padding: 0.4rem 0.45rem; }
+.cp-classes { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; margin-top: 0.6rem; font-size: 0.74rem; color: var(--muted-2); }
+.cp-classes > span { width: 100%; }
+.cp-class {
+  width: 30px; height: 30px; padding: 3px; cursor: pointer; border-radius: 8px;
+  background: color-mix(in srgb, var(--role) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--role) 45%, transparent);
+}
+.cp-class:hover { background: color-mix(in srgb, var(--role) 32%, transparent); transform: translateY(-1px); }
+.cp-class img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.cp-invisible { margin-top: 0.75rem; border-left: 3px solid var(--gold); }
+.cp-invisible > p { font-size: 0.85rem; }
+.cp-inv-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.cp-inv-cols h4 {
+  margin: 0 0 0.35rem; font-size: 0.68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.7px; color: var(--gold);
+}
+@media (max-width: 560px) { .cp-inv-cols { grid-template-columns: 1fr; } }
+
 /* ---------- Classes ---------- */
 .class-card { border-left: 3px solid var(--role, var(--accent)); }
 

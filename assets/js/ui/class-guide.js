@@ -169,3 +169,25 @@ function renderClassGuide(cls) {
   });
   return panel;
 }
+
+// Abre o Guia de uma classe na seção `secId`: troca para a aba Classes, expande o card,
+// escolhe a primeira build que tem a seção (se a atual não tiver) e rola até ela.
+function openClassGuide(classId, secId) {
+  setActiveTab("classes");
+  const card = board.querySelector(`.class-card[data-class="${classId}"]`);
+  if (!card) return;
+  const wasCollapsed = card.classList.contains("collapsed");
+  card.classList.remove("collapsed");
+  card.querySelector('.class-subtab[data-panel="guide"]')?.click();
+
+  const builds = [...card.querySelectorAll(".cg-build")];
+  const current = builds.find((b) => !b.hidden);
+  const target = current?.querySelector(`.cg-sec[data-sec="${secId}"]`) ? current
+    : builds.find((b) => b.querySelector(`.cg-sec[data-sec="${secId}"]`));
+  if (target && target !== current) card.querySelector(`.cg-builds [data-build="${target.dataset.build}"]`)?.click();
+
+  const sec = target?.querySelector(`.cg-sec[data-sec="${secId}"]`);
+  if (sec) sec.open = true;
+  // espera a animação de abrir o card (ver EXPAND_MS em ui/guides.js)
+  setTimeout(() => (sec || card).scrollIntoView({ behavior: "smooth", block: "start" }), wasCollapsed ? EXPAND_MS : 0);
+}

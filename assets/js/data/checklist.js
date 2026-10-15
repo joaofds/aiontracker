@@ -18,10 +18,10 @@ const DATA = [
       { id: "altgard-contracts", text: "Os 12 contratos de Altgard" },
       { id: "abyss-contracts", text: "Os 20 contratos do Abyss" },
       { id: "daily-quests-p1", text: "Quests diárias em dia" },
-      { id: "side-quests", text: "100% das side quests (verdes)" },
-      { id: "amulet-belt", text: "Amuleto e cinto melhorados para dourado" },
-      { id: "shugo", text: "Shugo concluído, Daevanions coletados na loja Shugo" },
-      { id: "nightmare", text: "Nightmare concluído, tokens gastos em Daevanions" },
+      { id: "side-quests", text: "100% das side quests (verdes)", note: "dão pontos de Daevanion", guide: "g-cp#daevanion" },
+      { id: "amulet-belt", text: "Amuleto e cinto melhorados para dourado", guide: "g-cp#gear" },
+      { id: "shugo", text: "Shugo concluído, Daevanions coletados na loja Shugo", guide: "g-cp#daevanion" },
+      { id: "nightmare", text: "Nightmare concluído, tokens gastos em Daevanions", guide: "g-cp#daevanion" },
     ],
   },
   {
@@ -48,7 +48,7 @@ const DATA = [
     badge: "Fase 3", title: "Progressão 1.600 – 2.100",
     subtitle: "Reta de endgame.",
     items: [
-      { id: "transcendence", text: "Atividades de Transcendência" },
+      { id: "transcendence", text: "Atividades de Transcendência", note: "fonte de Arcanas", guide: "g-cp#arcana" },
       { id: "acc-farm", text: "Farm de acessórios", note: "opcional" },
       { id: "odyle-craft-extra", text: "Odyle produzido (craft) de apoio" },
       { id: "odyle-buy-extra", text: "Odyle comprado de apoio" },
