@@ -454,7 +454,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 
 /* ---------- Guia de Combat Power (CP_GUIDE) ---------- */
 .cp-body .tip { margin: 0 0 0.9rem; }
-.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 0.75rem; align-items: start; }
+.cp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 0.75rem; align-items: start; }
 .cp-card, .cp-invisible {
   padding: 0.8rem 0.9rem; border-radius: 10px;
   background: rgba(130, 140, 180, 0.06); border: 1px solid var(--card-border);
@@ -698,7 +698,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .cg-sec summary .chevron { margin-left: auto; width: 18px; height: 18px; color: var(--muted-2); transition: transform 0.2s; }
 .cg-sec:not([open]) summary .chevron { transform: rotate(-90deg); }
 .cg-sec-icon { width: 1.4rem; text-align: center; }
-.cg-sec-body { padding: 0 0.85rem 0.85rem; display: grid; gap: 1rem; }
+.cg-sec-body { padding: 0 0.85rem 0.85rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
 .cg-note { margin: 0; font-size: 0.82rem; color: var(--muted); font-style: italic; }
 .cg-block-title {
   margin: 0 0 0.45rem; font-size: 0.68rem; font-weight: 700;
@@ -709,7 +709,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 /* Pills, cadeias de prioridade e selos */
 .cg-pills, .cg-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 0.3rem; }
 .cg-pill {
-  font-size: 0.78rem; color: var(--text); white-space: nowrap;
+  font-size: 0.78rem; color: var(--text); white-space: nowrap; max-width: 100%;
   background: rgba(130, 140, 180, 0.12); border: 1px solid var(--card-border);
   padding: 0.12rem 0.5rem; border-radius: 7px;
 }
@@ -725,7 +725,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .cg-tag-s2 { color: var(--gold); background: rgba(244, 198, 103, 0.14); }
 
 /* Skills ativas: ícone · nome + especializações · nível alvo */
-.cg-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 0.5rem; }
+.cg-skills { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 0.5rem; }
 .cg-skill {
   display: flex; align-items: flex-start; gap: 0.6rem; padding: 0.5rem 0.6rem;
   border-radius: 8px; border: 1px solid var(--card-border); background: rgba(130, 140, 180, 0.05);
@@ -769,13 +769,13 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .cg-table td:first-child { color: var(--text); font-weight: 600; white-space: nowrap; }
 
 /* Imagens e links */
-.cg-figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.6rem; }
+.cg-figs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 0.6rem; }
 .cg-figs figure { margin: 0; }
 .cg-figs figure:only-child { grid-column: 1 / -1; max-width: 720px; }
 .cg-figs .cg-fig-wide { grid-column: 1 / -1; }
 .cg-figs img { display: block; width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--card-border); }
 .cg-figs figcaption { margin-top: 0.25rem; font-size: 0.74rem; color: var(--muted-2); text-align: center; }
-.cg-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.5rem; }
+.cg-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.5rem; }
 .cg-link {
   display: grid; gap: 0.1rem; padding: 0.55rem 0.7rem; text-decoration: none;
   border-radius: 8px; border: 1px solid var(--card-border); background: rgba(130, 140, 180, 0.06);
@@ -785,7 +785,11 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .cg-link span { font-size: 0.75rem; color: var(--muted-2); }
 
 @media (max-width: 560px) {
-  .cg-defs { grid-template-columns: 1fr; gap: 0.15rem; }
+  .cg-defs { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
+  .cg-pill { white-space: normal; }              /* pills longas quebram linha */
+  .cg-table td:first-child { white-space: normal; }
+  .cg-sec summary { padding: 0.6rem 0.65rem; }
+  .cg-sec-body { padding: 0 0.6rem 0.7rem; }
   .cg-defs dd { margin-bottom: 0.4rem; }
   .cg-table thead { display: none; }
   .cg-table tr { display: grid; padding: 0.4rem 0; border-bottom: 1px solid var(--card-border); }
@@ -801,7 +805,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .routine-title p { margin: 0.15rem 0 0; font-size: 0.8rem; color: var(--muted); }
 .routine-actions { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
-.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; align-items: start; }
+.char-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 1rem; align-items: start; }
 
 .char-card {
   display: flex; flex-direction: column;
@@ -857,7 +861,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   backdrop-filter: blur(6px);
 }
 .routine-editor summary { padding: 0.9rem 1.2rem; font-weight: 600; cursor: pointer; }
-.editor-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; padding: 0 1.2rem; }
+.editor-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.25rem; padding: 0 1.2rem; }
 .editor-col h4 {
   margin: 0 0 0.5rem; font-size: 0.74rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted-2);
@@ -875,12 +879,13 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   padding: 0.4rem 0.6rem;
 }
 .editor-add input { flex: 1 1 140px; min-width: 0; }
+.editor-add select { min-width: 0; max-width: 100%; }
 .editor-add input:focus, .editor-add select:focus { outline: 2px solid var(--accent-2); outline-offset: 1px; }
 .editor-foot { display: flex; justify-content: flex-end; padding: 1rem 1.2rem 1.1rem; }
 
 @media (max-width: 560px) {
   .char-grid { grid-template-columns: 1fr; }
-  .editor-cols { grid-template-columns: 1fr; }
+  .editor-cols { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* ---------- Toolbar & footer ---------- */
@@ -905,7 +910,8 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   .brand-text p { display: none; }
   .section-count { display: none; }
   .section-target { display: none; } /* a meta já aparece no resumo do topo */
-  .rm-steps { grid-template-columns: repeat(4, 1fr); }
+  .rm-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .rm-step b { overflow: hidden; text-overflow: ellipsis; }
   .rm-step { padding: 0.45rem 0.5rem; }
   .rm-step b { font-size: 0.78rem; }
   .intro { font-size: 0.9rem; }
@@ -936,4 +942,17 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
   /* ↑ já existe no botão flutuante; fechar é raro no celular — sobra espaço para o resto */
   .ctx-actions [data-action="top"], .ctx-actions [data-action="close"] { display: none; }
   .guide-body { padding: 0.4rem 0.9rem 0.9rem; }
+}
+
+/* Celulares bem estreitos (≤ 380 px): cabeçalho e resumo das metas menores para caber */
+@media (max-width: 380px) {
+  .header-inner { gap: 0.5rem; }
+  .brand { gap: 0.55rem; min-width: 0; }
+  .brand-mark { width: 34px; height: 34px; font-size: 0.9rem; }
+  .brand-text h1 { font-size: 0.95rem; }
+  .header-right { gap: 0.4rem; }
+  .overall-ring { width: 46px; height: 46px; }
+  .overall-ring-label strong { font-size: 0.85rem; }
+  .rm-step { padding: 0.4rem 0.35rem; }
+  .rm-step b { font-size: 0.7rem; }
 }
