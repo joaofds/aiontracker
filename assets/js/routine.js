@@ -4,7 +4,9 @@
 
    state.routine = {
      templates: { main: [task], alt: [task] },  // listas editáveis (todas as alts compartilham a mesma)
-     chars: [{ id, name, type: "main" | "alt", done: { [taskId]: true } }],
+     chars: [{ id, name, type: "main" | "alt", done: { [taskId]: true },
+               gs?: number,                       // Gear Score atual (aba Progressão)
+               checks?: { [itemId]: true } }],    // fases marcadas (só alts; as do Main ficam em state.checks)
    }
    task = { id } para tarefas padrão (texto vem de ROUTINE_TASKS)
         | { id, cat, text } para tarefas criadas pelo usuário
@@ -72,6 +74,14 @@ function charProgress(char) {
   return { done: tasks.filter((t) => char.done[t.id]).length, total: tasks.length };
 }
 
+// Marcações das fases de um personagem. As do Main ficam em state.checks (formato antigo, junto com
+// os lembretes de Combat Power); as de cada alt, em char.checks.
+function phaseChecks(char) {
+  if (char.type === "main") return state.checks;
+  if (typeof char.checks !== "object" || char.checks === null) char.checks = {};
+  return char.checks;
+}
+
 /* ---------- Marcações ---------- */
 
 // Marca/desmarca uma tarefa de um personagem.
@@ -106,10 +116,24 @@ function resetRoutine(kind) {
 
 /* ---------- Personagens ---------- */
 
+// Define o Gear Score atual de um personagem (vazio, zero ou inválido apaga).
+function setCharGs(charId, gs) {
+  const char = findChar(charId);
+  if (!char) return;
+  if (Number.isFinite(gs) && gs > 0) char.gs = Math.round(gs);
+  else delete char.gs;
+  saveState();
+}
+
+// Desmarca as fases de todos os personagens (as do Main ficam em state.checks; ver phaseChecks).
+function clearAltPhaseChecks() {
+  state.routine.chars.forEach((c) => { if (c.type === "alt") c.checks = {}; });
+}
+
 // Adiciona uma nova alt ("Alt N").
 function addAlt() {
   const n = state.routine.chars.filter((c) => c.type === "alt").length + 1;
-  state.routine.chars.push({ id: uid(), name: `Alt ${n}`, type: "alt", done: {} });
+  state.routine.chars.push({ id: uid(), name: `Alt ${n}`, type: "alt", done: {}, checks: {} });
   saveState();
 }
 

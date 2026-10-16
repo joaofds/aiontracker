@@ -38,8 +38,9 @@ function importProgress() {
 
 // Apaga todo o progresso (após confirmação).
 function resetAll() {
-  if (!confirm("Resetar TODO o progresso (fases, lembretes de Combat Power e rotina de todos os personagens)?")) return;
+  if (!confirm("Resetar TODO o progresso (fases e rotina de todos os personagens e lembretes de Combat Power)?")) return;
   state.checks = {};
+  clearAltPhaseChecks();
   clearRoutine();
   render();
 }

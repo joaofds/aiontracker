@@ -16,6 +16,7 @@ const WEEKLY_RESET_DOW = 3;    // 0=Dom ... 3=Qua (reset semanal na quarta às 4
 const STORAGE_KEY = "aion2-tracker-v1";
 const THEME_KEY = "aion2-tracker-theme";
 const TIMERS_KEY = "aion2-tracker-timers-open";
+const PHASE_CHAR_KEY = "aion2-tracker-phase-char"; // personagem selecionado na aba Progressão
 const TIMERS_HIDDEN_KEY = "aion2-tracker-timers-hidden"; // cards de contador ocultados pelo usuário
 const ALERTS_KEY = "aion2-tracker-event-alerts";
 const ALERT_LEAD_KEY = "aion2-tracker-event-alert-lead";

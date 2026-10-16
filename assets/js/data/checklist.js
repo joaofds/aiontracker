@@ -3,9 +3,12 @@
    Baseado no roadmap do DeanGamingTV (https://aion2.hartmannlab.xyz/en/roadmap),
    mais alguns extras de exploração da versão anterior. Diárias/semanais ficam em data/routine.js.
 
-   Cada fase: { id, badge, title, subtitle, target?, tip?, items }.
+   Cada fase: { id, badge, title, subtitle, target?, gs?, tip?, items }.
+   `gs` = meta de Gear Score em número: com o GS do personagem informado, a primeira fase com
+   `gs` maior que o dele vira a meta atual (as anteriores contam como alcançadas).
    Itens: { id, text, note?, tag?, guide? } — o `id` é a chave salva no localStorage
    (não renomeie: o progresso marcado se perde). `tag`: "main" | "alt" | "ma" (Main + Alts) | "opt".
+   Cada personagem marca as fases separadamente: itens "main" não aparecem para as alts, e "alt" não aparece para o Main.
    `{ heading: "..." }` no meio dos itens é só um subtítulo (não conta no progresso).
    ============================================================ */
 
@@ -51,7 +54,7 @@ const DATA = [
   },
   {
     id: "meta-1000",
-    badge: "Meta 2", title: "Do 45 aos 1.000 GS e terminar a MSQ", target: "1.000 GS",
+    badge: "Meta 2", title: "Do 45 aos 1.000 GS e terminar a MSQ", target: "1.000 GS", gs: 1000,
     subtitle: "A quest principal (MSQ) dá a Unique Weapon e a Guard.",
     items: [
       { heading: "No seu mapa" },
@@ -71,7 +74,7 @@ const DATA = [
   },
   {
     id: "meta-1400",
-    badge: "Meta 3", title: "Dos 1.000 aos 1.400 GS", target: "1.400 GS",
+    badge: "Meta 3", title: "Dos 1.000 aos 1.400 GS", target: "1.400 GS", gs: 1400,
     subtitle: "Feche todo o conteúdo paralelo e libere as dungeons 2★.",
     tip: "Não gaste energia DG nesta fase: faça só o conteúdo paralelo.",
     items: [
@@ -103,7 +106,7 @@ const DATA = [
   },
   {
     id: "meta-1900",
-    badge: "Meta 4", title: "Dos 1.400 aos 1.900 GS", target: "1.900 GS",
+    badge: "Meta 4", title: "Dos 1.400 aos 1.900 GS", target: "1.900 GS", gs: 1900,
     subtitle: "Dourados no +10 e a primeira Transcendence.",
     items: [
       { id: "gold10-2star", text: "10 itens dourados das dungeons 2★ em +10", note: "levam a ~1.800 GS" },
@@ -112,7 +115,7 @@ const DATA = [
   },
   {
     id: "meta-2100",
-    badge: "Meta 5", title: "Dos 1.900 aos 2.100 GS", target: "2.100 GS",
+    badge: "Meta 5", title: "Dos 1.900 aos 2.100 GS", target: "2.100 GS", gs: 2100,
     subtitle: "Transcendence Stage 2 e os ganhos opcionais que faltam.",
     items: [
       { id: "trans-2", text: "Transcendence Stage 2 (precisa de 1.900 GS)", note: "Arcana: 5 azuis, ou 1 dourada + 3 azuis + 1 verde", guide: "g-cp#arcana" },
@@ -127,7 +130,7 @@ const DATA = [
   },
   {
     id: "meta-2800",
-    badge: "Meta 6", title: "Dos 2.100 aos 2.800 GS: raid de Ludra", target: "2.800 GS",
+    badge: "Meta 6", title: "Dos 2.100 aos 2.800 GS: raid de Ludra", target: "2.800 GS", gs: 2800,
     subtitle: "Dungeons 3★ e o equipamento para a raid de 10 jogadores.",
     items: [
       { heading: "Dungeons 3★ (com 2.100 GS)" },

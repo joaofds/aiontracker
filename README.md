@@ -18,6 +18,12 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   Level 45 → 1.000 → 1.400 → 1.900 → 2.100 → 2.800 GS → *Próximos objetivos*. Itens com selo
   **Main / Alts / Main + Alts / Opcional**, subgrupos dentro de cada meta e um **resumo das metas** no
   topo (progresso de cada uma, a meta atual destacada; clicar leva até ela).
+  - **Por personagem** — no resumo das metas dá para escolher o Main ou uma das alts (os mesmos
+    personagens da aba Rotina); cada um tem as suas marcações. Itens com selo *Main* não aparecem
+    para as alts, e itens *Alts* não aparecem para o Main.
+  - **GS atual** — informe o Gear Score do personagem e a meta certa é destacada automaticamente
+    (as anteriores contam como alcançadas), com quanto falta para ela ("Faltam 150 GS para 1.400 GS").
+    Sem GS, a meta atual é a primeira fase incompleta.
 - **Rotina por personagem** (aba Rotina) — um card para o **Main** e um para cada **alt**, com as
   tarefas agrupadas em *Diárias / Frequentes*, *Semanais*, *Lojas e Encomendas* e *Eventos do
   Abyss & Mundo*. Diárias resetam todo dia às 4h; o resto, no reset semanal. Dá para adicionar,
@@ -63,7 +69,7 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   especializações, Arcana, Genus Insight, asas/títulos, Soul Binding, Manastones, Pantheon, layout e
   macro, em seções recolhíveis com índice. Cleric e Spirit Master têm uma build extra completa
   (rotação, equipamento peça a peça e Daevanion boards), com seletor entre as builds.
-- **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases).
+- **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases do personagem selecionado).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
 - **Exportar / Importar** progresso via código — fases, personagens e listas de tarefas
@@ -159,6 +165,8 @@ As fases da aba **Progressão** estão no array `DATA` em `assets/js/data/checkl
   badge: "Meta 2",
   title: "Do 45 aos 1.000 GS e terminar a MSQ",
   target: "1.000 GS",        // opcional: meta (selo no card e etapa no resumo do topo)
+  gs: 1000,                  // opcional: meta de GS em número — com o GS do personagem informado, a primeira
+                             // fase com `gs` acima dele vira a meta atual
   subtitle: "...",
   tip: "...",                // opcional: aviso no topo da fase
   items: [
@@ -417,7 +425,9 @@ const EVENTS = [
 - O reset é calculado por **chave de período**: a cada novo ciclo os checkboxes
   correspondentes são limpos automaticamente — funciona mesmo que você não abra o
   site na hora exata. Com a aba aberta, a verificação roda a cada segundo.
-- O progresso das **fases** é permanente (só zera via "Resetar tudo").
+- O progresso das **fases** é permanente (só zera via "Resetar tudo"). As marcações do Main ficam em
+  `state.checks` (formato antigo); as de cada alt, em `checks` do personagem em `state.routine.chars`,
+  junto com o `gs` — por isso entram no Exportar/Importar.
 
 ---
 
@@ -425,7 +435,7 @@ const EVENTS = [
 
 - Tudo é salvo **localmente** no seu navegador (`localStorage`, chave `aion2-tracker-v1`;
   tema em `aion2-tracker-theme`; painel de contadores aberto/fechado em
-  `aion2-tracker-timers-open`; cards ocultos em `aion2-tracker-timers-hidden`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts` antecedência em `aion2-tracker-event-alert-lead` e eventos silenciados em `aion2-tracker-event-alerts-muted`). As chaves ficam definidas em `assets/js/config.js`.
+  `aion2-tracker-timers-open`; cards ocultos em `aion2-tracker-timers-hidden`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts`, antecedência em `aion2-tracker-event-alert-lead` e eventos silenciados em `aion2-tracker-event-alerts-muted`; personagem selecionado na Progressão em `aion2-tracker-phase-char`). As chaves ficam definidas em `assets/js/config.js`.
 - Nada é enviado para servidores. Limpar os dados do navegador apaga o progresso.
 - Use **Exportar** para fazer backup/compartilhar e **Importar** para restaurar.
 

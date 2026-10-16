@@ -426,6 +426,34 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .rm-step.current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .rm-step.current small::after { content: " · agora"; color: var(--accent-2); }
 .rm-step.done b::after { content: " ✓"; color: var(--ok); }
+/* Seletor de personagem + GS atual (as fases são marcadas por personagem) */
+.rm-char { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; margin-bottom: 0.6rem; }
+.rm-chars { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+.rm-char-btn {
+  font: inherit; font-size: 0.8rem; font-weight: 600; color: var(--muted); cursor: pointer;
+  max-width: 11rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  padding: 0.3rem 0.75rem; border-radius: 999px;
+  background: var(--card); border: 1px solid var(--card-border);
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+.rm-char-btn:hover { color: var(--text); border-color: var(--accent-2); }
+.rm-char-btn.active { color: var(--text); border-color: var(--accent-2); background: rgba(39, 216, 199, 0.14); }
+.rm-char-btn.char-main.active { border-color: var(--gold); background: rgba(244, 198, 103, 0.16); }
+.rm-gs { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.rm-gs input {
+  font: inherit; font-size: 0.85rem; color: var(--text); width: 6.5rem; font-variant-numeric: tabular-nums;
+  background: rgba(130, 140, 180, 0.1); border: 1px solid var(--card-border); border-radius: 7px; padding: 0.28rem 0.5rem;
+}
+.rm-gs input:focus { outline: 2px solid var(--accent-2); outline-offset: 1px; }
+.rm-gs-info { font-size: 0.8rem; color: var(--muted); }
+.rm-gs-info b { color: var(--gold); }
+/* Meta atual em destaque no card da fase */
+.section-now {
+  display: none; font-size: 0.72rem; font-weight: 700; white-space: nowrap; color: var(--accent-2);
+  padding: 0.15rem 0.5rem; border-radius: 999px; background: rgba(39, 216, 199, 0.12);
+}
+.section.current-phase { border-color: color-mix(in srgb, var(--accent-2) 50%, var(--card-border)); }
+.section.current-phase .section-now { display: inline-block; }
 .rm-note { margin: 0.7rem 0 0; font-size: 0.8rem; color: var(--muted); }
 .rm-note span { color: var(--muted-2); }
 .rm-note a { color: var(--accent-2); }
@@ -965,7 +993,7 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 @media (max-width: 560px) {
   .brand-text p { display: none; }
   .section-count { display: none; }
-  .section-target { display: none; } /* a meta já aparece no resumo do topo */
+  .section-target, .section-now { display: none !important; } /* a meta já aparece no resumo do topo */
   .rm-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .rm-step b { overflow: hidden; text-overflow: ellipsis; }
   .rm-step { padding: 0.45rem 0.5rem; }

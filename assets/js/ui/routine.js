@@ -44,6 +44,7 @@ function renderRoutine() {
 // Substitui o bloco da rotina no board (após adicionar/remover personagens ou tarefas).
 function refreshRoutine() {
   board.querySelector(":scope > .routine")?.replaceWith(renderRoutine());
+  refreshPhases(); // personagens novos/removidos também mudam o seletor da aba Progressão
   applyTab();
 }
 
@@ -65,6 +66,7 @@ function renderCharCard(char) {
     if (name === null) return;
     renameChar(char.id, name);
     nameBtn.textContent = char.name;
+    refreshPhases();
   });
   if (char.type === "alt") {
     const remove = document.createElement("button");
