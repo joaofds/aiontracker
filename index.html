@@ -52,6 +52,7 @@
       <div class="timers-body">
         <div class="timers-inner">
           <div class="timers-opts">
+            <button type="button" id="timers-pick-toggle" class="timers-pick-toggle" aria-expanded="false" aria-controls="timers-picker">👁️ Cards</button>
             <label class="switch">
               <input type="checkbox" id="alerts-toggle">
               <span class="switch-track"></span>
@@ -59,6 +60,7 @@
             </label>
             <select id="alerts-lead" class="alerts-lead" aria-label="Antecedência do alerta sonoro"></select>
           </div>
+          <div class="timers-picker" id="timers-picker" hidden></div>
           <div class="timers" id="timers"></div>
         </div>
       </div>

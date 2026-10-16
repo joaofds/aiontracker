@@ -27,8 +27,10 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - o reset diário (4h),
   - o reset semanal (quarta-feira 4h),
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
-    **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Gartua**
-    (horários globais em UTC, exibidos no seu fuso).
+    **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb), **Boss Argon** do Abismo
+    (Seg/Qui/Sáb, 30 min depois do Siege) e **Gartua** (horários globais em UTC, exibidos no seu fuso).
+  - botão **👁️ Cards** no painel: escolhe quais cards aparecem (clique para ocultar/exibir, ou
+    *Mostrar todos* / *Ocultar todos*). Cards ocultos saem do resumo do painel e não tocam alerta.
   - toggle **🔔 Alerta sonoro** no painel: toca um bipe e mostra uma notificação do sistema quando
     falta o tempo escolhido no seletor ao lado (1 a 15 min, padrão 2) para qualquer evento — também com a aba em segundo plano ou o navegador minimizado
     (a aba precisa estar aberta; o áudio é liberado após o primeiro clique na página).
@@ -419,7 +421,7 @@ const EVENTS = [
 
 - Tudo é salvo **localmente** no seu navegador (`localStorage`, chave `aion2-tracker-v1`;
   tema em `aion2-tracker-theme`; painel de contadores aberto/fechado em
-  `aion2-tracker-timers-open`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts` antecedência em `aion2-tracker-event-alert-lead` e eventos silenciados em `aion2-tracker-event-alerts-muted`). As chaves ficam definidas em `assets/js/config.js`.
+  `aion2-tracker-timers-open`; cards ocultos em `aion2-tracker-timers-hidden`; alerta sonoro ligado/desligado em `aion2-tracker-event-alerts` antecedência em `aion2-tracker-event-alert-lead` e eventos silenciados em `aion2-tracker-event-alerts-muted`). As chaves ficam definidas em `assets/js/config.js`.
 - Nada é enviado para servidores. Limpar os dados do navegador apaga o progresso.
 - Use **Exportar** para fazer backup/compartilhar e **Importar** para restaurar.
 

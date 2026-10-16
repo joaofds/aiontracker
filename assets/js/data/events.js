@@ -18,5 +18,7 @@ const EVENTS = [
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   // Siege em dias fixos (UTC): Seg, Qui e Sáb às 21:00 UTC (bosses 21:30 UTC logo após).
   { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, durationMinutes: 60, utc: true },
+  // Boss do Abismo (Executor Argon), nos mesmos dias do Siege, 30 min depois do início; fica ~30 min.
+  { id: "argon", icon: "👹", label: "Boss Argon (Abismo)", days: [1, 4, 6], anchorHour: 21, anchorMinute: 30, durationMinutes: 30, utc: true },
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
