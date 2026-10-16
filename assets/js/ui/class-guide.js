@@ -58,7 +58,7 @@ function guideRankedItem(classId, value) {
   return `<li>${skill ? skillIcon(classId, skill) : ""}<span>${guideText(value)}</span></li>`;
 }
 
-// Renderiza um bloco de seção conforme o `type` (ver data/class-guides.js).
+// Renderiza um bloco de seção conforme o `type` (ver data/class-guides/index.js).
 function guideBlock(classId, block) {
   const title = block.title ? `<h5 class="cg-block-title">${esc(block.title)}</h5>` : "";
   switch (block.type) {

@@ -3,7 +3,7 @@
    Lembrete de tudo que o jogo oferece para ganhar poder, fonte por fonte.
    Cada fonte tem `checks` (marcáveis; o `id` é a chave salva em state.checks)
    e, opcionalmente, `classGuide`: id da seção do Guia de classe que diz
-   o que escolher (ver data/class-guides.js).
+   o que escolher (ver data/class-guides/).
    Fonte: AION 2 Guia (hartmannlab), baseado no vídeo do Dean Gaming TV.
    ============================================================ */
 const CP_GUIDE = {

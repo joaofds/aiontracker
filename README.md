@@ -101,7 +101,7 @@ rpgtracker/
 │   │   │   ├── combat-power.js # CP_GUIDE (card de Combat Power na aba Guias)
 │   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
 │   │   │   ├── skills.js     # SKILLS (skills recomendadas por classe)
-│   │   │   ├── class-guides.js # CLASS_GUIDES (sub-aba Guia de cada classe)
+│   │   │   ├── class-guides/ # CLASS_GUIDES: index.js (formato + helpers) + um arquivo por classe
 │   │   │   └── skill-db/     # SKILL_DB: index.js (formato) + um arquivo por classe (gerado)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
@@ -292,10 +292,14 @@ e guias de build ([corpus.gg](https://corpus.gg/), entre outros) para prioridade
 especializações. Revise conforme o patch — o meta, sobretudo de PvP, ainda está em formação.
 
 ### Guias de build (sub-aba "Guia" da classe)
-As builds ficam em `CLASS_GUIDES` (`assets/js/data/class-guides.js`), indexado pelo `id` da classe.
-Cada classe tem uma **lista** de builds; com mais de uma, a sub-aba mostra um seletor. Classes sem
-entrada não ganham a sub-aba. O formato completo dos blocos (`skills`, `ranked`, `defs`, `table`,
-`images`, `links`, `tip`) e dos selos **TW/KR** / **S2** está documentado no topo do arquivo.
+As builds ficam em `CLASS_GUIDES`, indexado pelo `id` da classe, em `assets/js/data/class-guides/`:
+o `index.js` declara o `CLASS_GUIDES` e traz os helpers compartilhados (`hartmannBuild`, `kr`,
+`GUIDE_LINKS`…), e cada classe tem o seu arquivo (`<id-da-classe>.js`), que preenche
+`CLASS_GUIDES.<id-da-classe>`. Cada classe tem uma **lista** de builds; com mais de uma, a sub-aba
+mostra um seletor. Classes sem entrada não ganham a sub-aba. O formato completo dos blocos (`skills`,
+`ranked`, `defs`, `table`, `images`, `links`, `tip`) e dos selos **TW/KR** / **S2** está documentado
+no topo do `index.js`. Ao criar o arquivo de uma classe nova, adicione o `<script>` dele no
+`index.html` (depois de `data/class-guides/index.js`).
 
 - **`hartmannBuild({...})`** monta uma build no formato das *old builds* do
   [hartmannlab](https://aion2.hartmannlab.xyz/en/class-guides): as partes iguais para todas as
