@@ -21,6 +21,7 @@ const TIMERS_HIDDEN_KEY = "aion2-tracker-timers-hidden"; // cards de contador oc
 const ALERTS_KEY = "aion2-tracker-event-alerts";
 const ALERT_LEAD_KEY = "aion2-tracker-event-alert-lead";
 const ALERT_MUTED_KEY = "aion2-tracker-event-alerts-muted"; // eventos com o alerta desligado (🔕)
+const BOSS_KILLS_KEY = "aion2-tracker-boss-kills"; // epoch da última morte marcada de cada field boss
 const ALERT_LEAD_OPTIONS = [1, 2, 3, 5, 10, 15]; // opções (em minutos) do seletor de antecedência do alerta
 const ALERT_LEAD_DEFAULT = 2;  // antecedência padrão do alerta sonoro, em minutos
 const EVENT_LIVE_MINUTES = 10; // por quanto tempo um evento aparece como "Agora" (se ele não tiver `durationMinutes`)

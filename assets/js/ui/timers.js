@@ -8,33 +8,155 @@ const timersToggle = document.getElementById("timers-toggle");
 
 // Rótulos usados no preview do cabeçalho.
 const TIMER_LABELS = { daily: "Reset diário", weekly: "Reset semanal" };
-EVENTS.forEach((ev) => { TIMER_LABELS[ev.id] = ev.label; });
+[...EVENTS, ...FIELD_BOSSES].forEach((ev) => { TIMER_LABELS[ev.id] = ev.label; });
 // IDs de contadores que ocorrem em dias específicos (mostram o dia da semana no sub-texto).
 const DAY_BASED_IDS = new Set(["weekly", ...EVENTS.filter((e) => e.days).map((e) => e.id)]);
 
-// Cards de contador, na ordem do painel: resets + eventos.
+// Cards de contador, na ordem do painel: resets + eventos + field bosses.
 const TIMER_CARDS = [
   { id: "daily", icon: "☀️", label: "Reset diário", kind: "reset" },
   { id: "weekly", icon: "📅", label: "Reset semanal", kind: "reset" },
   ...EVENTS.map((ev) => ({ id: ev.id, icon: ev.icon, label: ev.label, kind: "evt", ev })),
+  ...FIELD_BOSSES.map((ev) => ({ id: ev.id, icon: ev.icon, label: ev.label, kind: "boss", ev })),
 ];
 // Cards ocultados pelo usuário (escolhidos em "👁️ Cards"); cards novos começam visíveis.
 const hiddenTimers = new Set(JSON.parse(localStorage.getItem(TIMERS_HIDDEN_KEY) || "[]"));
 
-// Monta os cards de contador (resets + eventos) no painel; os valores são preenchidos pelo tickTimers.
+// Monta os cards de contador (resets + eventos + bosses) no painel; os valores são preenchidos pelo tickTimers.
 function buildTimers() {
   timersEl.innerHTML = TIMER_CARDS.map((c) => `
-    <div class="timer-card ${c.kind === "evt" ? "evt" : ""}" data-timer="${c.id}">
+    <div class="timer-card ${c.kind === "reset" ? "" : "evt"}" data-timer="${c.id}">
       <div class="timer-head"><span class="timer-icon">${c.icon}</span><span class="timer-label">${c.label}</span>${
-        c.kind === "evt" ? `<button type="button" class="timer-bell" data-bell="${c.id}"></button>` : ""}</div>
+        c.kind === "boss" ? `
+        <button type="button" class="timer-kill" data-kill="${c.id}" title="Marcar morte agora (inicia o respawn)" aria-label="Marcar morte de ${c.label}">☠️</button>
+        <button type="button" class="timer-kill" data-edit="${c.id}" title="Ajustar: informar quanto falta para o respawn (como no jogo)" aria-label="Ajustar o respawn de ${c.label}">✎</button>
+        <button type="button" class="timer-kill" data-unkill="${c.id}" title="Desfazer a morte marcada" aria-label="Desfazer a morte de ${c.label}" hidden>↺</button>` : ""}${
+        c.kind !== "reset" ? `<button type="button" class="timer-bell" data-bell="${c.id}"></button>` : ""}</div>
       <div class="timer-value" data-value>--:--:--</div>
-      <div class="timer-sub" data-sub></div>
+      <div class="timer-sub" data-sub></div>${
+        c.kind === "boss" ? `
+      <form class="boss-edit" data-edit-form="${c.id}" hidden>
+        <label>Falta <input type="text" inputmode="numeric" placeholder="h:mm" autocomplete="off"
+          title="Tempo até o respawn, como na lista de Field Bosses do jogo: h:mm, h:mm:ss ou só minutos (0 = já nasceu)"></label>
+        <button type="submit" class="tp-link">OK</button>
+        <button type="button" class="tp-link" data-edit-cancel>Cancelar</button>
+      </form>` : ""}
     </div>`).join("");
   timersEl.querySelectorAll("[data-bell]").forEach((btn) => {
     btn.addEventListener("click", () => toggleEventMuted(btn.dataset.bell));
   });
+  timersEl.querySelectorAll("[data-kill]").forEach((btn) => {
+    btn.addEventListener("click", () => setBossKill(btn.dataset.kill, Date.now()));
+  });
+  timersEl.querySelectorAll("[data-unkill]").forEach((btn) => {
+    btn.addEventListener("click", () => setBossKill(btn.dataset.unkill, null));
+  });
+  timersEl.querySelectorAll("[data-edit]").forEach((btn) => {
+    btn.addEventListener("click", () => openBossEdit(btn.dataset.edit));
+  });
+  timersEl.querySelectorAll("[data-edit-form]").forEach(initBossEditForm);
   updateBells();
   buildTimersPicker();
+}
+
+/* ---------- Field bosses (respawn a partir da morte) ---------- */
+
+// Epoch da última morte marcada de cada boss (id → epoch).
+const bossKills = JSON.parse(localStorage.getItem(BOSS_KILLS_KEY) || "{}");
+
+// Epoch em que o boss nasce de novo, ou null se nenhuma morte foi marcada.
+function bossRespawn(b) {
+  const kill = bossKills[b.id];
+  return kill ? kill + b.respawnHours * 3600000 : null;
+}
+
+// Marca (epoch) ou desfaz (null) a morte de um boss, e reagenda o alerta dele.
+function setBossKill(id, epoch) {
+  if (epoch) bossKills[id] = epoch; else delete bossKills[id];
+  localStorage.setItem(BOSS_KILLS_KEY, JSON.stringify(bossKills));
+  dropScheduledAlert(id);
+  tickTimers();
+}
+
+// Converte o tempo restante digitado ("h:mm", "h:mm:ss" ou só minutos) em ms; null se inválido.
+function parseTimeLeft(text) {
+  const m = text.trim().match(/^(\d+)(?::(\d{1,2}))?(?::(\d{1,2}))?$/);
+  if (!m) return null;
+  if (m[2] === undefined) return Number(m[1]) * 60000; // só minutos
+  if (Number(m[2]) > 59 || Number(m[3] || 0) > 59) return null;
+  return ((Number(m[1]) * 60 + Number(m[2])) * 60 + Number(m[3] || 0)) * 1000;
+}
+
+// Abre (ou fecha) o ajuste do respawn de um boss, já preenchido com o tempo restante atual.
+function openBossEdit(id) {
+  const form = timersEl.querySelector(`[data-edit-form="${id}"]`);
+  if (!form.hidden) { form.hidden = true; return; }
+  const b = FIELD_BOSSES.find((x) => x.id === id);
+  const respawn = bossRespawn(b);
+  const input = form.querySelector("input");
+  input.value = respawn !== null && respawn > Date.now()
+    ? fmtCountdown(respawn - Date.now()).replace(/^0(?=\d)/, "") : "";
+  input.setCustomValidity("");
+  form.hidden = false;
+  input.focus();
+  input.select();
+}
+
+// Liga o formulário de ajuste: "falta X" → a morte passa a ser (agora + X − respawn).
+function initBossEditForm(form) {
+  const id = form.dataset.editForm;
+  const b = FIELD_BOSSES.find((x) => x.id === id);
+  const input = form.querySelector("input");
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const left = parseTimeLeft(input.value);
+    if (left === null) {
+      input.setCustomValidity("Use h:mm, h:mm:ss ou só minutos (ex.: 2:15, 45 ou 0).");
+      input.reportValidity();
+      return;
+    }
+    form.hidden = true;
+    setBossKill(id, Date.now() + left - b.respawnHours * 3600000);
+  });
+  input.addEventListener("input", () => input.setCustomValidity(""));
+  form.querySelector("[data-edit-cancel]").addEventListener("click", () => { form.hidden = true; });
+  form.addEventListener("keydown", (e) => { if (e.key === "Escape") form.hidden = true; });
+}
+
+// Atualiza os cards de boss; retorna os respawns ainda por vir (id → epoch).
+function tickBosses(now) {
+  const pending = {};
+  const today = fmtClock(now).dow;
+  FIELD_BOSSES.forEach((b) => {
+    const respawn = bossRespawn(b);
+    if (respawn !== null && respawn > now) pending[b.id] = respawn;
+    const card = timersEl.querySelector(`[data-timer="${b.id}"]`);
+    if (!card) return;
+
+    const alive = respawn !== null && respawn <= now;
+    card.classList.toggle("live", alive);
+    card.querySelector("[data-unkill]").hidden = respawn === null;
+    const value = card.querySelector("[data-value]");
+    const sub = card.querySelector("[data-sub]");
+    if (respawn === null) {
+      value.textContent = "--:--:--";
+      sub.textContent = `☠️ ao matar · ✎ ajustar · respawn ${b.respawnHours}h`;
+    } else {
+      const c = fmtClock(respawn);
+      const when = c.dow === today ? c.hm : `${c.dow}. ${c.hm}`;
+      value.textContent = alive ? "🟢 Vivo" : fmtCountdown(respawn - now);
+      sub.textContent = alive ? `nasceu às ${when} · ☠️ ao matar` : `nasce às ${when}`;
+    }
+
+    // ao marcar a morte ou o boss nascer, piscar o card
+    const state = alive ? "alive" : respawn;
+    if (b.id in lastTargets && state !== lastTargets[b.id]) {
+      card.classList.add("flash");
+      setTimeout(() => card.classList.remove("flash"), 1000);
+    }
+    lastTargets[b.id] = state;
+  });
+  return pending;
 }
 
 /* ---------- Ocultar/exibir cards ---------- */
@@ -144,7 +266,12 @@ function tickTimers() {
     lastTargets[id] = target;
   }
 
-  checkEventAlerts(targets, now);
+  const bossTargets = tickBosses(now);
+  for (const [id, target] of Object.entries(bossTargets)) {
+    if (!hiddenTimers.has(id) && (!soonest || target < soonest.target)) soonest = { id, target };
+  }
+
+  checkEventAlerts({ ...targets, ...bossTargets }, now);
 
   // resumo no cabeçalho (só cards visíveis): evento acontecendo agora (se houver) ou o próximo
   const liveId = Object.keys(live).find((id) => !hiddenTimers.has(id));
@@ -235,19 +362,19 @@ function notifyEvent(ev, target) {
   if (!("Notification" in window) || Notification.permission !== "granted") return;
   const mins = Math.max(1, Math.round((target - Date.now()) / 60000));
   new Notification(`${ev.icon} ${ev.label}`, {
-    body: `Começa em ${mins} min (às ${fmtClock(target).hm}).`,
+    body: `${ev.respawnHours ? "Nasce" : "Começa"} em ${mins} min (às ${fmtClock(target).hm}).`,
     tag: `event-${ev.id}`,
   });
 }
 
-// Agenda o alerta de cada evento cujo momento de aviso (início − alertLeadMinutes) está próximo.
+// Agenda o alerta de cada evento/boss cujo momento de aviso (início − alertLeadMinutes) está próximo.
 function checkEventAlerts(targets, now) {
   if (!alertsOn) return;
   const lead = alertLeadMinutes * 60000;
-  EVENTS.forEach((ev) => {
+  [...EVENTS, ...FIELD_BOSSES].forEach((ev) => {
     if (mutedEvents.has(ev.id) || hiddenTimers.has(ev.id)) return;
     const target = targets[ev.id];
-    if (alertedTargets[ev.id] === target) return;
+    if (target === undefined || alertedTargets[ev.id] === target) return;
     const untilAlert = target - lead - now;
     if (target <= now || untilAlert > ALERT_SCHEDULE_AHEAD_MS) return;
     const oscs = playAlert(Math.max(0, untilAlert) / 1000, () => notifyEvent(ev, target));

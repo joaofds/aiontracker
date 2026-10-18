@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ClaudeCodeEditorTabs">
-    <option name="activeSessionId" value="0d19acbf-f3ae-41b5-8da5-9b5aaf02c6b0" />
+    <option name="activeSessionId" value="e4d5b718-6257-4ac1-8bbc-fb808b5c763d" />
     <option name="openSessionIds">
       <list>
-        <option value="3563faf2-ee2f-4349-8839-2166f5cfe06c" />
         <option value="0d19acbf-f3ae-41b5-8da5-9b5aaf02c6b0" />
+        <option value="e4d5b718-6257-4ac1-8bbc-fb808b5c763d" />
       </list>
     </option>
     <option name="sessionPaths">
       <map>
         <entry key="0d19acbf-f3ae-41b5-8da5-9b5aaf02c6b0" value="/sessions/7f63891d-5990-4c35-b6d5-2e76c8ecf8d3" />
-        <entry key="3563faf2-ee2f-4349-8839-2166f5cfe06c" value="/sessions/9d6b7a34-5a4f-45da-9a42-953580e977fb" />
+        <entry key="e4d5b718-6257-4ac1-8bbc-fb808b5c763d" value="/sessions/a85e61ef-aaaa-4945-9970-78bc0a5af928" />
       </map>
     </option>
     <option name="sessionTitles">
       <map>
         <entry key="0d19acbf-f3ae-41b5-8da5-9b5aaf02c6b0" value="Alguma sugestão de melhoría baseado no estado atua" />
-        <entry key="3563faf2-ee2f-4349-8839-2166f5cfe06c" value="Vamos implementar a opção para permitir o usuario" />
+        <entry key="e4d5b718-6257-4ac1-8bbc-fb808b5c763d" value="Vamos fazer mais 3 cards para os bosses de mundo a" />
       </map>
     </option>
   </component>

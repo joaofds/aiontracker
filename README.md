@@ -35,6 +35,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
     **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb), **Boss Argon** do Abismo
     (Seg/Qui/Sáb, 30 min depois do Siege) e **Gartua** (horários globais em UTC, exibidos no seu fuso).
+  - o respawn dos field bosses **Lagta** (12h), **Kashapa** (6h) e **Dartan** (6h): eles não têm
+    horário fixo, então clique em **☠️** no card quando o boss morrer (↺ desfaz) e o contador
+    mostra quando ele nasce de novo (fica **🟢 Vivo** depois disso). A morte marcada fica salva no navegador.
+    Perdeu o boss ou esqueceu de marcar? Clique em **✎** e digite quanto falta para o respawn, como
+    aparece na lista de Field Bosses do jogo (aba Exploração): `h:mm`, `h:mm:ss` ou só minutos (`0` = já nasceu).
   - botão **👁️ Cards** no painel: escolhe quais cards aparecem (clique para ocultar/exibir, ou
     *Mostrar todos* / *Ocultar todos*). Cards ocultos saem do resumo do painel e não tocam alerta.
   - toggle **🔔 Alerta sonoro** no painel: toca um bipe e mostra uma notificação do sistema quando

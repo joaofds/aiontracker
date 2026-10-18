@@ -22,3 +22,16 @@ const EVENTS = [
   { id: "argon", icon: "👹", label: "Boss Argon (Abismo)", days: [1, 4, 6], anchorHour: 21, anchorMinute: 30, durationMinutes: 30, utc: true },
   { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
+
+/* ============================================================
+   Dados: field/world bosses com respawn contado a partir da morte
+   (sem horário fixo; o usuário marca ☠️ no card quando o boss morre).
+    - respawnHours: tempo até o boss nascer de novo depois de morto.
+   Tempos de https://game8.co/games/Aion-2/archives/631054 (iguais em Verteron e Altgard);
+   outras fontes divergem (ex.: Dartan 3h, Lagta 24h) — ajuste conforme o jogo.
+   ============================================================ */
+const FIELD_BOSSES = [
+  { id: "lagta", icon: "🪖", label: "Boss Lagta", respawnHours: 12 },
+  { id: "kashapa", icon: "💀", label: "Boss Kashapa", respawnHours: 6 },
+  { id: "dartan", icon: "🗡️", label: "Boss Dartan", respawnHours: 6 },
+];

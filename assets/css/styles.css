@@ -275,6 +275,27 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .timer-bell:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 .timer-bell.muted { opacity: 0.45; }
 .timers.alerts-off .timer-bell { opacity: 0.3; }
+/* ☠️ / ↺ dos field bosses (marcar/desfazer a morte), à esquerda do 🔔 */
+.timer-kill {
+  flex: none; cursor: pointer;
+  font-size: 0.95rem; line-height: 1; padding: 0.2rem 0.3rem;
+  background: none; border: 1px solid transparent; border-radius: 6px;
+  color: var(--muted); transition: background 0.2s ease;
+}
+.timer-kill[hidden] { display: none; }
+.timer-kill:hover { background: rgba(130, 140, 180, 0.12); }
+.timer-kill:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.timer-label + .timer-kill { margin-left: auto; }
+.timer-kill ~ .timer-bell { margin-left: 0; }
+/* ✎ ajuste do respawn: "Falta [h:mm] OK Cancelar" */
+.boss-edit { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-top: 0.45rem; font-size: 0.76rem; color: var(--muted); }
+.boss-edit[hidden] { display: none; }
+.boss-edit label { display: inline-flex; align-items: center; gap: 0.35rem; }
+.boss-edit input {
+  width: 5.5em; font: inherit; color: var(--text); font-variant-numeric: tabular-nums;
+  background: rgba(130, 140, 180, 0.1); border: 1px solid var(--card-border); border-radius: 7px; padding: 0.22rem 0.4rem;
+}
+.boss-edit input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
 @keyframes flash { 0%,100% { background: var(--card); } 40% { background: rgba(61, 220, 132, 0.18); } }
 
 /* ---------- Intro ---------- */
