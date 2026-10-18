@@ -87,10 +87,11 @@ const GUIDES = [
         <li><b>Urugugu Canyon (Conquest):</b> até conseguir a sua arma e os acessórios.</li>
         <li><b>Com 2.100 GS (3★):</b> o mesmo esquema com a <b>Ferocious Horn Den</b> (Exploration 3x +
           Conquest até faltar 1 peça) e o <b>Fire Temple (Conquest)</b> para arma e acessórios.</li>
-        <li><b>Gartua:</b> abre <b>a cada 12 horas</b>. Acompanhe o contador "Gartua" no topo e entre
+        <li><b>Gartua:</b> nasce de novo <b>12 horas depois de morto</b>. Acompanhe o contador "Gartua" no topo e entre
           assim que estiver disponível para não perder janelas.</li>
       </ul>
-      <div class="tip"><b>Ciclo de 12h:</b> o contador do Gartua está ancorado às 6h/18h.</div>`,
+      <div class="tip"><b>Ciclo de 12h:</b> não tem horário fixo — o relógio começa quando o boss morre. Marque ☠️
+        no card ao matar, ou use ✎ para digitar o tempo restante que aparece no mapa do jogo.</div>`,
   },
   {
     id: "g-recursos", icon: "💰", title: "Recursos e energia",

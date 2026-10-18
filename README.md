@@ -33,9 +33,9 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   - o reset diário (4h),
   - o reset semanal (quarta-feira 4h),
   - os eventos recorrentes do jogo: **Spacetime Rift**, **Watcher Kaira**, **Shugo Festival**,
-    **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb), **Boss Argon** do Abismo
-    (Seg/Qui/Sáb, 30 min depois do Siege) e **Gartua** (horários globais em UTC, exibidos no seu fuso).
-  - o respawn dos field bosses **Lagta** (12h), **Kashapa** (6h) e **Dartan** (6h): eles não têm
+    **Dimensional Invasion**, **Artifact Siege** (Seg/Qui/Sáb) e **Boss Argon** do Abismo
+    (Seg/Qui/Sáb, 30 min depois do Siege) — horários globais em UTC, exibidos no seu fuso.
+  - o respawn dos field bosses **Gartua** (12h), **Lagta** (12h), **Kashapa** (6h) e **Dartan** (6h): eles não têm
     horário fixo, então clique em **☠️** no card quando o boss morrer (↺ desfaz) e o contador
     mostra quando ele nasce de novo (fica **🟢 Vivo** depois disso). A morte marcada fica salva no navegador.
     Perdeu o boss ou esqueceu de marcar? Clique em **✎** e digite quanto falta para o respawn, como
@@ -398,8 +398,11 @@ const EVENTS = [
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   // Evento em dias fixos da semana (UTC): Siege às Seg/Qui/Sáb 21:00 UTC:
   { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, utc: true },
-  // Evento ancorado no fuso configurado do site (sem `utc`):
-  { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
+];
+
+// Field bosses sem horário fixo (respawn contado a partir da morte marcada no card):
+const FIELD_BOSSES = [
+  { id: "gartua", icon: "🌀", label: "Gartua", respawnHours: 12 },
 ];
 ```
 

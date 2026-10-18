@@ -20,7 +20,6 @@ const EVENTS = [
   { id: "artifact-siege", icon: "🏰", label: "Artifact Siege", days: [1, 4, 6], anchorHour: 21, anchorMinute: 0, durationMinutes: 60, utc: true },
   // Boss do Abismo (Executor Argon), nos mesmos dias do Siege, 30 min depois do início; fica ~30 min.
   { id: "argon", icon: "👹", label: "Boss Argon (Abismo)", days: [1, 4, 6], anchorHour: 21, anchorMinute: 30, durationMinutes: 30, utc: true },
-  { id: "gartua", icon: "🌀", label: "Gartua", intervalHours: 12, anchorHour: 6 },
 ];
 
 /* ============================================================
@@ -31,6 +30,8 @@ const EVENTS = [
    outras fontes divergem (ex.: Dartan 3h, Lagta 24h) — ajuste conforme o jogo.
    ============================================================ */
 const FIELD_BOSSES = [
+  // Eternal Gartua (Verteron) / Immortal Gartua (Altgard): 12h após a morte, sem horário fixo.
+  { id: "gartua", icon: "🌀", label: "Gartua", respawnHours: 12 },
   { id: "lagta", icon: "🪖", label: "Boss Lagta", respawnHours: 12 },
   { id: "kashapa", icon: "💀", label: "Boss Kashapa", respawnHours: 6 },
   { id: "dartan", icon: "🗡️", label: "Boss Dartan", respawnHours: 6 },
