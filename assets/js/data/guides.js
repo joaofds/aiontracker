@@ -128,4 +128,90 @@ const GUIDES = [
       <div class="tip"><b>Acumula por 1 semana:</b> os tickets diários (Nightmare, energia de dungeon e
       Shugo Festival) acumulam por até uma semana — dá para compensar um dia sem jogar.</div>`,
   },
+  {
+    id: "g-craft", icon: "🔨", title: "Crafting & Essence Extraction",
+    summary: "Profissões, como subir proficiência, Combo/Splendent, a linha Orichalcum → Dragon Lord e o Substance Morph.",
+    html: `
+      <p>Menu de crafting: <b>Alt + G</b>. Para craftar, use uma <b>Crafting Table</b> — Elyos: Dawn Legion Base e
+      Zumion Village (Verteron); Asmodians: Safe Haven e Nornir Assembly (Altgard). Antes de craftar, confira a
+      proficiência exigida, os materiais e a <b>Crafting Chance</b> da receita.</p>
+
+      <p id="g-craft-profissoes"><b>As 5 profissões</b> (todas no mesmo personagem, mas cada uma sobe separada):</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Profissão</th><th>O que faz</th><th>Classes (arma)</th></tr></thead>
+        <tbody>
+          <tr><td>Blacksmithing</td><td>Greatsword, Longsword, Dagger, Mace e Guard</td><td>Gladiator, Templar, Assassin, Cleric</td></tr>
+          <tr><td>Armorsmithing</td><td>Todas as peças de armadura e Cloak</td><td>—</td></tr>
+          <tr><td>Handicrafting</td><td>Bow, Staff e acessórios (Necklace, Earring, Ring, Bracelet)</td><td>Ranger, Chanter</td></tr>
+          <tr><td>Alchemy</td><td>Spellbook, Orb, poções, serums, scrolls, Manastones e Soulstones</td><td>Sorcerer, Spiritmaster</td></tr>
+          <tr><td>Cooking</td><td>Comidas e temperos (buffs temporários de combate)</td><td>—</td></tr>
+        </tbody>
+      </table></div>
+      <p>Prioridade: <b>a profissão da sua arma primeiro</b>, depois <b>Handicrafting</b> para acessórios.
+      Alchemy e Cooking ficam para consumíveis. Belt, runas, amuleto e Arcana <b>não</b> têm receita.</p>
+
+      <p id="g-craft-proficiencia"><b>Subindo a proficiência</b> (1 a 100 por profissão):</p>
+      <ul>
+        <li><b>Novice 1–50:</b> craftar dá EXP de proficiência. No <b>Novice 50</b> a barra trava até você fazer a
+          quest de promoção — no Blacksmithing, craftar um <b>Novice Blacksmith's Hammer</b> (6 Orichalcum Ingot + 3 Odyle).</li>
+        <li><b>Professional 51–100:</b> libera as receitas avançadas (Dragon Lord) e melhora as chances.</li>
+        <li>Foque <b>uma profissão</b> e suba com receitas Common baratas (ex.: <b>Orichalcum Ingot</b>). Solvents,
+          abrasives e pós vêm do mercador da profissão.</li>
+        <li><b>Crafte um por vez:</b> 10 crafts individuais dão mais EXP que 1 craft de 10x. Craft em lote só
+          quando tempo importa mais que EXP.</li>
+      </ul>
+
+      <p id="g-craft-combo"><b>Chance, Combo e Splendent</b></p>
+      <ul>
+        <li>Cada tentativa é uma corrida entre a barra <b>azul (Success)</b> e a <b>laranja (Failure)</b>. Se a
+          laranja enche primeiro, falhou — e os materiais se vão.</li>
+        <li>A chance depende da receita e da <b>diferença entre a sua proficiência e a exigida</b>. Veja em
+          Crafting Chance → <b>Expected Probability</b> o valor <b>Basic</b>, e em <b>Change</b> o do Combo.</li>
+        <li><b>Combo:</b> após um craft bem-sucedido de equipamento, há ~<b>25%</b> de chance de ativar. Se
+          ativar (e passar na própria rolagem), sai a versão <b>Splendent</b> — um grau acima.</li>
+        <li>Não existe receita de Splendent: ela só sai via Combo (ou Transfer Crafting). E as receitas seguintes
+          <b>exigem a Splendent</b> da etapa anterior — <b>nunca venda nem desmanche</b> uma peça Splendent.</li>
+      </ul>
+
+      <p id="g-craft-linha"><b>A linha de equipamento craftado</b> (exemplo: arma):</p>
+      <ol>
+        <li>Orichalcum (Common) → <b>Splendent</b> Orichalcum (Rare)</li>
+        <li>Expert's Orichalcum (Rare) → Expert's <b>Splendent</b> (Epic)</li>
+        <li>Artisan's Orichalcum (Epic) → Artisan's <b>Splendent</b> (Unique)</li>
+        <li><b>True / Star Dragon Lord</b> (Unique, iLvl 62) — craft normal (pode falhar), exige a Artisan's Splendent.</li>
+        <li>Splendent True/Star (iLvl 70) → <b>White / Dark</b> (78) → <b>Wise / Ebony</b> (94) → Splendent Wise/Ebony (102)
+          — via <b>Transfer Crafting</b>, que <b>não falha</b>. As etapas altas pedem materiais Wrathful
+          (Mind, Will e Ego) de conteúdo PvE em grupo.</li>
+      </ol>
+      <p><b>Transfer Crafting</b> usa a peça atual como material e <b>mantém encantamento, amplificação e Soul
+      Binding</b>. Peças craftadas podem ter <b>5 linhas de Soul Binding</b> (contra 4 de muitas peças de dungeon) —
+      por isso a arma craftada vale o investimento.</p>
+
+      <p id="g-craft-extraction"><b>Essence Extraction (gathering)</b> — mesma mecânica de barras do crafting;
+      a maioria dos nós aguenta várias tentativas. Materiais: <b>Ore</b> (metal), <b>Gem</b> (acessórios),
+      <b>Log</b> (armas de madeira), <b>Herb</b> (Alchemy), <b>Cooking Ingredient</b> e <b>Odyle</b>.</p>
+      <ul>
+        <li><b>Common Skills</b> (valem para tudo, Nv máx. 10, 40 pontos cada): maxe primeiro
+          <b>Proficient Handling</b> (+50 Success) e <b>Delicate Touch</b> (−80 Failure); o resto em
+          <b>Lady Luck</b> (40% de chance de bônus no Success).</li>
+        <li><b>Specialty Skills</b> (por categoria, 7 pontos cada): <b>Seeker</b> (mostra o recurso no minimapa),
+          <b>Plentiful Harvest</b> (até 30% de material dobrado) e <b>Appraiser</b> (até 30% de reroll de qualidade).
+          Invista só nas categorias que você usa.</li>
+        <li>Resetar os pontos custa <b>50.000 Kinah</b>.</li>
+      </ul>
+
+      <p id="g-craft-energia"><b>Substance Morph</b> — sistema de conversão à parte (não é profissão), nos Morph
+      Merchants das cidades de crafting:</p>
+      <ul>
+        <li><b>Energia DG:</b> cada craft custa <b>25 Odyle + 5 Fine Odyle + 1 Pure Odyle + 50.000 Kinah</b>.
+          É a tarefa semanal de energia da aba Rotina (20x no Main, 4x nos alts).</li>
+        <li><b>Odyle → materiais</b> (Ore, Gem, Log) bound do mesmo grau, Power Shards de tier baixo → tier alto,
+          Noble Belt, e as asas <b>Sealing</b> / <b>Glorious Wings</b> (70 Sealed Wing Featherdown + 10 Pure Odyle).</li>
+      </ul>
+
+      <div class="tip"><b>Economize Kinah:</b> antes de craftar, compare o custo dos materiais com o preço do item
+      pronto no Market — às vezes comprar o intermediário (ingots, ou até a peça Splendent) sai mais barato que
+      rolar um Combo de 25%. E suba a proficiência antes das tentativas caras: poucos % fazem diferença quando
+      os materiais custam milhões.</div>`,
+  },
 ];

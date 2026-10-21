@@ -58,7 +58,8 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   trocar de aba ou seguir um atalho.
 - **Seção de guias** — cards expansíveis com explicações (roadmap, gear score & encantamento,
   rotina diária/semanal, dungeons ★/Vakron & Gartua e **Recursos e energia** — de onde vem cada
-  recurso, recompensas das Duty Quests e o que fazer sem energia). Itens da checklist têm um link **📖 guia** que
+  recurso, recompensas das Duty Quests e o que fazer sem energia — e **Crafting & Essence Extraction** —
+  profissões, proficiência, Combo/Splendent, a linha Orichalcum → Dragon Lord e Substance Morph). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
 - **Combat Power** (aba Guias) — lembrete das 10 fontes de poder do jogo (pets, Genus Insight,
   equipamento, Arcana, asas, títulos, skills/stigmas, Daevanion, skins e Pantheon) e do poder

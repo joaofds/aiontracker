@@ -45,7 +45,7 @@ function renderClass(cls) {
       <div class="class-subtabs" role="tablist">
         <button type="button" class="class-subtab active" data-panel="overview">Visão geral</button>
         <button type="button" class="class-subtab" data-panel="skills">Skills <span>${(SKILL_DB[cls.id] || []).length}</span></button>
-        ${hasGuide ? '<button type="button" class="class-subtab" data-panel="guide">Guia</button>' : ""}
+        ${hasGuide ? '<button type="button" class="class-subtab" data-panel="guide">Builds</button>' : ""}
       </div>
       <div class="class-panel" data-panel="overview">
         <p class="class-focus">${cls.focus}</p>

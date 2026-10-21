@@ -33,7 +33,7 @@ const DATA = [
       { id: "w1-draupnir", tag: "main", text: "Draupnir (Conquest 1★) 8x", note: "sem pegar a recompensa final — com 10x você ganha uma Statue" },
       { id: "w1-command", tag: "main", text: "Comprar as Duty/Order Quests (Command Quests)", note: "12 PvE (Outlaw Village) e 20 PvP (Abyss)" },
       { id: "w1-pvp-medals", tag: "main", text: "Comprar as medalhas de PvP semanais", note: "100k Abyss Points" },
-      { id: "w1-dg-craft", tag: "ma", text: "Crafting de energia DG", note: "Só Main: 20 DG = 500 White, 100 Green, 20 Blue e 1M Kinah · Main + 3 alts: 32 DG = 800 / 160 / 32 e 1,6M" },
+      { id: "w1-dg-craft", tag: "ma", text: "Crafting de energia DG", note: "Só Main: 20 DG = 500 White, 100 Green, 20 Blue e 1M Kinah · Main + 3 alts: 32 DG = 800 / 160 / 32 e 1,6M", guide: "g-craft#energia" },
       { id: "w1-ascension", tag: "main", text: "Ascension Trial" },
       { id: "w1-battlefield", tag: "ma", text: "Battlefield", note: "se sobrar tempo" },
       { id: "w1-abyss-7h", tag: "ma", text: "Gastar as 7 horas de Abyss", note: "se sobrar tempo" },
@@ -147,7 +147,7 @@ const DATA = [
     badge: "Depois", title: "Próximos objetivos", target: "Depois",
     subtitle: "Metas de longo prazo depois da raid.",
     items: [
-      { id: "odyle-craft-extra", text: "Juntar 800 White, 160 Green e 32 Blue Odyle", note: "crafting de energia para 1 Main + 3 alts" },
+      { id: "odyle-craft-extra", text: "Juntar 800 White, 160 Green e 32 Blue Odyle", note: "crafting de energia para 1 Main + 3 alts", guide: "g-craft#energia" },
       { id: "pets", text: "Farmar pets", guide: "g-cp#pets" },
       { id: "teleports", text: "Registrar (vincular) todos os teleports", note: "dá a Statue Epic" },
       { id: "fire-temple-10", text: "Fire Temple (Conquest) 10x", note: "dá a Statue Rare" },
