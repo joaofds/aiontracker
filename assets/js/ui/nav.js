@@ -5,6 +5,7 @@
      #classes                       aba Classes
      #classes/chanter               card do Chanter aberto (Visão geral)
      #classes/chanter/skills        sub-aba Skills
+     #classes/chanter/macro         sub-aba Macro
      #classes/cleric/guia/pve/gear  sub-aba Guia, build "pve", seção Equipamento
      #guias/g-cp/daevanion          card de Combat Power, fonte "Pontos de Daevanion"
      #progressao/fase1              card de uma fase
@@ -15,7 +16,7 @@
 // Duração da animação de abrir/fechar card (.section-body em styles.css), com folga.
 const EXPAND_MS = 320;
 const TABS = ["progressao", "rotina", "guias", "classes"];
-const SUBTAB_SLUG = { overview: "", skills: "skills", guide: "guia" };
+const SUBTAB_SLUG = { overview: "", skills: "skills", guide: "guia", macro: "macro" };
 
 const ctxBar = document.getElementById("context-bar");
 const toTopBtn = document.getElementById("to-top");
@@ -117,7 +118,7 @@ function readHash() {
 }
 
 // Vai até um lugar: troca de aba, abre o card, escolhe sub-aba/build/seção e rola até lá.
-// `rest` (para classes): ["skills"] | ["guia", build?, seção?]; (para guias): [âncora].
+// `rest` (para classes): ["skills"] | ["macro"] | ["guia", build?, seção?]; (para guias): [âncora].
 // Com `push`, grava no histórico.
 function navigate({ tab, card, rest = [] }, { push = false, smooth = true } = {}) {
   if (!tab) return;

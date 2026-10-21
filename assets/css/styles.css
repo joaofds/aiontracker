@@ -889,6 +889,32 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 .cg-link b { font-size: 0.85rem; color: var(--text); }
 .cg-link span { font-size: 0.75rem; color: var(--muted-2); }
 
+/* Sub-aba Macro: colunas como no jogo (1ª prioridade embaixo) e skills inline */
+.cm-stacks { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: 0.75rem; }
+.cm-slots {
+  list-style: none; margin: 0; padding: 0.4rem; display: flex; flex-direction: column-reverse; gap: 0.3rem;
+  border-radius: 10px; border: 1px solid var(--card-border); background: rgba(130, 140, 180, 0.05);
+}
+.cm-slot {
+  display: flex; align-items: center; gap: 0.5rem; padding: 0.3rem 0.45rem;
+  border-radius: 8px; background: rgba(130, 140, 180, 0.08); font-size: 0.85rem;
+}
+.cm-slot:first-child { background: color-mix(in srgb, var(--role, var(--accent)) 16%, transparent); }
+.cm-prio {
+  flex: none; display: inline-grid; place-items: center; width: 1.25rem; height: 1.25rem;
+  font-size: 0.68rem; font-weight: 700; color: var(--role, var(--accent));
+  border-radius: 5px; background: color-mix(in srgb, var(--role, var(--accent)) 14%, transparent);
+}
+.cm-skill { display: inline-flex; align-items: center; gap: 0.4rem; vertical-align: middle; }
+.cm-skill b { color: var(--text); font-weight: 600; }
+.cm-slot .skill-icon { width: 30px; height: 30px; border-radius: 6px; }
+.cg-para .cm-skill .skill-icon, .cm-flow .cm-skill .skill-icon, .tip .cm-skill .skill-icon {
+  width: 20px; height: 20px; border-radius: 5px; font-size: 0.55rem;
+}
+.cm-flow, .cm-tips { margin: 0; padding-left: 1.3rem; display: grid; gap: 0.35rem; font-size: 0.88rem; color: var(--muted); }
+.cm-flow li::marker { color: var(--role, var(--accent)); font-weight: 700; }
+.cm-flow b, .cm-tips b { color: var(--text); }
+
 @media (max-width: 560px) {
   .cg-defs { grid-template-columns: minmax(0, 1fr); gap: 0.15rem; }
   .cg-pill { white-space: normal; }              /* pills longas quebram linha */

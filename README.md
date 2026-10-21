@@ -74,7 +74,11 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   [guias do hartmannlab](https://aion2.hartmannlab.xyz/en/class-guides): skills com nível alvo e
   especializações, Arcana, Genus Insight, asas/títulos, Soul Binding, Manastones, Pantheon, layout e
   macro, em seções recolhíveis com índice. Cleric e Spirit Master têm uma build extra completa
-  (rotação, equipamento peça a peça e Daevanion boards), com seletor entre as builds.
+  (rotação, equipamento peça a peça e Daevanion boards), com seletor entre as builds. Na sub-aba
+  **Macro**, a macro base de cada classe segundo o
+  [guia do KeenGamer](https://www.keengamer.com/articles/guides/aion-2-macro-guide-best-setups-for-all-classes/):
+  as colunas como no jogo (1ª prioridade embaixo), as skills que ficam fora da macro, o fluxo de
+  combate e como montar a macro — tudo com os ícones das skills.
 - **Barras de progresso** por fase e por personagem + **anel de progresso geral** (considera só as fases do personagem selecionado).
 - **Destaque do próximo objetivo** — a primeira tarefa pendente de cada fase ganha um selo "Próximo".
 - **Tema claro/escuro** com preferência salva.
@@ -114,6 +118,7 @@ rpgtracker/
 │   │   │   ├── classes.js    # CLASSES + PVP_NOTE (aba Classes)
 │   │   │   ├── skills.js     # SKILLS (skills recomendadas por classe)
 │   │   │   ├── class-guides/ # CLASS_GUIDES: index.js (formato + helpers) + um arquivo por classe
+│   │   │   ├── class-macros.js # CLASS_MACROS + MACRO_BASICS (sub-aba Macro da classe)
 │   │   │   └── skill-db/     # SKILL_DB: index.js (formato) + um arquivo por classe (gerado)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
@@ -126,6 +131,7 @@ rpgtracker/
 │   │   │   ├── combat-power.js # card de Combat Power (lembretes + atalhos p/ o Guia da classe)
 │   │   │   ├── skill-db.js   # sub-aba Skills da classe (lista, filtros, ícones)
 │   │   │   ├── class-guide.js  # sub-aba Guia da classe (builds, seções, seletor)
+│   │   │   ├── class-macro.js  # sub-aba Macro da classe (colunas, teclas manuais, como montar)
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
 │   │   │   ├── theme.js      # tema claro/escuro
@@ -234,7 +240,7 @@ O `guide` aceita `"guia#ancora"` para rolar até um trecho do guia — o element
 `assets/js/ui/nav.js` cuida de três coisas:
 
 - **Endereço** (`#aba/card/sub-aba/build/seção`) — o card é o `data-class`, `data-guide` ou
-  `data-id` do card no board; nas classes, a sub-aba é `skills` ou `guia` (Visão geral não
+  `data-id` do card no board; nas classes, a sub-aba é `skills`, `guia` ou `macro` (Visão geral não
   aparece), seguida da build (só quando a classe tem mais de uma) e do `id` da seção; nos guias,
   a âncora (`#guias/g-cp/daevanion` → elemento `#g-cp-daevanion`). Use `navigate({ tab, card, rest },
   { push: true })` para ir a um lugar gravando no histórico — `openGuide` e `openClassGuide`
@@ -327,6 +333,13 @@ no topo do `index.js`. Ao criar o arquivo de uma classe nova, adicione o `<scrip
   na busca.
 - Prints de layout e macro ficam em `assets/images/guides/<classe>/`; os da configuração da macro,
   iguais para todos, em `assets/images/guides/common/`.
+
+### Macros (sub-aba "Macro" da classe)
+O conteúdo está em `assets/js/data/class-macros.js`: `CLASS_MACROS.<id-da-classe>` traz as colunas
+(`stacks`, skills na ordem de prioridade — a 1ª fica embaixo da coluna no jogo), as skills manuais
+(`manual`), o fluxo de combate (`flow`) e um aviso opcional (`warning`); `MACRO_BASICS` é o passo a
+passo de montar a macro, igual para todas. Nos textos, `[[Nome da skill]]` vira ícone + nome. Os
+nomes devem bater com o `SKILL_DB` da classe. Classes sem entrada não ganham a sub-aba.
 
 ### Banco de skills (sub-aba "Skills" da classe)
 Cada card de classe tem as sub-abas **Visão geral** (o conteúdo acima), **Skills** e **Guia** (seção anterior). A **Skills** tem a
