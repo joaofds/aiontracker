@@ -7,7 +7,7 @@ const CLASSES = [
   {
     id: "templar", symbol: "🛡️", name: "Templar", color: "#4d82ff",
     role: "Tanque", weapon: "Espada longa & Escudo",
-    focus: "Segura o aggro e absorve dano com habilidades de escudo, mantendo os chefes travados em si com Provoke. Extremamente perdoável para iniciantes.",
+    focus: "Segura o aggro e absorve dano com habilidades de escudo, mantendo os chefes travados em si com Provoke. Extremamente recomendado para iniciantes.",
     stats: ["Defense", "HP", "Block", "Front Attack", "Double Chance", "Weapon/Critical Damage"],
     pve: "Feche Defense / HP / Block primeiro; com o excedente: Front Attack > Double Chance > Weapon/Critical Damage.",
     pvp: "Sobrevivência primeiro: Evasion, Block, Status Effect Resist e HP; adicione PvP Damage Boost e PvP Accuracy com o que sobrar.",
