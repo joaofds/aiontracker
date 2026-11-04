@@ -97,7 +97,7 @@ const GUIDES = [
     id: "g-recursos", icon: "💰", title: "Recursos e energia",
     summary: "De onde vem cada recurso, as recompensas das Duty Quests e o que fazer quando a energia acaba.",
     html: `
-      <p><b>De onde vem cada recurso</b> (Rifts abrem às 2, 5, 8 e 11h — AM e PM):</p>
+      <p><b>De onde vem cada recurso</b> (Rifts abrem de 3 em 3h, das 1h às 22h BRT: 1, 4, 7, 10, 13, 16, 19 e 22h):</p>
       <div class="cg-table-wrap"><table class="cg-table">
         <thead><tr><th>Recurso</th><th>Onde conseguir</th></tr></thead>
         <tbody>

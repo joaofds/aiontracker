@@ -11,8 +11,8 @@
    Horários dos eventos globais conferidos em https://corpus.gg/games/aion-2/timers (em UTC).
    ============================================================ */
 const EVENTS = [
-  // Servidor SA: a cada 3h entre 11:00 e 02:00 (BRT, UTC-3) → 11, 14, 17, 20, 23, 02 BRT.
-  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", hours: [14, 17, 20, 23, 2, 5], utc: true },
+  // Servidor SA: a cada 3h entre 01:00 e 22:00 (BRT, UTC-3) → 01, 04, 07, 10, 13, 16, 19, 22 BRT.
+  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", hours: [4, 7, 10, 13, 16, 19, 22, 1], utc: true },
   { id: "watcher-kaira", icon: "👁️", label: "Watcher Kaira", intervalHours: 3, anchorHour: 1, utc: true },
   { id: "shugo-festival", icon: "🎪", label: "Shugo Festival", intervalHours: 1, anchorHour: 0, anchorMinute: 0, utc: true },
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },

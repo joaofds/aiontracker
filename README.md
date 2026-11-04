@@ -406,8 +406,8 @@ No array `EVENTS` em `assets/js/data/events.js`. Cada evento vira um card de con
 
 ```js
 const EVENTS = [
-  // Horários fixos diários (UTC): Spacetime Rift no servidor SA, 11:00–02:00 BRT a cada 3h:
-  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", hours: [14, 17, 20, 23, 2, 5], utc: true },
+  // Horários fixos diários (UTC): Spacetime Rift no servidor SA, 01:00–22:00 BRT a cada 3h:
+  { id: "spacetime-rift", icon: "🌌", label: "Spacetime Rift", hours: [4, 7, 10, 13, 16, 19, 22, 1], utc: true },
   // Eventos globais (instante fixo em UTC, exibidos no seu fuso local):
   { id: "dimensional-invasion", icon: "👾", label: "Dimensional Invasion", intervalHours: 1, anchorHour: 0, anchorMinute: 30, utc: true },
   // Evento em dias fixos da semana (UTC): Siege às Seg/Qui/Sáb 21:00 UTC:
