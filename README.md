@@ -61,7 +61,9 @@ e [aion2tracker.net](https://aion2tracker.net/), traduzido e adaptado para **PT-
   recurso, recompensas das Duty Quests e o que fazer sem energia — e **Crafting & Essence Extraction** —
   profissões, proficiência, Combo/Splendent, a linha Orichalcum → Dragon Lord e Substance Morph — e
   **Melhores stats por slot (Soul Binding)** — linhas de DPS/tank/healer por peça, Reset × Sync, Transfer, custos e
-  Manastones, traduzido do [guia do Raid Relay](https://raidrelay.com/aion-2-best-stats-guide)). Itens da checklist têm um link **📖 guia** que
+  Manastones, traduzido do [guia do Raid Relay](https://raidrelay.com/aion-2-best-stats-guide) — e
+  **Arcana** — que carta carrega cada skill (com seletor de classe e as skills do banco), graus, Vigor × Magic,
+  Enhance, extração e Transmute, traduzido do [guia de Arcana do Raid Relay](https://raidrelay.com/aion-2-arcana-guide)). Itens da checklist têm um link **📖 guia** que
   leva direto ao guia relacionado.
 - **Combat Power** (aba Guias) — lembrete das 10 fontes de poder do jogo (pets, Genus Insight,
   equipamento, Arcana, asas, títulos, skills/stigmas, Daevanion, skins e Pantheon) e do poder
@@ -121,6 +123,7 @@ rpgtracker/
 │   │   │   ├── skills.js     # SKILLS (skills recomendadas por classe)
 │   │   │   ├── class-guides/ # CLASS_GUIDES: index.js (formato + helpers) + um arquivo por classe
 │   │   │   ├── class-macros.js # CLASS_MACROS + MACRO_BASICS (sub-aba Macro da classe)
+│   │   │   ├── arcana.js     # ARCANA_CARDS + ARCANA_CARD_SKILLS (que skill cada carta carrega)
 │   │   │   └── skill-db/     # SKILL_DB: index.js (formato) + um arquivo por classe (gerado)
 │   │   ├── time.js       # fuso virtual, cálculo de resets/eventos, formatação
 │   │   ├── state.js      # persistência + reset automático de diárias/semanais
@@ -134,6 +137,7 @@ rpgtracker/
 │   │   │   ├── skill-db.js   # sub-aba Skills da classe (lista, filtros, ícones)
 │   │   │   ├── class-guide.js  # sub-aba Guia da classe (builds, seções, seletor)
 │   │   │   ├── class-macro.js  # sub-aba Macro da classe (colunas, teclas manuais, como montar)
+│   │   │   ├── arcana.js     # seletor de classe + skills por carta do guia de Arcana
 │   │   │   ├── classes.js    # aba Classes
 │   │   │   ├── timers.js     # painel de contadores
 │   │   │   ├── theme.js      # tema claro/escuro
@@ -143,6 +147,7 @@ rpgtracker/
 │   └── images/           # símbolos das classes (<id>.avif) + skills/<classe>/ (ícones)
 │                         # + guides/<classe>/ e guides/common/ (prints dos guias de classe)
 │                         # + guides/stats/ (prints e ícones de slot/moeda do guia de stats)
+│                         # + guides/arcana/ (prints e ícones das cartas do guia de Arcana)
 ├── tools/
 │   └── import-metabot.py # gera data/skill-db/*.js a partir do MetaBot.GG
 └── README.md

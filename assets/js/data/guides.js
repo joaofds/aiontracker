@@ -6,11 +6,18 @@
 const GS_IMG = "assets/images/guides/stats";
 const gsSlot = (slot) => `<img class="gs-ico" src="${GS_IMG}/slots/${slot}.webp" alt="" loading="lazy" />`;
 const gsCur = (cur) => `<img class="gs-ico gs-ico-sm" src="${GS_IMG}/${cur}.webp" alt="" loading="lazy" />`;
-const gsFig = (file, caption) => `
+// Print com legenda que abre em tamanho cheio (use dentro de <div class="cg-figs">).
+const guideFig = (src, caption) => `
   <figure>
-    <a href="${GS_IMG}/${file}" target="_blank" rel="noopener"><img src="${GS_IMG}/${file}" alt="${caption}" loading="lazy" /></a>
+    <a href="${src}" target="_blank" rel="noopener"><img src="${src}" alt="${caption}" loading="lazy" /></a>
     <figcaption>${caption}</figcaption>
   </figure>`;
+const gsFig = (file, caption) => guideFig(`${GS_IMG}/${file}`, caption);
+
+// Ícones e prints do guia de Arcana (assets/images/guides/arcana/).
+const ARC_IMG = "assets/images/guides/arcana";
+const arcCard = (card) => `<img class="gs-ico" src="${ARC_IMG}/cards/${card}.webp" alt="" loading="lazy" />`;
+const arcFig = (file, caption) => guideFig(`${ARC_IMG}/${file}`, caption);
 
 const GUIDES = [
   {
@@ -576,5 +583,277 @@ const GUIDES = [
       dos modelos do gameplay.tips (testado na versão coreana) e do EliteGrindLab; as Sync Stones semanais vêm das patch
       notes da NC de 11/11/2026. A ordem das linhas, a regra de parada e as recomendações de Reset/Sync são avaliação do
       autor com base nesses dados.</div>`,
+  },
+  {
+    id: "g-arcana", icon: "🃏", title: "Arcana: skills, sets, Enhance e Transmute",
+    summary: "Que carta carrega cada skill da sua classe, graus, Vigor × Magic, custos de Enhance, o que extrair e quando dar Transmute.",
+    mount: (el) => mountArcanaSkills(el),
+    html: `
+      <p><b>Arcana</b> são cinco cartas, usadas a partir do <b>nível 45</b>, que sobem algumas skills da sua classe,
+      adicionam um <b>Empyrean Lord stat</b> e contam para o Gear Score. Só caem na <b>Transcendence</b>, a partir de
+      <b>1.600 de GS</b>. Dê <b>Transmute no Chalice primeiro</b>: ele pode carregar qualquer uma das suas 22 skills, e a
+      primeira skill que você escolhe sai de graça.</p>
+
+      <p id="g-arcana-skills"><b>Que carta carrega a sua skill: skills de Arcana por classe</b></p>
+      <p>Cada carta sobe só as suas próprias skills, entre 22 da sua classe:</p>
+      <ul>
+        <li>${arcCard("parchment")}<b>Parchment:</b> 6 skills ativas. Cai na Shattered Arkanis.</li>
+        <li>${arcCard("compass")}<b>Compass:</b> as outras 6 skills ativas. Cai na Deus Research Base.</li>
+        <li>${arcCard("bell")}<b>Bell:</b> 5 skills passivas. Cai na Deus Research Base.</li>
+        <li>${arcCard("mirror")}<b>Mirror:</b> as outras 5 skills passivas. Cai na Shattered Arkanis.</li>
+        <li>${arcCard("chalice")}<b>Chalice:</b> qualquer uma das 22. Cai nas duas.</li>
+      </ul>
+      <p>Toda skill do sorteio de uma carta tem a mesma chance (conferido nos arquivos do jogo), e uma carta nunca
+      carrega a mesma skill duas vezes. Então uma carta com quatro efeitos tem 4 do seu sorteio: uma skill que você quer
+      está em <b>4 de cada 6</b> Parchments ou Compasses, <b>4 de cada 5</b> Bells ou Mirrors, mas só <b>4 de cada 22</b>
+      Chalices. Por isso o Chalice é a carta para dar Transmute com uma skill escolhida. Cartas de Vigor e de Magic
+      carregam as mesmas skills. Em cada classe, as skills principais estão no topo de cada carta.</p>
+      <div class="arc-skills" data-arcana-skills></div>
+
+      <p id="g-arcana-graus"><b>O que cada grau dá</b></p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Grau</th><th>Item level</th><th>Lord stat</th><th>Efeitos de skill</th><th>Nível máx.</th></tr></thead>
+        <tbody>
+          <tr><td>Common (cinza)</td><td>20</td><td>8</td><td>1</td><td>+2</td></tr>
+          <tr><td>Rare (verde)</td><td>40</td><td>12</td><td>2</td><td>+3</td></tr>
+          <tr><td>Epic (azul)</td><td>60</td><td>16</td><td>3</td><td>+4</td></tr>
+          <tr><td>Unique (dourado)</td><td>80</td><td>20</td><td>4</td><td>+5</td></tr>
+        </tbody>
+      </table></div>
+      <p>Cada nível soma 1 de item level, que é o seu Gear Score, e 1 de Lord stat. Uma Unique +5 dá <b>85 de GS</b> e
+      <b>25 pontos de Lord stat</b>.</p>
+      <div class="cg-figs">${arcFig("rare-chalice.webp",
+        "Um Chalice of Vigor Rare novo: item level 40, Time 12 subindo 3 até o máximo +3, com dois efeitos de skill em Lv. +1, Mocking Blade e Overhead Slam")}</div>
+
+      <p id="g-arcana-efeitos"><b>Como os efeitos de skill crescem</b></p>
+      <p>A carta cai com os efeitos de skill em Lv. +1 cada, um efeito por degrau de grau. Cada nível de Enhance adiciona
+      um efeito novo até a carta ter quatro; depois disso, cada nível sobe <b>um dos quatro ao acaso</b>, até Lv. +4.
+      Alguns guias dizem que o Enhance só sobe os efeitos que a carta já tem; isso foi conferido nos arquivos do jogo, na
+      prévia de Enhance do jogo e numa carta encantada (abaixo).</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Grau</th><th>Efeitos ao cair</th><th>No nível máx.</th><th>Níveis de skill no máx.</th></tr></thead>
+        <tbody>
+          <tr><td>Common</td><td>1</td><td>3</td><td>3</td></tr>
+          <tr><td>Rare</td><td>2</td><td>4</td><td>5</td></tr>
+          <tr><td>Epic</td><td>3</td><td>4</td><td>7</td></tr>
+          <tr><td>Unique</td><td>4</td><td>4</td><td>9</td></tr>
+        </tbody>
+      </table></div>
+      <p>Então o primeiro nível de uma Epic adiciona o seu quarto efeito, e os níveis de skill começam a subir no +2. Uma
+      Unique já tem quatro, então todo nível sobe um deles ao acaso: este Chalice +3 colocou os três níveis numa skill só.</p>
+      <div class="cg-figs">${arcFig("unique-chalice-plus3.webp",
+        "Um Chalice of Vigor Unique +3: item level 80 + 3, Time 23, Wish of Concentration em Lv. +4 e três efeitos em Lv. +1 — os três níveis numa skill só")}</div>
+
+      <p id="g-arcana-sets"><b>Vigor ou Magic: sets e Lord stats</b></p>
+      <p>Toda carta é de <b>Vigor</b> ou de <b>Magic</b>, metade dos drops cada. Duas ou quatro cartas do mesmo set dão o bônus:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Set</th><th>2 cartas</th><th>4 cartas</th></tr></thead>
+        <tbody>
+          <tr><td>Primal Vigor</td><td>+60 PvE Attack com 70% de HP ou mais</td><td>+150 PvE Attack com 70% de HP ou mais</td></tr>
+          <tr><td>Magic Armor</td><td>Recupera 1.500 MP com 20% de MP ou menos, no máximo a cada 30 segundos</td><td>+1.000 PvE Defense com 50% de MP ou mais</td></tr>
+        </tbody>
+      </table></div>
+      <p>O set também define o Empyrean Lord stat de cada carta. Cada ponto sobe os dois stats dele em <b>0,1%</b>:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Carta</th><th>Vigor</th><th>Magic</th></tr></thead>
+        <tbody>
+          <tr><td>${arcCard("chalice")}Chalice</td><td>Time [Siel]: Combat Speed, Double Resist</td><td>Space [Israphel]: Move Speed, Block</td></tr>
+          <tr><td>${arcCard("parchment")}Parchment</td><td>Life [Yustiel]: HP, Regeneration</td><td>Destiny [Marchutan]: MP, Endurance</td></tr>
+          <tr><td>${arcCard("compass")}Compass</td><td>Freedom [Vaizel]: Accuracy, Evasion</td><td>Death [Triniel]: Critical Hit, Regeneration Penetration</td></tr>
+          <tr><td>${arcCard("bell")}Bell</td><td>Justice [Nezekan]: Defense, Perfect Chance</td><td>Destruction [Zikel]: Attack, Perfect Resist</td></tr>
+          <tr><td>${arcCard("mirror")}Mirror</td><td>Illusion [Kaisinel]: Cooldown menor, Endurance Penetration</td><td>Wisdom [Lumiel]: MP Cost menor, Double Chance</td></tr>
+        </tbody>
+      </table></div>
+      <div class="cg-figs">${arcFig("time-siel.webp",
+        "O stat Time na janela de stats: 53 pontos dão 5,3% de Combat Speed e 5,3% de Double Resist")}</div>
+      <p><b>Escolha pelo seu MP.</b> Se a sua classe fica sem MP, use <b>Magic</b>: duas cartas devolvem 1.500 MP quando
+      você está baixo, o Wisdom do Mirror reduz o custo de MP e o Destiny do Parchment aumenta o seu MP. Caso contrário,
+      use <b>Vigor</b>, cujas quatro cartas dão 150 de PvE Attack enquanto o seu HP está em 70% ou mais. Você tem cinco
+      slots, então a quinta carta pode ser de qualquer set: use a que carregar a sua skill. Duas cartas de cada set dão os
+      dois bônus de 2 cartas. <b>Não troque uma carta que carrega as suas skills só para completar um set.</b></p>
+      <p>Vigor não é um set físico e Magic não é um set de dano mágico: qualquer classe pode usar qualquer um.</p>
+      <div class="tip"><b>Global × KR/TW:</b> o Global tem esses dois sets e cinco cartas. Guias com Scales, Keys,
+      Hourglasses ou sete sets descrevem as versões coreana e taiwanesa.</div>
+
+      <p id="g-arcana-enhance"><b>Como dar Enhance na Arcana: exp e custo em Kinah</b></p>
+      <ul>
+        <li>Abra a <b>Arcana</b>, escolha a carta e registre os materiais: cartas sobrando e <b>Training Arcana</b> vão na
+          mesma janela. Cada carta usada como material custa <b>5.000 Kinah</b>, mais 1 Kinah por exp que você já colocou
+          nela; cada Training Arcana custa <b>2.000</b>.</li>
+        <li>Uma carta usada como material dá a exp dela e toda a exp que foi colocada nela, então a exp investida passa
+          adiante quando ela alimenta a próxima; as taxas em Kinah não voltam. Exp acima do nível máximo volta como Training
+          Arcana. <b>O Enhance não falha</b>: o nível sobe quando a barra de exp enche (conferido nos arquivos do jogo).</li>
+        <li>Dê Enhance quando faltar Combat Power, não em toda carta que você tem. O melhor motivo é um nível de skill que
+          você precisa e nenhuma das suas cartas carrega. Uma carta com menos de quatro efeitos ganha um novo a cada nível,
+          sorteado entre as skills que ela ainda não carrega. Isso é uma aposta, então faça num <b>Parchment ou Compass</b>:
+          6 skills no sorteio, contra 22 no Chalice. É também o nível de skill mais barato que dá para comprar, 300 a 1.200
+          de exp, contra 48.000 do último nível de uma Unique.</li>
+      </ul>
+      <div class="cg-figs">${arcFig("enhance-bell.webp",
+        "Enhance de um Bell of Vigor Epic de +0 para +2: um efeito novo será adicionado e Justice sobe 2; 20 cartas registradas, Enhance por 100.000 Kinah")}</div>
+      <p>Exp total de +0 até cada nível:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Nível</th><th>Common</th><th>Rare</th><th>Epic</th><th>Unique</th></tr></thead>
+        <tbody>
+          <tr><td>+1</td><td>300</td><td>600</td><td>1.200</td><td>3.000</td></tr>
+          <tr><td>+2</td><td>900</td><td>1.800</td><td>3.600</td><td>9.000</td></tr>
+          <tr><td>+3</td><td>—</td><td>4.200</td><td>8.400</td><td>21.000</td></tr>
+          <tr><td>+4</td><td>—</td><td>—</td><td>18.000</td><td>45.000</td></tr>
+          <tr><td>+5</td><td>—</td><td>—</td><td>—</td><td>93.000</td></tr>
+        </tbody>
+      </table></div>
+      <p>O que cada material dá como alimento, em +0:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Material</th><th>Exp</th><th>${gsCur("kinah")}Kinah</th></tr></thead>
+        <tbody>
+          <tr><td>Carta Common</td><td>200</td><td>5.000</td></tr>
+          <tr><td>Carta Rare</td><td>400</td><td>5.000</td></tr>
+          <tr><td>Carta Epic</td><td>800</td><td>5.000</td></tr>
+          <tr><td>Carta Unique</td><td>2.000</td><td>5.000</td></tr>
+          <tr><td>Lesser Training Arcana</td><td>200</td><td>2.000</td></tr>
+          <tr><td>Intermediate Training Arcana</td><td>600</td><td>2.000</td></tr>
+          <tr><td>Superior Training Arcana</td><td>1.500</td><td>2.000</td></tr>
+          <tr><td>Ultimate Training Arcana</td><td>3.000</td><td>2.000</td></tr>
+          <tr><td>Exalted Training Arcana</td><td>5.000</td><td>2.000</td></tr>
+        </tbody>
+      </table></div>
+      <p>Carta do mesmo tipo não dá exp extra: um Chalice Common usado num Chalice dá 200, igual a um Parchment Common.</p>
+      <div class="cg-figs">${arcFig("feed-identical.webp",
+        "Um Chalice of Vigor Rare com um Chalice Common e um Parchment Common registrados: 400 dos 600 de exp, 200 de cada, e Enhance por 10.000 Kinah, 5.000 por carta")}</div>
+      <p>Todo grau precisa da mesma quantidade de cartas do próprio grau:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Nível</th><th>Cartas sobrando</th><th>${gsCur("kinah")}Kinah</th></tr></thead>
+        <tbody>
+          <tr><td>+1</td><td>2</td><td>10.000</td></tr>
+          <tr><td>+2</td><td>5</td><td>25.000</td></tr>
+          <tr><td>+3</td><td>11</td><td>55.000</td></tr>
+          <tr><td>+4</td><td>23</td><td>115.000</td></tr>
+          <tr><td>+5</td><td>47</td><td>235.000</td></tr>
+        </tbody>
+      </table></div>
+      <p>Commons são o alimento mais caro para uma carta melhor: uma Unique até +5 leva <b>465 Commons e 2.325.000 Kinah</b>,
+      ou <b>19 Exalted Training Arcana e 38.000 Kinah</b>.</p>
+
+      <p id="g-arcana-training"><b>Training Arcana: exp, preços e limites</b></p>
+      <p>Training Arcana são materiais, não cartas para equipar; a exp delas está na tabela acima. As três primeiras vêm da
+      <b>Season Shop</b> e dos achievements da Transcendence e do Ascension Trial:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Fonte</th><th>Lesser</th><th>Intermediate</th><th>Superior</th></tr></thead>
+        <tbody>
+          <tr><td>Season Shop, por season</td><td>20</td><td>10</td><td>5</td></tr>
+          <tr><td>Season Shop, Oath Coins cada</td><td>1.500</td><td>4.500</td><td>11.300</td></tr>
+          <tr><td>Achievements da Transcendence, uma vez</td><td>24</td><td>10</td><td>2</td></tr>
+          <tr><td>Missões do Ascension Trial, uma vez</td><td>0</td><td>1</td><td>2</td></tr>
+        </tbody>
+      </table></div>
+      <p>Os achievements são três por stage de cada dungeon: limpar, limpar em até 7 minutos e limpar sem perder ninguém
+      da party.</p>
+      <div class="cg-figs">${arcFig("shop-training.webp",
+        "Intermediate e Superior Training Arcana na Season Shop: 4.500 e 11.300 Oath Coins, 10 e 5 por servidor")}</div>
+
+      <p id="g-arcana-manter"><b>Manter, alimentar ou extrair: Mysterious Crystals por carta</b></p>
+      <ul>
+        <li><b>Mantenha</b> a melhor carta de cada slot que carrega as suas skills.</li>
+        <li><b>Alimente</b> as cartas que você usa com Epics e Uniques sobrando, com as cartas que você substitui e com Training Arcana.</li>
+        <li><b>Extraia</b> as Commons. Extrair é grátis, e a carta enche a barra de <b>Mysterious Crystal</b> conforme a exp
+          que daria como alimento: em +0, 2% numa Common cinza, 4% numa Rare verde, 8% numa Epic azul e 20% numa Unique
+          dourada. Barra cheia = um crystal.</li>
+      </ul>
+      <div class="cg-figs">${arcFig("extract-gauge.webp",
+        "A barra de extração depois de um Chalice Common: 2% de um Mysterious Crystal")}</div>
+      <p>As cartas que um claim da Transcendence dá, em média, com os três bosses mortos. Cada claim custa <b>40 de Odyle Energy</b>:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Stage</th><th>Common</th><th>Rare</th><th>Epic</th><th>Unique</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>2</td><td>0,2</td><td>0</td><td>0</td></tr>
+          <tr><td>2</td><td>3</td><td>1</td><td>0,2</td><td>0</td></tr>
+          <tr><td>3</td><td>2</td><td>1,5</td><td>0,75</td><td>0,2</td></tr>
+          <tr><td>4</td><td>0,38</td><td>1,5</td><td>1,5</td><td>1</td></tr>
+        </tbody>
+      </table></div>
+      <p>Quanto essas cartas valem:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Stage</th><th>Exp se alimentar</th><th>Crystal se extrair</th><th>Claims por crystal</th><th>Odyle Energy por crystal</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>480</td><td>4,8%</td><td>20,8</td><td>833</td></tr>
+          <tr><td>2</td><td>1.160</td><td>11,6%</td><td>8,6</td><td>345</td></tr>
+          <tr><td>3</td><td>2.000</td><td>20%</td><td>5</td><td>200</td></tr>
+          <tr><td>4</td><td>3.876</td><td>38,8%</td><td>2,6</td><td>103</td></tr>
+        </tbody>
+      </table></div>
+      <p>Isso conta todas as cartas; as que você mantém saem daí. Usadas como alimento, as cartas de um claim custam cerca de
+      5.000 Kinah cada.</p>
+
+      <p id="g-arcana-transmute"><b>Transmute de uma carta Unique: custo em crystals e Kinah</b></p>
+      <p>O <b>Transmute</b> cria uma carta Unique do slot e do set que você escolher. Você pode escolher até dois dos quatro
+      efeitos de skill; o resto é sorteado entre as skills da carta. <b>A primeira skill escolhida é grátis</b>; a segunda
+      soma 10 crystals e 3.000.000 de Kinah.</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Skills escolhidas</th><th>Crystals</th><th>${gsCur("kinah")}Kinah</th><th>Claims no stage 3</th><th>Odyle Energy</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>5</td><td>2.000.000</td><td>25</td><td>1.000</td></tr>
+          <tr><td>1</td><td>5</td><td>2.000.000</td><td>25</td><td>1.000</td></tr>
+          <tr><td>2</td><td>15</td><td>5.000.000</td><td>75</td><td>3.000</td></tr>
+        </tbody>
+      </table></div>
+      <div class="cg-figs">${arcFig("transmute-one-skill.webp",
+        "Transmute de um Chalice of Vigor Unique com Overhead Slam escolhida: mais 3 efeitos ao acaso, 5 Mysterious Crystals e 2.000.000 de Kinah — o mesmo que sem escolher nenhuma")}</div>
+      <p>As cartas de um mesmo grau que você extrairia para esses crystals:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Skills escolhidas</th><th>Commons</th><th>Rares</th><th>Epics</th><th>Uniques</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>250</td><td>125</td><td>63</td><td>25</td></tr>
+          <tr><td>1</td><td>250</td><td>125</td><td>63</td><td>25</td></tr>
+          <tr><td>2</td><td>750</td><td>375</td><td>188</td><td>75</td></tr>
+        </tbody>
+      </table></div>
+      <p><b>Transmute o Chalice primeiro, com a sua skill principal nele.</b> A skill que você quer é a mais difícil de
+      conseguir num Chalice farmando: normalmente você farma ela num Parchment ou Compass (4 em 6), mas quase nunca num
+      Chalice (4 em 22), e o Chalice Unique só cai no stage 4. A primeira skill escolhida é grátis. Por 5 crystals ele vale
+      80 de GS, então soma 80 num slot vazio e 20 em cima de uma Epic; o guia de Gear Score crafta ele com 1.900. Escolha o
+      set pelo seu MP, como acima.</p>
+      <p><b>Depois, a carta de skills ativas que falta no seu set.</b> Depois do Chalice, dê Transmute no Parchment ou no
+      Compass — o que carregar as suas skills ativas principais — no set em que você está curto. São as únicas outras cartas
+      com skills ativas; Bell e Mirror carregam passivas.</p>
+      <p>Depois de um Transmute, o próximo tem cooldown. O jogo diz que o Transmute reseta ou muda no início de cada nova
+      season; a <b>season 1 termina em 16/12/2026</b>.</p>
+
+      <p id="g-arcana-fontes"><b>Onde conseguir cartas de Arcana e Mysterious Crystals</b></p>
+      <p><b>Drops por stage.</b> Dá para usar Arcana a partir do nível 45, e as cartas só caem na Transcendence: Parchment,
+      Mirror e Chalice na <b>Shattered Arkanis</b>; Compass, Bell e Chalice na <b>Deus Research Base</b>. Cada claim custa
+      40 de Odyle Energy. O maior grau que cada stage dá:</p>
+      <div class="cg-table-wrap"><table class="cg-table">
+        <thead><tr><th>Stage</th><th>Gear Score</th><th>Chalice</th><th>Outras cartas</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>1.600</td><td>Common</td><td>Rare</td></tr>
+          <tr><td>2</td><td>1.900</td><td>Rare</td><td>Epic</td></tr>
+          <tr><td>3</td><td>2.200</td><td>Epic</td><td>Unique</td></tr>
+          <tr><td>4</td><td>2.500</td><td>Unique</td><td>Unique</td></tr>
+        </tbody>
+      </table></div>
+      <p id="g-arcana-crystals"><b>Mysterious Crystals</b> vêm da extração de cartas, <b>5 por season</b> das missões do
+      Ascension Trial e <b>5 por season por servidor</b> da aba Growth da Season Shop, a 25.000 Oath Coins cada. São bound,
+      então não dá para trocar.</p>
+      <p>O Ascension Trial dá 5 crystals por season, o suficiente para um Transmute. As missões do <b>Tower of Trials</b>, na
+      aba Challenge da Season Mission, dão um crystal na primeira vez que a pontuação final de uma run chega a 1.000, 3.000,
+      4.000, 5.000 e 6.000.</p>
+      <p><b>Guarde as Oath Coins para as Talisra Wings</b> e só compre os crystals da loja se estiver desesperado por um
+      Transmute. As asas custam 210.000 Oath Coins, uma por personagem; os cinco crystals custam 125.000. Equipadas, as asas
+      dão 60 de Attack, 35 de Accuracy, 4% de Cooldown Reduction e 400 de Defense, e só tê-las soma 10 de Attack, 20 de
+      Accuracy e 100 de Defense.</p>
+      <div class="cg-figs">${arcFig("shop-talisra-wings.webp",
+        "As Talisra Wings (Bound) na Season Shop: 210.000 Oath Coins, 1 por personagem")}${arcFig("shop-crystal.webp",
+        "O Mysterious Crystal na Season Shop: 25.000 Oath Coins, 5 por servidor nesta season")}</div>
+      <p>Se for comprar crystals: um crystal equivale a 10.000 de exp em cartas que você não vai precisar extrair, cerca de 5
+      claims no stage 3 (200 de Odyle Energy). Em Oath Coins, isso dá 2,5 por ponto de exp, contra 7,5 das Training Arcana —
+      então, entre os itens de Arcana da loja, os crystals são a melhor compra. Cinco fazem um Transmute com uma skill
+      escolhida.</p>
+
+      <div class="tip"><b>Fonte:</b> tradução do guia
+      <a href="https://raidrelay.com/aion-2-arcana-guide" target="_blank" rel="noopener">Aion 2 Arcana Guide (Raid Relay)</a>,
+      atualizado em 20/10/2026, com dados do cliente Global (tabelas do launcher 26, sem mudança no 30) e conferências no
+      jogo. As recomendações (Enhance só por poder ou por uma skill que falta, apostar em Parchment/Compass, Commons para
+      extração, Oath Coins para as Talisra Wings, Chalice primeiro) são avaliação do autor. Nomes, efeitos e especializações
+      das skills vêm da base de skills do tracker (MetaBot.GG).</div>`,
   },
 ];

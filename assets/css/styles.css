@@ -886,6 +886,22 @@ code { font-size: 0.85em; background: rgba(124, 92, 255, 0.14); padding: 0.05em 
 /* Ícones de slot / moeda nas tabelas do guia de stats */
 .gs-ico { width: 22px; height: 22px; vertical-align: middle; margin-right: 0.4rem; border-radius: 4px; }
 .gs-ico-sm { width: 16px; height: 16px; margin-right: 0.3rem; border-radius: 0; }
+
+/* Guia de Arcana: seletor de classe + skills por carta */
+.arc-skills { margin: 0 0 1.2rem; }
+.arc-classes { display: flex; flex-wrap: wrap; gap: 0.35rem; margin-bottom: 0.8rem; }
+.arc-class {
+  display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.25rem 0.65rem 0.25rem 0.3rem;
+  border: 1px solid var(--card-border); border-radius: 999px; background: transparent;
+  color: var(--muted); font: inherit; font-size: 0.8rem; cursor: pointer;
+}
+.arc-class img { width: 22px; height: 22px; object-fit: contain; }
+.arc-class:hover { color: var(--text); background: color-mix(in srgb, var(--role) 14%, transparent); }
+.arc-class.active { color: var(--text); border-color: var(--role); background: color-mix(in srgb, var(--role) 24%, transparent); }
+.arc-cards { display: grid; gap: 0.9rem; }
+.arc-card h4 { display: flex; align-items: center; gap: 0.5rem; margin: 0 0 0.35rem; font-size: 0.9rem; }
+.arc-card h4 small { display: block; font-weight: 400; font-size: 0.74rem; color: var(--muted-2); }
+.arc-card-ico { width: 30px; height: 30px; border-radius: 4px; }
 .cg-links { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: 0.5rem; }
 .cg-link {
   display: grid; gap: 0.1rem; padding: 0.55rem 0.7rem; text-decoration: none;

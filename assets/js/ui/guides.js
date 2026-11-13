@@ -16,6 +16,8 @@ function renderGuide(guide) {
   const inner = document.createElement("div");
   inner.className = "section-body-inner guide-body";
   inner.innerHTML = guide.html;
+  // Guias com parte interativa (ex.: Arcana) completam o HTML depois de montado.
+  if (typeof guide.mount === "function") guide.mount(inner);
   body.appendChild(inner);
 
   el.append(body);
