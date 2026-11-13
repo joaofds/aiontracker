@@ -142,6 +142,7 @@ rpgtracker/
 │   │   └── main.js       # boot
 │   └── images/           # símbolos das classes (<id>.avif) + skills/<classe>/ (ícones)
 │                         # + guides/<classe>/ e guides/common/ (prints dos guias de classe)
+│                         # + guides/stats/ (prints e ícones de slot/moeda do guia de stats)
 ├── tools/
 │   └── import-metabot.py # gera data/skill-db/*.js a partir do MetaBot.GG
 └── README.md

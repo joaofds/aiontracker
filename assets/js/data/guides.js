@@ -2,6 +2,16 @@
    Dados: guias (conteúdo da aba "Guias").
    Conteúdo da comunidade; ajuste conforme o patch atual do jogo.
    ============================================================ */
+// Ícones e prints do guia de stats (assets/images/guides/stats/).
+const GS_IMG = "assets/images/guides/stats";
+const gsSlot = (slot) => `<img class="gs-ico" src="${GS_IMG}/slots/${slot}.webp" alt="" loading="lazy" />`;
+const gsCur = (cur) => `<img class="gs-ico gs-ico-sm" src="${GS_IMG}/${cur}.webp" alt="" loading="lazy" />`;
+const gsFig = (file, caption) => `
+  <figure>
+    <a href="${GS_IMG}/${file}" target="_blank" rel="noopener"><img src="${GS_IMG}/${file}" alt="${caption}" loading="lazy" /></a>
+    <figcaption>${caption}</figcaption>
+  </figure>`;
+
 const GUIDES = [
   {
     id: "g-roadmap", icon: "🗺️", title: "Roadmap de progressão",
@@ -232,19 +242,19 @@ const GUIDES = [
       <div class="cg-table-wrap"><table class="cg-table">
         <thead><tr><th>Peça</th><th>Linhas, em ordem (faixa)</th></tr></thead>
         <tbody>
-          <tr><td>Weapon</td><td>Combat Speed (10,63–12,29%)<br>Weapon Damage Boost (7,87–9,12%)<br>Damage Boost (5,95–6,91%)<br>Might (21–31)</td></tr>
-          <tr><td>Guard</td><td>Combat Speed (8,26–9,57%)<br>Weapon Damage Boost (6,3–7,32%)<br>Damage Boost (4,76–5,54%)<br>Might (16–25)</td></tr>
-          <tr><td>Shoulders</td><td>Double Chance (1,4–1,68%)<br>Critical Damage Boost (10,5–12,15%)<br>Attack (14–23)</td></tr>
-          <tr><td>Chest</td><td>Damage Boost (5,35–6,22%)<br>Perfect Chance (4,72–5,5%)<br>Attack (22–32)</td></tr>
-          <tr><td>Gloves</td><td>Combat Speed (5,9–6,86%)<br>Perfect Chance (2,75–3,23%)<br>Attack (12–21)</td></tr>
-          <tr><td>Helmet</td><td>Double Chance (1,75–2,08%)<br>Attack Increase (1,75–2,08%)<br>Attack (18–28)</td></tr>
-          <tr><td>Legs</td><td>Attack Increase (1,92–2,28%)<br>Perfect Chance (4,33–5,05%)<br>Attack (20–30)</td></tr>
-          <tr><td>Cape</td><td>Double Chance (1,4–1,68%)<br>Attack Increase (1,4–1,68%)<br>Attack (14–23)</td></tr>
-          <tr><td>Necklace</td><td>Combat Speed (3,54–4,14%)<br>Might (10–19)<br>Precision (10–19)<br>Attack (25–36)</td></tr>
-          <tr><td>Boots</td><td>Move Speed (8,4–9,73%)<br>Attack (16–25)<br>Perfect Chance (3,54–4,14%)</td></tr>
-          <tr><td>Earring</td><td>Move Speed (5,25–6,11%)<br>Might (8–16)<br>Precision (8–16)<br>Attack (22–32)<br>Linha de skill principal (+1)</td></tr>
-          <tr><td>Ring</td><td>Might (6–14)<br>Precision (6–14)<br>Attack (18–28)<br>Linha de skill principal (+1)</td></tr>
-          <tr><td>Bracelet</td><td>Time [Siel] (9–17)<br>Wisdom [Lumiel] (9–17)<br>Destruction [Zikel] (9–17)<br>Death [Triniel] (9–17)</td></tr>
+          <tr><td>${gsSlot("weapon")}Weapon</td><td>Combat Speed (10,63–12,29%)<br>Weapon Damage Boost (7,87–9,12%)<br>Damage Boost (5,95–6,91%)<br>Might (21–31)</td></tr>
+          <tr><td>${gsSlot("guard")}Guard</td><td>Combat Speed (8,26–9,57%)<br>Weapon Damage Boost (6,3–7,32%)<br>Damage Boost (4,76–5,54%)<br>Might (16–25)</td></tr>
+          <tr><td>${gsSlot("shoulders")}Shoulders</td><td>Double Chance (1,4–1,68%)<br>Critical Damage Boost (10,5–12,15%)<br>Attack (14–23)</td></tr>
+          <tr><td>${gsSlot("chest")}Chest</td><td>Damage Boost (5,35–6,22%)<br>Perfect Chance (4,72–5,5%)<br>Attack (22–32)</td></tr>
+          <tr><td>${gsSlot("gloves")}Gloves</td><td>Combat Speed (5,9–6,86%)<br>Perfect Chance (2,75–3,23%)<br>Attack (12–21)</td></tr>
+          <tr><td>${gsSlot("helmet")}Helmet</td><td>Double Chance (1,75–2,08%)<br>Attack Increase (1,75–2,08%)<br>Attack (18–28)</td></tr>
+          <tr><td>${gsSlot("legs")}Legs</td><td>Attack Increase (1,92–2,28%)<br>Perfect Chance (4,33–5,05%)<br>Attack (20–30)</td></tr>
+          <tr><td>${gsSlot("cape")}Cape</td><td>Double Chance (1,4–1,68%)<br>Attack Increase (1,4–1,68%)<br>Attack (14–23)</td></tr>
+          <tr><td>${gsSlot("necklace")}Necklace</td><td>Combat Speed (3,54–4,14%)<br>Might (10–19)<br>Precision (10–19)<br>Attack (25–36)</td></tr>
+          <tr><td>${gsSlot("boots")}Boots</td><td>Move Speed (8,4–9,73%)<br>Attack (16–25)<br>Perfect Chance (3,54–4,14%)</td></tr>
+          <tr><td>${gsSlot("earring")}Earring</td><td>Move Speed (5,25–6,11%)<br>Might (8–16)<br>Precision (8–16)<br>Attack (22–32)<br>Linha de skill principal (+1)</td></tr>
+          <tr><td>${gsSlot("ring")}Ring</td><td>Might (6–14)<br>Precision (6–14)<br>Attack (18–28)<br>Linha de skill principal (+1)</td></tr>
+          <tr><td>${gsSlot("bracelet")}Bracelet</td><td>Time [Siel] (9–17)<br>Wisdom [Lumiel] (9–17)<br>Destruction [Zikel] (9–17)<br>Death [Triniel] (9–17)</td></tr>
         </tbody>
       </table></div>
       <ul>
@@ -264,7 +274,7 @@ const GUIDES = [
         <thead><tr><th>Peça</th><th>Mantenha se rolar</th></tr></thead>
         <tbody>
           <tr><td>Weapon, Guard</td><td>Multi-hit Chance, Precision, Critical Attack, Attack, Front/Back Attack, uma linha de skill principal</td></tr>
-          <tr><td>Necklace</td><td>Uma linha de skill principal</td></tr>
+          <tr><td>${gsSlot("necklace")}Necklace</td><td>Uma linha de skill principal</td></tr>
           <tr><td>Armadura</td><td>Damage Tolerance, Endurance e Defense Increase, para sobreviver ou para PvP</td></tr>
           <tr><td>Todas menos o Bracelet</td><td>Accuracy e Critical Hit, enquanto você ainda precisar de mais</td></tr>
         </tbody>
@@ -283,17 +293,17 @@ const GUIDES = [
       <div class="cg-table-wrap"><table class="cg-table">
         <thead><tr><th>Peça</th><th>Linhas, em ordem (faixa)</th></tr></thead>
         <tbody>
-          <tr><td>Legs</td><td>Damage Tolerance (9,45–10,94%)<br>Endurance (2,88–3,38%)<br>Status Effect Resist — PvP (6,18–7,18%)</td></tr>
-          <tr><td>Helmet</td><td>Endurance (2,62–3,08%)<br>Weapon Damage Tolerance — PvP (6,3–7,32%)<br>Status Effect Resist — PvP (5,62–6,53%)</td></tr>
-          <tr><td>Cape</td><td>Endurance (2,1–2,49%)<br>Critical Damage Tolerance — PvP (10,5–12,15%)<br>Status Effect Resist — PvP (4,5–5,25%)</td></tr>
-          <tr><td>Chest</td><td>Defense Increase (3,15–3,69%)<br>Weapon Damage Tolerance — PvP (7,87–9,12%)<br>Status Effect Resist — PvP (6,75–7,83%)</td></tr>
-          <tr><td>Shoulders</td><td>Defense Increase (2,1–2,49%)<br>Status Effect Resist — PvP (4,5–5,25%)</td></tr>
-          <tr><td>Gloves</td><td>Defense Increase (1,83–2,17%)<br>Status Effect Resist — PvP (3,93–4,59%)</td></tr>
-          <tr><td>Boots</td><td>Move Speed (8,4–9,73%)<br>Defense Increase (2,36–2,78%)<br>Status Effect Resist — PvP (5,06–5,89%)</td></tr>
-          <tr><td>Necklace</td><td>HP (236–278)</td></tr>
-          <tr><td>Earring</td><td>HP (202–239)</td></tr>
-          <tr><td>Ring</td><td>HP (168–200)</td></tr>
-          <tr><td>Bracelet</td><td>Justice [Nezekan] (9–17)<br>Life [Yustiel] (9–17)</td></tr>
+          <tr><td>${gsSlot("legs")}Legs</td><td>Damage Tolerance (9,45–10,94%)<br>Endurance (2,88–3,38%)<br>Status Effect Resist — PvP (6,18–7,18%)</td></tr>
+          <tr><td>${gsSlot("helmet")}Helmet</td><td>Endurance (2,62–3,08%)<br>Weapon Damage Tolerance — PvP (6,3–7,32%)<br>Status Effect Resist — PvP (5,62–6,53%)</td></tr>
+          <tr><td>${gsSlot("cape")}Cape</td><td>Endurance (2,1–2,49%)<br>Critical Damage Tolerance — PvP (10,5–12,15%)<br>Status Effect Resist — PvP (4,5–5,25%)</td></tr>
+          <tr><td>${gsSlot("chest")}Chest</td><td>Defense Increase (3,15–3,69%)<br>Weapon Damage Tolerance — PvP (7,87–9,12%)<br>Status Effect Resist — PvP (6,75–7,83%)</td></tr>
+          <tr><td>${gsSlot("shoulders")}Shoulders</td><td>Defense Increase (2,1–2,49%)<br>Status Effect Resist — PvP (4,5–5,25%)</td></tr>
+          <tr><td>${gsSlot("gloves")}Gloves</td><td>Defense Increase (1,83–2,17%)<br>Status Effect Resist — PvP (3,93–4,59%)</td></tr>
+          <tr><td>${gsSlot("boots")}Boots</td><td>Move Speed (8,4–9,73%)<br>Defense Increase (2,36–2,78%)<br>Status Effect Resist — PvP (5,06–5,89%)</td></tr>
+          <tr><td>${gsSlot("necklace")}Necklace</td><td>HP (236–278)</td></tr>
+          <tr><td>${gsSlot("earring")}Earring</td><td>HP (202–239)</td></tr>
+          <tr><td>${gsSlot("ring")}Ring</td><td>HP (168–200)</td></tr>
+          <tr><td>${gsSlot("bracelet")}Bracelet</td><td>Justice [Nezekan] (9–17)<br>Life [Yustiel] (9–17)</td></tr>
         </tbody>
       </table></div>
       <p><b>Damage Tolerance</b>, <b>Endurance</b>, <b>Defense</b> e <b>HP</b> funcionam em todo golpe que você leva, então
@@ -321,9 +331,8 @@ const GUIDES = [
       rerrola. A Weapon Enraged Kromede tem só 3, e o equipamento craftado tem 5. Cada slot sorteia da sua própria lista de
       15 a 24 stats, a maioria enchimento: cada linha sorteada é uma linha-alvo específica só 1,2 a 4 vezes em 100; Attack
       é 4 a 6, e os stats divinos do Bracelet, 10.</p>
-      <div class="tip"><b>Exemplo:</b> o tooltip de uma Guard Unique mostra Attack, Accuracy e Critical Hit fixos,
-      Soul Binding Rate de 58,5% e então as 4 linhas de Soul Binding (Damage Boost 4,5%, Critical Attack 59, Frost Lv. +1,
-      Flame Scattershot Lv. +1), além de um slot de Soul Fuse aberto.</div>
+      <div class="cg-figs">${gsFig("soul-binding-guard-tooltip.webp",
+        "Tooltip de uma Guard Unique: Attack, Accuracy e Critical Hit fixos, Soul Binding Rate 58,5%, as 4 linhas de Soul Binding (Damage Boost 4,5%, Critical Attack 59, Frost Lv. +1, Flame Scattershot Lv. +1) e o slot de Soul Fuse aberto")}</div>
 
       <p id="g-stats-stack"><b>Como os stats de dano se somam</b></p>
       <p>Stats no mesmo grupo (“bucket”) se <b>somam</b>, e os grupos se <b>multiplicam</b> — então uma linha vale mais num
@@ -389,7 +398,9 @@ const GUIDES = [
       <p>Então mantenha a linha de skill de uma skill que faz boa parte do seu dano, e troque a de uma que você quase não usa.</p>
 
       <p id="g-stats-custos"><b>Quanto custa o Soul Binding</b></p>
-      <p>O Soul Binding é uma aba dentro de <b>Enhancement</b>.</p>
+      <p>O Soul Binding é uma aba dentro de <b>Enhancement</b>:</p>
+      <div class="cg-figs">${gsFig("soul-binding-window.webp",
+        "Aba Soul Binding em Enhancement: Aulamus Greatsword +12 com Soul Binding Rate 100%, cada linha no máximo (Combat Speed 11,25%, Block 54, Ruinous Blow e Keen Strike Lv. +1) e Soul Fuse por 1.000.000 de Kinah")}</div>
       <div class="cg-table-wrap"><table class="cg-table">
         <thead><tr><th>Ação</th><th>O que faz</th><th>O que custa</th></tr></thead>
         <tbody>
@@ -409,7 +420,7 @@ const GUIDES = [
       </ol>
       <p>Dez Binds, por grau da peça:</p>
       <div class="cg-table-wrap"><table class="cg-table">
-        <thead><tr><th>Grau</th><th>Kinah</th><th>Soul Codex</th></tr></thead>
+        <thead><tr><th>Grau</th><th>${gsCur("kinah")}Kinah</th><th>${gsCur("soul-codex")}Soul Codex</th></tr></thead>
         <tbody>
           <tr><td>Rare</td><td>130.500</td><td>25</td></tr>
           <tr><td>Epic</td><td>733.000</td><td>77</td></tr>
@@ -418,7 +429,7 @@ const GUIDES = [
       </table></div>
       <p>Um Reset, por grau da peça:</p>
       <div class="cg-table-wrap"><table class="cg-table">
-        <thead><tr><th>Grau</th><th>Kinah</th><th>Soul Codex: Reset</th></tr></thead>
+        <thead><tr><th>Grau</th><th>${gsCur("kinah")}Kinah</th><th>${gsCur("soul-codex-reset")}Soul Codex: Reset</th></tr></thead>
         <tbody>
           <tr><td>Rare</td><td>45.000</td><td>1</td></tr>
           <tr><td>Epic</td><td>150.000</td><td>2</td></tr>
@@ -427,7 +438,7 @@ const GUIDES = [
       </table></div>
       <p>Cada Bind numa peça Unique:</p>
       <div class="cg-table-wrap"><table class="cg-table">
-        <thead><tr><th>Bind</th><th>Kinah</th><th>Soul Codex</th></tr></thead>
+        <thead><tr><th>Bind</th><th>${gsCur("kinah")}Kinah</th><th>${gsCur("soul-codex")}Soul Codex</th></tr></thead>
         <tbody>
           <tr><td>1</td><td>30.000</td><td>10</td></tr>
           <tr><td>2</td><td>42.000</td><td>12</td></tr>
@@ -450,9 +461,9 @@ const GUIDES = [
       numa de item level 86); qualquer coisa abaixo de Unique não tem como dar certo. Desde 11 de novembro, a Transcendence
       Season Mission <b>Way of the Transcended</b> dá até <b>3 Sync Stones (Unique) por semana</b>, bound (patch notes da
       NC).</p>
-      <div class="tip"><b>Exemplos de Soul Sync:</b> numa Vakron Guard +7 usando Vakron Boots +5 como material, a Success
-      Chance é 100% e a janela mostra o valor de cada linha contra o máximo (Damage Boost 4,46% de 5,07%, Critical Attack 59
-      de 73). Numa Enraged Kromede Necklace +5 (item level 86) usando Aulamus Earrings +10 (item level 70), continua 100%.</div>
+      <div class="cg-figs">${gsFig("soul-sync-any-slot.webp",
+        "Soul Sync numa Vakron Guard +7 com Vakron Boots +5 como material: 100% de Success Chance, e o valor de cada linha contra o máximo (Damage Boost 4,46% de 5,07%, Critical Attack 59 de 73)")}${gsFig("soul-sync-lower-item-level.webp",
+        "Soul Sync numa Enraged Kromede Necklace +5 (item level 86) com Aulamus Earrings +10 (item level 70) como material: continua 100% de Success Chance")}</div>
       <p>Um Reset rerrola todas as linhas de Soul Binding de uma vez (4 no Unique, 5 no craftado), então acerta uma linha
       específica em cerca de <b>um terço das tentativas</b> que um Sync precisa. Mas ele também zera o Binding e todas as
       linhas que você tinha; o Sync mantém as outras.</p>
