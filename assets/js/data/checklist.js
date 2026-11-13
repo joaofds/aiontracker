@@ -124,7 +124,7 @@ const DATA = [
       { id: "all-10", tag: "opt", text: "Todos os itens em +10" },
       { id: "pvp-daevanion", tag: "opt", text: "200k Abyss Points → 20 pontos de Daevanion PvP", note: "+20 GS" },
       { id: "unique-bracelet", tag: "opt", text: "Bracelete Unique +10" },
-      { id: "ms-all", tag: "opt", text: "Manastone/Soulstone em tudo", note: "pelo menos 2 verdes ou 1 azul por peça" },
+      { id: "ms-all", tag: "opt", text: "Manastone/Soulstone em tudo", note: "pelo menos 2 verdes ou 1 azul por peça", guide: "g-stats#pedras" },
       { id: "acc-farm", tag: "opt", text: "Farm de acessórios" },
     ],
   },
